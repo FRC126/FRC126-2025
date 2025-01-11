@@ -1,0 +1,147 @@
+<xml version="1.0">
+<dashboard>
+	<widget field="Climber Position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="378"/>
+	</widget>
+	<widget field="Distance Reached" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="217" y="273"/>
+	</widget>
+	<widget field="Distance" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="223" y="252"/>
+	</widget>
+	<widget field="Distance Inches" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="200" y="231"/>
+	</widget>
+	<widget field="Thrower 0 speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="228" y="210"/>
+	</widget>
+	<widget field="Thrower 0 RPM Reached" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="368" y="122"/>
+	</widget>
+	<widget field="Thrower 0 RPM Target" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="366" y="101"/>
+	</widget>
+	<widget field="Thrower 0 RPM Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="364" y="0"/>
+	</widget>
+	<widget field="AutoCommand" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="217" y="189"/>
+	</widget>
+	<widget field="photoSensor" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="203" y="168"/>
+	</widget>
+	<widget field="Climbing" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="180" y="147"/>
+	</widget>
+	<widget field="thrower tilt input" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="180" y="126"/>
+	</widget>
+	<widget field="speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="180" y="105"/>
+	</widget>
+	<widget field="reachedTwo" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="180" y="84"/>
+	</widget>
+	<widget field="reachedOne" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="200" y="63"/>
+	</widget>
+	<widget field="idleThrower" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="180" y="42"/>
+	</widget>
+	<widget field="thrower myRPM" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="180" y="21"/>
+	</widget>
+	<widget field="straightDegrees" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="180" y="0"/>
+	</widget>
+	<widget field="driveStraight" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="462"/>
+	</widget>
+	<widget field="thrower speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="441"/>
+	</widget>
+	<widget field="thrower position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="528" y="232"/>
+	</widget>
+	<widget field="thrower angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="532" y="182"/>
+	</widget>
+	<widget field="thrower position calc" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="519" y="207"/>
+	</widget>
+	<widget field="right thrower pos" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="357"/>
+	</widget>
+	<widget field="left thrower pos" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="336"/>
+	</widget>
+	<widget field="Thrower 2 speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="315"/>
+	</widget>
+	<widget field="Thrower 2 RPM Reached" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="294"/>
+	</widget>
+	<widget field="Thrower 2 RPM Target" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="273"/>
+	</widget>
+	<widget field="Thrower 2 RPM Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="252"/>
+	</widget>
+	<widget field="Thrower 1 speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="231"/>
+	</widget>
+	<widget field="Thrower 1 RPM Reached" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="210"/>
+	</widget>
+	<widget field="Thrower 1 RPM Target" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="189"/>
+	</widget>
+	<widget field="Thrower 1 RPM Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="168"/>
+	</widget>
+	<widget field="currentAngle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="147"/>
+	</widget>
+	<widget field="rotate" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="126"/>
+	</widget>
+	<widget field="leftRight" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="105"/>
+	</widget>
+	<widget field="forwardBack" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="84"/>
+	</widget>
+	<widget field="RobotIsAutoCommand" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="63"/>
+	</widget>
+	<widget field="limelight_Interface" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="521" y="50"/>
+	</widget>
+	<widget field="limelight_Stream" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="537" y="26"/>
+	</widget>
+	<widget field="limelight_PipelineName" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="501" y="80"/>
+	</widget>
+	<widget field="Auto Follow Choices" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="769" y="107"/>
+	</widget>
+	<widget field="Alliance Color" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="789" y="6"/>
+	</widget>
+	<widget field="Auto Target" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="931" y="19"/>
+	</widget>
+	<widget field="Build Date" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="42"/>
+	</widget>
+	<widget field="Git Branch" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="21"/>
+	</widget>
+	<widget field="Competition Robot" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="0"/>
+	</widget>
+</dashboard>
+<live-window>
+</live-window>
+</xml>
