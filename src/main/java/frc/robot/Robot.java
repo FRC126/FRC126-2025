@@ -44,7 +44,7 @@ import edu.wpi.first.wpilibj.SPI;
 public class Robot extends TimedRobot {
     // Global Robot Variables
     public int RobotID = 1;  
-    public static boolean useNavx=true;
+    public static boolean useNavx=false;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
@@ -147,17 +147,17 @@ public class Robot extends TimedRobot {
         swerveDrive = new SwerveDrive();
 
         // Thrower Devices
-        thrower = new Thrower();
-        thrower.resetEncoders(RobotMap.throwerSixtyTicks);
+        //thrower = new Thrower();
+        //thrower.resetEncoders(RobotMap.throwerSixtyTicks);
 
         // Climber
-        climber = new Climber();
+        //climber = new Climber();
   
         // Pickup SubSystem
-        pickup = new Pickup();
+        //pickup = new Pickup();
 
         // LED Subsystem
-        Leds = new LEDSubsystem();
+        //Leds = new LEDSubsystem();
 
         // Limelight subsystem1
         //limeLight = new LimeLight();
