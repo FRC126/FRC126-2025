@@ -19,9 +19,10 @@ import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkRelativeEncoder;
+import com.revrobotics.spark.SparkRelativeEncoder;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,9 +41,10 @@ public class Pickup extends SubsystemBase {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
-    CANSparkMax PickupMotor = new CANSparkMax(RobotMap.PickupCanID, CANSparkMax.MotorType.kBrushless);
-    RelativeEncoder PickupMotorEncoder = PickupMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-    DigitalInput photoSensor = new DigitalInput(6);
+    SparkMax PickupMotor = new SparkMax(RobotMap.PickupCanID, SparkMax.MotorType.kBrushless);
+	SparkMaxConfig PickupMotorConfig = new SparkMaxConfig();
+    RelativeEncoder PickupMotorEncoder = PickupMotor.getEncoder();
+	DigitalInput photoSensor = new DigitalInput(6);
 
 	/************************************************************************
 	 ************************************************************************/
@@ -58,6 +60,8 @@ public class Pickup extends SubsystemBase {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new PickupControl(this));
+		PickupMotorConfig.encoder.countsPerRevolution(42);
+		PickupMotor.configure(PickupMotorConfig, null, null);
 	}
 
 	/************************************************************************

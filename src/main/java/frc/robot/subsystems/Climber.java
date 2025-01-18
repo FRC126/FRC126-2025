@@ -19,9 +19,14 @@ import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
+
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkRelativeEncoder;
+import com.revrobotics.spark.SparkRelativeEncoder;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkLowLevel;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,8 +45,9 @@ public class Climber extends SubsystemBase {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
-    CANSparkMax ClimberMotor = new CANSparkMax(RobotMap.ClimberCanID, CANSparkMax.MotorType.kBrushless);
-    RelativeEncoder ClimberMotorEncoder = ClimberMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
+    SparkMax ClimberMotor = new SparkMax(RobotMap.ClimberCanID, SparkMax.MotorType.kBrushless);
+	SparkMaxConfig ClimberMotorConfig = new SparkMaxConfig();
+    RelativeEncoder ClimberMotorEncoder = ClimberMotor.getEncoder();
 
     DigitalInput climberBottomLimit = new DigitalInput(7);
 
@@ -53,6 +59,10 @@ public class Climber extends SubsystemBase {
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new ClimberControl(this));
 		setPosition(0);
+
+		ClimberMotorConfig.encoder.countsPerRevolution(42);
+		ClimberMotor.configure(ClimberMotorConfig, null, null);
+		ClimberMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
 	}
 
 	/************************************************************************
@@ -65,7 +75,8 @@ public class Climber extends SubsystemBase {
 	 ************************************************************************/
 
 	private void runMotor(double speed) {
-		ClimberMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
+		ClimberMotor.configure(ClimberMotorConfig, null, null);
 		ClimberMotor.set(speed);
 	}
 

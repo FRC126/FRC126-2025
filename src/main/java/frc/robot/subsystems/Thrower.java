@@ -20,15 +20,18 @@ import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.math.controller.ImplicitModelFollower;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.math.MathUtil;
 
 import com.ctre.phoenix6.*;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkRelativeEncoder;
+import com.revrobotics.spark.SparkRelativeEncoder;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -57,13 +60,15 @@ public class Thrower extends SubsystemBase {
     TalonFX throwerMotorTalonOne = new TalonFX(RobotMap.throwerTalonMotorOneCanID);
     TalonFX throwerMotorTalonTwo = new TalonFX(RobotMap.throwerTalonMotorTwoCanID);
 
-    CANSparkMax throwerTriggerMotor = new CANSparkMax(RobotMap.throwerTriggerMotorCanID, CANSparkMax.MotorType.kBrushless);
-    CANSparkMax throwerClimberMotorLeft = new CANSparkMax(RobotMap.throwerClimberMotorLeftCanID, CANSparkMax.MotorType.kBrushless);
-    CANSparkMax throwerClimberMotorRight = new CANSparkMax(RobotMap.throwerClimberMotorRightCanID, CANSparkMax.MotorType.kBrushless);
+    SparkMax throwerTriggerMotor = new SparkMax(RobotMap.throwerTriggerMotorCanID, SparkMax.MotorType.kBrushless);
+    SparkMax throwerClimberMotorLeft = new SparkMax(RobotMap.throwerClimberMotorLeftCanID, SparkMax.MotorType.kBrushless);
+    SparkMax throwerClimberMotorRight = new SparkMax(RobotMap.throwerClimberMotorRightCanID, SparkMax.MotorType.kBrushless);
 
-    RelativeEncoder throwerTriggerMotorRelativeEncoder = throwerTriggerMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-    RelativeEncoder throwerClimberMotorLeftRelativeEncoder = throwerClimberMotorLeft.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-    RelativeEncoder throwerClimberMotorRightRelativeEncoder = throwerClimberMotorRight.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);	
+    RelativeEncoder throwerTriggerMotorRelativeEncoder = throwerTriggerMotor.getEncoder();
+    RelativeEncoder throwerClimberMotorLeftRelativeEncoder = throwerClimberMotorLeft.getEncoder();
+    RelativeEncoder throwerClimberMotorRightRelativeEncoder = throwerClimberMotorRight.getEncoder();	
+
+    SparkMaxConfig ThrowerConfig = new SparkMaxConfig();
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Thrower Limit Switches
@@ -78,6 +83,14 @@ public class Thrower extends SubsystemBase {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new ThrowerControl(this));
+
+		ThrowerConfig.encoder.countsPerRevolution(42);
+		throwerTriggerMotor.configure(ThrowerConfig, null, null);
+		throwerClimberMotorLeft.configure(ThrowerConfig, null, null);
+		throwerClimberMotorRight.configure(ThrowerConfig, null, null);
+
+		ThrowerConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
+
 	}
 
 	/************************************************************************
@@ -92,7 +105,7 @@ public class Thrower extends SubsystemBase {
 
     public int throwerRPM(int index, double targetRPM) {
 		double ix, error=0.0, rpm;
-		StatusSignal<Double> RPM;
+		StatusSignal<AngularVelocity> RPM;
 		double P=Pslow;
 
 		if (index == 1) {
@@ -202,9 +215,8 @@ public class Thrower extends SubsystemBase {
 		double currAngle=getThrowerAngle();
 		boolean useLimitSwiches=true;
         
-		throwerClimberMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		throwerClimberMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
-
+		throwerClimberMotorLeft.configure(ThrowerConfig, null, null);
+		throwerClimberMotorRight.configure(ThrowerConfig, null, null);
      	
 		if (currAngle > 135 && speed > 0) { speed *= .3; }
 		if (currAngle < 30 && speed < 0) { speed *= .3; }

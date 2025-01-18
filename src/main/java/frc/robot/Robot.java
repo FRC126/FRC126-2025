@@ -30,7 +30,9 @@ import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
 // Navx-MXP Libraries and Connection Library
-import com.kauailabs.navx.frc.AHRS;
+import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
+
 import edu.wpi.first.wpilibj.SPI;
 
 /**
@@ -162,7 +164,7 @@ public class Robot extends TimedRobot {
        
         // Navx Subsystem
         try {
-            navxMXP = new AHRS(SPI.Port.kMXP);
+            new AHRS(NavXComType.kMXP_SPI  );
         } catch (RuntimeException ex) {
             DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
         }
@@ -182,16 +184,16 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putBoolean(COMPETITION_ROBOT, true);
 
-        Log.print(0, "Git Info", "branch: %s buildDate: %s gitDate: %s sha: %s".formatted(
-            BuildConstants.GIT_BRANCH,
-            BuildConstants.BUILD_DATE,
-            BuildConstants.GIT_DATE,
-            BuildConstants.GIT_SHA
-            ));
+        //Log.print(0, "Git Info", "branch: %s buildDate: %s gitDate: %s sha: %s".formatted(
+        //   BuildConstants.GIT_BRANCH,
+        //    BuildConstants.BUILD_DATE,
+        //    BuildConstants.GIT_DATE,
+        //    BuildConstants.GIT_SHA
+        //    ));
         Log.print(0, "Robot", "Robot Init Complete");
         // Put information above onto Smart Dashboard
-        SmartDashboard.putString("Git Branch", BuildConstants.GIT_BRANCH);
-        SmartDashboard.putString("Build Date", BuildConstants.BUILD_DATE);
+        //SmartDashboard.putString("Git Branch", BuildConstants.GIT_BRANCH);
+        //SmartDashboard.putString("Build Date", BuildConstants.BUILD_DATE);
 
         // Dashboard Cooser for the Autonomous mode move
         autoFunction.setDefaultOption("Speaker Shot",speakerAuto);

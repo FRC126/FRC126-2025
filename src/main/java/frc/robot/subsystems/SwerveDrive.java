@@ -20,14 +20,17 @@ import frc.robot.commands.*;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import com.ctre.phoenix6.*;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkRelativeEncoder;
+import com.revrobotics.spark.SparkRelativeEncoder;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -35,31 +38,31 @@ import com.revrobotics.SparkRelativeEncoder;
 public class SwerveDrive extends SubsystemBase {
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Swerve Motors
-    CANSparkMax swerveFrontRightDriveMotor = new CANSparkMax(RobotMap.swerveFrontRightDriveCanID, CANSparkMax.MotorType.kBrushless);
-    CANSparkMax swerveFrontRightTurnMotor = new CANSparkMax(RobotMap.swerveFrontRightTurnCanID, CANSparkMax.MotorType.kBrushless);
+    SparkMax swerveFrontRightDriveMotor = new SparkMax(RobotMap.swerveFrontRightDriveCanID, SparkMax.MotorType.kBrushless);
+    SparkMax swerveFrontRightTurnMotor = new SparkMax(RobotMap.swerveFrontRightTurnCanID, SparkMax.MotorType.kBrushless);
 
-    CANSparkMax swerveFrontLeftDriveMotor = new CANSparkMax(RobotMap.swerveFrontLeftDriveCanID, CANSparkMax.MotorType.kBrushless);
-    CANSparkMax swerveFrontLeftTurnMotor = new CANSparkMax(RobotMap.swerveFrontLeftTurnCanID, CANSparkMax.MotorType.kBrushless);
+    SparkMax swerveFrontLeftDriveMotor = new SparkMax(RobotMap.swerveFrontLeftDriveCanID, SparkMax.MotorType.kBrushless);
+    SparkMax swerveFrontLeftTurnMotor = new SparkMax(RobotMap.swerveFrontLeftTurnCanID, SparkMax.MotorType.kBrushless);
 
-    CANSparkMax swerveRearLeftDriveMotor = new CANSparkMax(RobotMap.swerveRearLeftDriveCanID, CANSparkMax.MotorType.kBrushless);
-    CANSparkMax swerveRearLeftTurnMotor = new CANSparkMax(RobotMap.swerveRearLeftTurnCanID, CANSparkMax.MotorType.kBrushless);
+    SparkMax swerveRearLeftDriveMotor = new SparkMax(RobotMap.swerveRearLeftDriveCanID, SparkMax.MotorType.kBrushless);
+    SparkMax swerveRearLeftTurnMotor = new SparkMax(RobotMap.swerveRearLeftTurnCanID, SparkMax.MotorType.kBrushless);
 
-    CANSparkMax swerveRearRightDriveMotor = new CANSparkMax(RobotMap.swerveRearRightDriveCanID, CANSparkMax.MotorType.kBrushless);
-    CANSparkMax swerveRearRightTurnMotor = new CANSparkMax(RobotMap.swerveRearRightTurnCanID, CANSparkMax.MotorType.kBrushless);
+    SparkMax swerveRearRightDriveMotor = new SparkMax(RobotMap.swerveRearRightDriveCanID, SparkMax.MotorType.kBrushless);
+    SparkMax swerveRearRightTurnMotor = new SparkMax(RobotMap.swerveRearRightTurnCanID, SparkMax.MotorType.kBrushless);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Built in Motor Encoders for Swerve Drive
-    RelativeEncoder swerveFrontRightDriveRelativeEncoder = swerveFrontRightDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-    RelativeEncoder swerveFrontRightTurnRelativeEncoder = swerveFrontRightTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
+    // Built in Motor Encoders fo44444444r Swerve Drive
+    RelativeEncoder swerveFrontRightDriveRelativeEncoder = swerveFrontRightDriveMotor.getEncoder();
+    RelativeEncoder swerveFrontRightTurnRelativeEncoder = swerveFrontRightTurnMotor.getEncoder();
 
-    RelativeEncoder swerveFrontLeftDriveRelativeEncoder = swerveFrontLeftDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-    RelativeEncoder swerveFrontLeftTurnRelativeEncoder = swerveFrontLeftTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
+    RelativeEncoder swerveFrontLeftDriveRelativeEncoder = swerveFrontLeftDriveMotor.getEncoder();
+    RelativeEncoder swerveFrontLeftTurnRelativeEncoder = swerveFrontLeftTurnMotor.getEncoder();
 
-    RelativeEncoder swerveRearLeftDriveRelativeEncoder = swerveRearLeftDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-    RelativeEncoder swerveRearLeftTurnRelativeEncoder = swerveRearLeftTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
+    RelativeEncoder swerveRearLeftDriveRelativeEncoder = swerveRearLeftDriveMotor.getEncoder();
+    RelativeEncoder swerveRearLeftTurnRelativeEncoder = swerveRearLeftTurnMotor.getEncoder();
 
-    RelativeEncoder swerveRearRightDriveRelativeEncoder = swerveRearRightDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-    RelativeEncoder swerveRearRightTurnRelativeEncoder = swerveRearRightTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
+    RelativeEncoder swerveRearRightDriveRelativeEncoder = swerveRearRightDriveMotor.getEncoder();
+    RelativeEncoder swerveRearRightTurnRelativeEncoder = swerveRearRightTurnMotor.getEncoder();
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Swerve Drive CAN Coders
@@ -67,6 +70,8 @@ public class SwerveDrive extends SubsystemBase {
     CANcoder swerveFrontLeftEncoder = new CANcoder(RobotMap.SwerveFrontLeftEncoderCanID);
     CANcoder swerveRearRightEncoder = new CANcoder(RobotMap.SwerveRearRightEncoderCanID);
     CANcoder swerveRearLeftEncoder = new CANcoder(RobotMap.SwerveRearLeftEncoderCanID);
+
+	SparkMaxConfig SwerveConfig = new SparkMaxConfig();
 	
     boolean swerveDebug=false;
 	boolean enableFullSpeed=true;
@@ -113,12 +118,15 @@ public class SwerveDrive extends SubsystemBase {
 		wheelSpeed[frontRight] = 0;
 		wheelSpeed[rearLeft] = 0;
 		wheelSpeed[rearRight] = 0;
+ 
+		SwerveConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
+		SwerveConfig.encoder.countsPerRevolution(42);
 
-		swerveFrontRightTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		swerveFrontLeftTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		swerveRearLeftTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		swerveRearRightTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-
+		swerveFrontRightTurnMotor.configure(SwerveConfig, null, null);
+		swerveFrontLeftTurnMotor.configure(SwerveConfig, null, null);
+		swerveRearLeftTurnMotor.configure(SwerveConfig, null, null);
+		swerveRearRightTurnMotor.configure(SwerveConfig, null, null);
+		
 		if (RobotMap.robotID == 0) {
 			enableFullSpeed=false;
 		}		
@@ -194,10 +202,12 @@ public class SwerveDrive extends SubsystemBase {
 
 	public boolean brakesOn() {
 		if (!areBrakesOn) {
-			swerveFrontRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-			swerveFrontLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-			swerveRearLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-			swerveRearRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+			SparkMaxConfig config = new SparkMaxConfig();
+			config.idleMode(SparkBaseConfig.IdleMode.kBrake);
+			swerveFrontRightDriveMotor.configure(config, null, null);
+			swerveFrontLeftDriveMotor.configure(config, null, null);
+			swerveRearLeftDriveMotor.configure(config, null, null);
+			swerveRearRightDriveMotor.configure(config, null, null);
 			areBrakesOn=true;
             return(true);
 		}	
@@ -209,10 +219,12 @@ public class SwerveDrive extends SubsystemBase {
 
 	public boolean brakesOff() {
 		if (areBrakesOn) {
-			swerveFrontRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-			swerveFrontLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-			swerveRearLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-			swerveRearRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+			SparkMaxConfig config = new SparkMaxConfig();
+			config.idleMode(SparkBaseConfig.IdleMode.kCoast);
+			swerveFrontRightDriveMotor.configure(config, null, null);
+			swerveFrontLeftDriveMotor.configure(config, null, null);
+			swerveRearLeftDriveMotor.configure(config, null, null);
+			swerveRearRightDriveMotor.configure(config, null, null);
 			areBrakesOn=false;
 			return(true);
 		}	
@@ -366,10 +378,10 @@ public class SwerveDrive extends SubsystemBase {
 		}
 
 		// Get the Encoder information from each swerve drive module
-    	StatusSignal<Double> FRPosSS = swerveFrontRightEncoder.getAbsolutePosition();
-		StatusSignal<Double> FLPosSS = swerveFrontLeftEncoder.getAbsolutePosition();
-		StatusSignal<Double> RRPosSS = swerveRearRightEncoder.getAbsolutePosition();
-		StatusSignal<Double> RLPosSS = swerveRearLeftEncoder.getAbsolutePosition();
+    	StatusSignal<Angle> FRPosSS = swerveFrontRightEncoder.getAbsolutePosition();
+		StatusSignal<Angle> FLPosSS = swerveFrontLeftEncoder.getAbsolutePosition();
+		StatusSignal<Angle> RRPosSS = swerveRearRightEncoder.getAbsolutePosition();
+		StatusSignal<Angle> RLPosSS = swerveRearLeftEncoder.getAbsolutePosition();
 
 		double frontRightPos = FRPosSS.getValueAsDouble();
 		double frontLeftPos = FLPosSS.getValueAsDouble();
