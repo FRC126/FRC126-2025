@@ -59,7 +59,7 @@ public class Pickup extends SubsystemBase {
 	public Pickup() {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
-		setDefaultCommand(new PickupControl(this));
+		//setDefaultCommand(new PickupControl(this));
 		//DPickupMotorConfig.encoder.countsPerRevolution(42);
 		PickupMotor.configure(PickupMotorConfig, null, null);
 	}
@@ -77,7 +77,7 @@ public class Pickup extends SubsystemBase {
         boolean here=photoSensor.get();
 		SmartDashboard.putBoolean("photoSensor",here);
         if (here) {
-			Robot.Leds.setMode(LEDSubsystem.LEDModes.HaveNote);
+			//Robot.Leds.setMode(LEDSubsystem.LEDModes.HaveNote);
 		}
 		return(here);
 	}
@@ -101,9 +101,9 @@ public class Pickup extends SubsystemBase {
 	 ************************************************************************/
 
 	 public void pickupMotorOff() {
-		if (!Robot.thrower.getThrowTriggered()) {
-			PickupMotor.set(0);
-		}	
+		//if (!Robot.thrower.getThrowTriggered()) {
+		//	PickupMotor.set(0);
+		//}	
 	}
 	
 	/************************************************************************

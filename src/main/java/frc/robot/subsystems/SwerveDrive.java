@@ -112,7 +112,7 @@ public class SwerveDrive extends SubsystemBase {
 	public SwerveDrive() {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
-		setDefaultCommand(new SwerveControl(this));
+		//setDefaultCommand(new SwerveControl(this));
 
 		wheelSpeed[frontLeft] = 0;
 		wheelSpeed[frontRight] = 0;
@@ -514,9 +514,10 @@ public class SwerveDrive extends SubsystemBase {
 	 *************************************************************************/
 
 	public double rotateToDegrees(double offset) {
-		double startAngle = Robot.swerveDrive.getYaw();    
+		//double startAngle = Robot.swerveDrive.getYaw();    
 
-		return(rotateToDegrees(offset,startAngle));
+		//return(rotateToDegrees(offset,startAngle));
+		return(0);
 	}
 
     /************************************************************************
@@ -537,7 +538,7 @@ public class SwerveDrive extends SubsystemBase {
 
 		if (Math.abs(diff) < driftAllowance) {
 			driveRotate=0;
-			Robot.swerveDrive.brakesOn();
+			//Robot.swerveDrive.brakesOn();
 		} else if (startAngle < target) {
 			driveRotate=tmp;
 		} else {
@@ -550,7 +551,7 @@ public class SwerveDrive extends SubsystemBase {
             SmartDashboard.putNumber("Turn diff",diff);
         }
 		
-		Robot.swerveDrive.Drive(0, 0, driveRotate);
+		//Robot.swerveDrive.Drive(0, 0, driveRotate);
 
 		return(driveRotate);
 	}
@@ -559,7 +560,8 @@ public class SwerveDrive extends SubsystemBase {
 	 *************************************************************************/
 
 	public double rotateToDegreesFixed(double offset, double startAngle) {
-		double driveRotate=0;
+/*
+/		double driveRotate=0;
 		double driftAllowance=1.00;
 		double currentAngle=Robot.swerveDrive.getYaw();    
 
@@ -589,6 +591,8 @@ public class SwerveDrive extends SubsystemBase {
 		Robot.swerveDrive.Drive(0, 0, driveRotate);
 
 		return(driveRotate);
+*/
+        return(0);		
 	}	
 
     /************************************************************************
@@ -596,7 +600,7 @@ public class SwerveDrive extends SubsystemBase {
 	 
 	public void cancel() {
         Drive(0,0,0); 
-		Robot.swerveDrive.brakesOn();
+		//Robot.swerveDrive.brakesOn();
 	}
 
 	/************************************************************************

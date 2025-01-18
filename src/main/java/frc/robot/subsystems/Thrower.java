@@ -82,7 +82,7 @@ public class Thrower extends SubsystemBase {
 	public Thrower() {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
-		setDefaultCommand(new ThrowerControl(this));
+		//setDefaultCommand(new ThrowerControl(this));
 
 		//ThrowerConfig.encoder.countsPerRevolution(42);
 		ThrowerConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
@@ -309,7 +309,7 @@ public class Thrower extends SubsystemBase {
 
 	 public void throwerTriggerReverse() {
 		throwerTriggerRun(1);
-		Robot.pickup.pickupMotorReverse();
+		//Robot.pickup.pickupMotorReverse();
 	}
 
     /************************************************************************
@@ -317,7 +317,7 @@ public class Thrower extends SubsystemBase {
 
     public void throwerTriggerOn() {
 		throwerTriggerRun(-1);
-		Robot.pickup.pickupMotorOn();
+		//Robot.pickup.pickupMotorOn();
 		throwTriggered=true;
 		getPhotoSensor();
 	}
@@ -328,9 +328,9 @@ public class Thrower extends SubsystemBase {
     public void throwerTriggerOff() {
 		throwTriggered=false;
 		throwerTriggerRun(0);
-		if (!Robot.pickup.getUserRunPickup()) {
-  			Robot.pickup.pickupMotorOff();
-		}		
+		//if (!Robot.pickup.getUserRunPickup()) {
+  		//	Robot.pickup.pickupMotorOff();
+		//}		
 	}
 	
     /************************************************************************
@@ -407,9 +407,9 @@ public class Thrower extends SubsystemBase {
 	 public boolean getPhotoSensor() {
         boolean here=photoSensor.get()?false:true;
 		SmartDashboard.putBoolean("photoSensor",here);
-        if (here || Robot.pickup.getTriggerTripped()) {
-			Robot.Leds.setMode(LEDSubsystem.LEDModes.HaveNoteHigh);
-		}
+        //if (here || Robot.pickup.getTriggerTripped()) {
+			//Robot.Leds.setMode(LEDSubsystem.LEDModes.HaveNoteHigh);
+		//}
 		return(here);
 	}		
 

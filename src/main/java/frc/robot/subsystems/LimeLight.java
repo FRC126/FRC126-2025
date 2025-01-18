@@ -52,7 +52,7 @@ public class LimeLight extends SubsystemBase {
     public LimeLight() {
         // Register this subsystem with command scheduler and set the default command
         super();
-        setDefaultCommand(new LimeLightControl(this));
+        //setDefaultCommand(new LimeLightControl(this));
 
         llTargetValid=false;
         llTargetArea = 0.0;
@@ -178,8 +178,8 @@ public class LimeLight extends SubsystemBase {
             validCount <= 3) {
             centered=0;
             aimed=0;
-            Robot.thrower.setAutoMoveThrower(false);    
-            Robot.swerveDrive.setAutoMove(false);
+            //Robot.thrower.setAutoMoveThrower(false);    
+            //Robot.swerveDrive.setAutoMove(false);
             return(false);
         }     
 
@@ -188,16 +188,16 @@ public class LimeLight extends SubsystemBase {
 
         if (!noAim) {
             if ( llTargetXOffset < -1.5 || llTargetXOffset > 1.5) {
-                Robot.swerveDrive.brakesOn();
-                double driveRotate = Robot.swerveDrive.rotateToDegrees(llTargetXOffset);
-                if (driveRotate!=0) {
-                    Robot.swerveDrive.setAutoMove(true);
-                } else {
-                    Robot.swerveDrive.setAutoMove(false);
-                }    
+                //Robot.swerveDrive.brakesOn();
+                //double driveRotate = Robot.swerveDrive.rotateToDegrees(llTargetXOffset);
+                //if (driveRotate!=0) {
+                //    Robot.swerveDrive.setAutoMove(true);
+                //} else {
+                //    Robot.swerveDrive.setAutoMove(false);
+                //}    
                 centered=0;
             } else {
-                Robot.swerveDrive.cancel();
+                //Robot.swerveDrive.cancel();
                 centered++;
             }   
         }
@@ -217,19 +217,19 @@ public class LimeLight extends SubsystemBase {
                 SmartDashboard.putNumber("Ato Thrower Angle", angle);
             //}
 
-            Robot.thrower.setAutoMoveThrower(true);
-            if (Robot.thrower.setThrowerPosition(angle)) {
-                aimed++;
-            } else {
-                aimed=0;
-            }
+            //Robot.thrower.setAutoMoveThrower(true);
+            //if (Robot.thrower.setThrowerPosition(angle)) {
+            //    aimed++;
+            //} else {
+            //    aimed=0;
+            //}
         } else {
             aimed=100;
         }    
 
         if ((centered) > 2 && (aimed > 2)) {
-            Robot.thrower.setAutoMoveThrower(false);
-            Robot.swerveDrive.setAutoMove(false);
+            //Robot.thrower.setAutoMoveThrower(false);
+            //Robot.swerveDrive.setAutoMove(false);
             return(true);
         } else {
             return(false);

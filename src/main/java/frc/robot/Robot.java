@@ -60,11 +60,11 @@ public class Robot extends TimedRobot {
     public static Controllers oi;
     public static Log log;
     public static InternalData internalData;
-    public static SwerveDrive swerveDrive;
-    public static Thrower thrower;    
+    //public static SwerveDrive swerveDrive;
+    //public static Thrower thrower;    
     public static Climber climber;
-    public static Pickup pickup;
-    public static LEDSubsystem Leds;
+    //public static Pickup pickup;
+    //public static LEDSubsystem Leds;
     // Lidar Light Distance Measure
     //public static LidarLite lidar;
     // Lime Light
@@ -144,14 +144,14 @@ public class Robot extends TimedRobot {
         internalData = new InternalData();
 
         // Swerve drive subsystem 
-        swerveDrive = new SwerveDrive();
+        //swerveDrive = new SwerveDrive();
 
         // Thrower Devices
         //thrower = new Thrower();
         //thrower.resetEncoders(RobotMap.throwerSixtyTicks);
 
         // Climber
-        //climber = new Climber();
+        climber = new Climber();
   
         // Pickup SubSystem
         //pickup = new Pickup();
@@ -164,7 +164,9 @@ public class Robot extends TimedRobot {
        
         // Navx Subsystem
         try {
-            new AHRS(NavXComType.kMXP_SPI  );
+            if (useNavx) {
+               new AHRS(NavXComType.kMXP_SPI  );
+            }   
         } catch (RuntimeException ex) {
             DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
         }
@@ -227,8 +229,8 @@ public class Robot extends TimedRobot {
 
         Log.print(0, "Robot", "Robot Autonomous Init");
 
-		Robot.swerveDrive.cancel();
-		Robot.swerveDrive.resetYaw();
+		//Robot.swerveDrive.cancel();
+		//Robot.swerveDrive.resetYaw();
 
 		try {
 			selectedautoNext = (int)autoNext.getSelected();
@@ -254,6 +256,7 @@ public class Robot extends TimedRobot {
             target=Robot.targetTypes.TargetSeek; 
         }
 
+/*
         switch (selectedautoNext) {
             case threeNoteAuto:
                 SmartDashboard.putString("AutoCommand","Speaker Three Notes");
@@ -288,6 +291,7 @@ public class Robot extends TimedRobot {
                 autonomous=null;
                 break;    
         }         
+*/
 
         if (autonomous != null) {
             autonomous.schedule();
@@ -299,9 +303,9 @@ public class Robot extends TimedRobot {
     ************************************************************************/
     @Override
     public void autonomousPeriodic() {
-        Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
+        //Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
         CommandScheduler.getInstance().run();
-        Robot.Leds.doLights();
+        //Robot.Leds.doLights();
     }
 
     /************************************************************************
@@ -318,10 +322,10 @@ public class Robot extends TimedRobot {
 
         Robot.stopAutoCommand();
 
-		Robot.swerveDrive.cancel();
-        Robot.swerveDrive.brakesOff();
-        Robot.thrower.cancel();
-        Robot.pickup.cancel();
+		//Robot.swerveDrive.cancel();
+        //Robot.swerveDrive.brakesOff();
+        //Robot.thrower.cancel();
+        //Robot.pickup.cancel();
     }
 
     /************************************************************************
@@ -329,9 +333,9 @@ public class Robot extends TimedRobot {
     ************************************************************************/
     @Override
     public void teleopPeriodic() {
-        Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
+        //Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
         CommandScheduler.getInstance().run();
-        Robot.Leds.doLights();
+        //Robot.Leds.doLights();
         check();
     }
 
@@ -353,7 +357,7 @@ public class Robot extends TimedRobot {
 
         if (operatorJoystick.isBackButton()) {
             Robot.overrideEncoders=true;
-            Robot.climber.setPosition(0);
+            //Robot.climber.setPosition(0);
             //Robot.thrower.resetEncoders(); 
         } else {
             Robot.overrideEncoders=false;
@@ -367,7 +371,7 @@ public class Robot extends TimedRobot {
     public void testInit() {
         Log.print(0, "Robot", "Robot Test Init");
 
-		Robot.swerveDrive.cancel();
+		//Robot.swerveDrive.cancel();
     }  
 
     /************************************************************************
@@ -375,9 +379,9 @@ public class Robot extends TimedRobot {
     ************************************************************************/
    @Override
     public void testPeriodic() {
-        Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
+        //Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
         CommandScheduler.getInstance().run();
-        Robot.Leds.doLights();
+        //Robot.Leds.doLights();
 }
 
     /************************************************************************
@@ -408,9 +412,9 @@ public class Robot extends TimedRobot {
 			return false;
 		}	
 
-        if (Robot.swerveDrive.getAutoMove()) { 
-    		Robot.swerveDrive.cancel();
-        }
+        //if (Robot.swerveDrive.getAutoMove()) { 
+    	//	Robot.swerveDrive.cancel();
+        //}
 
 	    Robot.isAutoCommand = true;
 
@@ -433,12 +437,12 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putBoolean("RobotIsAutoCommand",Robot.isAutoCommand);
 
-      	Robot.swerveDrive.cancel();
-        Robot.thrower.cancel();
-        Robot.pickup.cancel();
-        Robot.climber.cancel();
+      	//Robot.swerveDrive.cancel();
+        //Robot.thrower.cancel();
+        //Robot.pickup.cancel();
+        //Robot.climber.cancel();
 
-        Robot.swerveDrive.setAutoMove(false);
+        //Robot.swerveDrive.setAutoMove(false);
 	}		
 
     /************************************************************************

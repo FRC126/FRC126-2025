@@ -45,7 +45,8 @@ public class Climber extends SubsystemBase {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
-    SparkMax ClimberMotor = new SparkMax(RobotMap.ClimberCanID, SparkMax.MotorType.kBrushless);
+    SparkMax ClimberMotor = new SparkMax(61, SparkMax.MotorType.kBrushless);
+    SparkMax ClimberMotor2 = new SparkMax(62, SparkMax.MotorType.kBrushless);
 	SparkMaxConfig ClimberMotorConfig = new SparkMaxConfig();
     RelativeEncoder ClimberMotorEncoder = ClimberMotor.getEncoder();
 
@@ -61,8 +62,8 @@ public class Climber extends SubsystemBase {
 		setPosition(0);
 
 		//ClimberMotorConfig.encoder.countsPerRevolution(42);
-		ClimberMotor.configure(ClimberMotorConfig, null, null);
-		ClimberMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
+		//ClimberMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
+		//ClimberMotor.configure(ClimberMotorConfig, null, null);
 	}
 
 	/************************************************************************
@@ -74,13 +75,14 @@ public class Climber extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	private void runMotor(double speed) {
+	public void runMotor(double speed) {
 
-		ClimberMotor.configure(ClimberMotorConfig, null, null);
+		//ClimberMotor.configure(ClimberMotorConfig, null, null);
 		ClimberMotor.set(speed);
+		ClimberMotor2.set(speed * -1);
+	
 	}
-
- 	/************************************************************************
+		/************************************************************************
 	 ************************************************************************/
 
 	private double getPosition() {

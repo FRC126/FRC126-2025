@@ -48,17 +48,22 @@ public class ClimberControl extends Command {
     	// Climber Movement Control
 		double y = operatorJoystick.getRightStickY();
 
+			SmartDashboard.putNumber("Climb Speed", y);
+
 		if (y > 0) {
-	        Robot.climber.extendClimber(y);
-			Robot.Leds.setMode(LEDSubsystem.LEDModes.Climbing);
+			Robot.climber.runMotor((y - .15) * 1.15);
+	        //Robot.climber.extendClimber(y);
+			//Robot.Leds.setMode(LEDSubsystem.LEDModes.Climbing);
 			SmartDashboard.putString("Climbing", "Climbing");
 
 		} else if (	y < 0 ) {
-	        Robot.climber.retractClimber(y);
-			Robot.Leds.setMode(LEDSubsystem.LEDModes.Climbing);
+			Robot.climber.runMotor((y + .15) * 1.15);
+	        //Robot.climber.retractClimber(y);
+			//Robot.Leds.setMode(LEDSubsystem.LEDModes.Climbing);
 			SmartDashboard.putString("Climbing", "lowering");
 		} else {
-			Robot.climber.cancel();
+			Robot.climber.runMotor(0);
+			//Robot.climber.cancel();
 			SmartDashboard.putString("Climbing", "no action");
 		}
 	}
