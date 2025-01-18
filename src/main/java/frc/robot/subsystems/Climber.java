@@ -60,7 +60,7 @@ public class Climber extends SubsystemBase {
 		setDefaultCommand(new ClimberControl(this));
 		setPosition(0);
 
-		ClimberMotorConfig.encoder.countsPerRevolution(42);
+		//ClimberMotorConfig.encoder.countsPerRevolution(42);
 		ClimberMotor.configure(ClimberMotorConfig, null, null);
 		ClimberMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
 	}

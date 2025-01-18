@@ -120,7 +120,7 @@ public class SwerveDrive extends SubsystemBase {
 		wheelSpeed[rearRight] = 0;
  
 		SwerveConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
-		SwerveConfig.encoder.countsPerRevolution(42);
+		//SwerveConfig.encoder.countsPerRevolution(42);
 
 		swerveFrontRightTurnMotor.configure(SwerveConfig, null, null);
 		swerveFrontLeftTurnMotor.configure(SwerveConfig, null, null);

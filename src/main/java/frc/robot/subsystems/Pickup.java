@@ -60,7 +60,7 @@ public class Pickup extends SubsystemBase {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new PickupControl(this));
-		PickupMotorConfig.encoder.countsPerRevolution(42);
+		//DPickupMotorConfig.encoder.countsPerRevolution(42);
 		PickupMotor.configure(PickupMotorConfig, null, null);
 	}
 

@@ -84,12 +84,12 @@ public class Thrower extends SubsystemBase {
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new ThrowerControl(this));
 
-		ThrowerConfig.encoder.countsPerRevolution(42);
+		//ThrowerConfig.encoder.countsPerRevolution(42);
+		ThrowerConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
 		throwerTriggerMotor.configure(ThrowerConfig, null, null);
 		throwerClimberMotorLeft.configure(ThrowerConfig, null, null);
 		throwerClimberMotorRight.configure(ThrowerConfig, null, null);
 
-		ThrowerConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
 
 	}
 
