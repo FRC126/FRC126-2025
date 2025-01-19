@@ -20,13 +20,13 @@ import frc.robot.JoystickWrapper;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class ClimberControl extends Command {
+public class TestMotorControl extends Command {
 	JoystickWrapper operatorJoystick;
 
 	/**********************************************************************************
 	 **********************************************************************************/
 
-	public ClimberControl(Climber subsystem) {
+	public TestMotorControl(TestMotor subsystem) {
 		addRequirements(subsystem);
 		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.15);
 	}
@@ -52,18 +52,13 @@ public class ClimberControl extends Command {
 
 		if (y > 0) {
 			Robot.climber.runMotor((y - .15) * 1.15);
-	        //Robot.climber.extendClimber(y);
-			//Robot.Leds.setMode(LEDSubsystem.LEDModes.Climbing);
 			SmartDashboard.putString("Climbing", "Climbing");
 
 		} else if (	y < 0 ) {
 			Robot.climber.runMotor((y + .15) * 1.15);
-	        //Robot.climber.retractClimber(y);
-			//Robot.Leds.setMode(LEDSubsystem.LEDModes.Climbing);
 			SmartDashboard.putString("Climbing", "lowering");
 		} else {
 			Robot.climber.runMotor(0);
-			//Robot.climber.cancel();
 			SmartDashboard.putString("Climbing", "no action");
 		}
 	}
