@@ -7,7 +7,7 @@
 	    \ \_\/\______/ \ \____/
 		 \/_/\/_____/   \/___/
 
-    Team 126 2024 Code       
+    Team 126 2025 Code       
 	Go get em gaels!
 
 ***********************************/
@@ -47,19 +47,19 @@ public class TestMotorControl extends Command {
 	public void execute() {
     	// Climber Movement Control
 		double y = operatorJoystick.getRightStickY();
-
-			SmartDashboard.putNumber("Climb Speed", y);
+		double speed=0;
 
 		if (y > 0) {
-			Robot.climber.runMotor((y - .15) * 1.15);
-			SmartDashboard.putString("Climbing", "Climbing");
-
+			speed = (y - .15) * 1.15;
+			SmartDashboard.putString("Test Motor", "Forward");
 		} else if (	y < 0 ) {
-			Robot.climber.runMotor((y + .15) * 1.15);
-			SmartDashboard.putString("Climbing", "lowering");
+			speed = (y + .15) * 1.15;
+			SmartDashboard.putString("Test Motor", "Backward");
 		} else {
-			Robot.climber.runMotor(0);
-			SmartDashboard.putString("Climbing", "no action");
+			SmartDashboard.putString("Test Motor", "Stop");
 		}
+
+	 	SmartDashboard.putNumber("Test Motor Speed", speed);
+        Robot.testMotor.runMotor(speed)	;
 	}
 }

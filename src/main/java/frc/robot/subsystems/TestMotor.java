@@ -14,8 +14,8 @@
 
 package frc.robot.subsystems;
 
-import frc.robot.Robot;
-import frc.robot.RobotMap;
+//import frc.robot.Robot;
+//import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -23,47 +23,37 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkRelativeEncoder;
 import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.SparkLowLevel;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**********************************************************************************
  **********************************************************************************/
 
-public class Climber extends SubsystemBase {
+public class TestMotor extends SubsystemBase {
 	boolean pickupDebug = false;
 	double pickupRPM;
 	int called = 0;
 
-	static final double extendedPosition=0;
-	static final double retractedPosition=600;
-
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Pickup CAN Motor
-    SparkMax ClimberMotor = new SparkMax(61, SparkMax.MotorType.kBrushless);
-    SparkMax ClimberMotor2 = new SparkMax(62, SparkMax.MotorType.kBrushless);
-	SparkMaxConfig ClimberMotorConfig = new SparkMaxConfig();
-    RelativeEncoder ClimberMotorEncoder = ClimberMotor.getEncoder();
-
-    DigitalInput climberBottomLimit = new DigitalInput(7);
+    // Test Motors
+    SparkMax TestMotor = new SparkMax(61, SparkMax.MotorType.kBrushless);
+    SparkMax TestMotor2 = new SparkMax(62, SparkMax.MotorType.kBrushless);
+	SparkMaxConfig TestMotorConfig = new SparkMaxConfig();
+    RelativeEncoder TestMotorEncoder = TestMotor.getEncoder();
 
 	/************************************************************************
 	 ************************************************************************/
 
-	public Climber() {
+	public TestMotor() {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
-		setDefaultCommand(new ClimberControl(this));
+		setDefaultCommand(new TestMotorControl(this));
 		setPosition(0);
 
-		//ClimberMotorConfig.encoder.countsPerRevolution(42);
-		//ClimberMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
-		//ClimberMotor.configure(ClimberMotorConfig, null, null);
+		TestMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
+		TestMotor.configure(TestMotorConfig, null, null);
 	}
 
 	/************************************************************************
@@ -77,18 +67,19 @@ public class Climber extends SubsystemBase {
 
 	public void runMotor(double speed) {
 
-		//ClimberMotor.configure(ClimberMotorConfig, null, null);
-		ClimberMotor.set(speed);
-		ClimberMotor2.set(speed * -1);
-	
+		TestMotor.set(speed);
+		TestMotor2.set(speed * -1);
+
+		getPosition();
 	}
-		/************************************************************************
+
+	/************************************************************************
 	 ************************************************************************/
 
 	private double getPosition() {
-		double pos=ClimberMotorEncoder.getPosition();
+		double pos=TestMotorEncoder.getPosition();
 
-		SmartDashboard.putNumber("Climber Position",pos);
+		SmartDashboard.putNumber("Test Motor Position",pos);
 
 		return(pos);
 	}
@@ -97,51 +88,7 @@ public class Climber extends SubsystemBase {
 	 ************************************************************************/
 
 	public void setPosition(double value) {
-		ClimberMotorEncoder.setPosition(value);
-	}
-
-	/************************************************************************
-	 ************************************************************************/
-
-	public boolean extendClimber(double speed) {
-		if (speed < 0) { 
-			return(true);
-		}
-
-		// Check Thrower Position before moving Climber
-		if (getPosition() > extendedPosition || Robot.overrideEncoders ) {
-			if ( getPosition() > 350 ) { speed *= .5; }
-    		runMotor(speed*-1);
-			return(false);
-		} else {
-			cancel();
-			return(true);
-		}	
-	}
-
-    /************************************************************************
-	 ************************************************************************/
-
-	public boolean retractClimber(double speed) {
-		boolean useLimitSwiches=true;
-
-		if (speed > 0) { 
-			return(true);
-		}
-
-		// Check Thrower Position before moving Climber
-		if (getPosition() < retractedPosition || Robot.overrideEncoders ) {
-			if (climberBottomLimit.get() == true && useLimitSwiches) {
-       		    cancel();
-				return(true);
-			} else {	
-     		    runMotor(speed*-1);
-				return(false);
-			}	
-		} else {
-     		cancel();
-			return(true);
-		}	
+		TestMotorEncoder.setPosition(value);
 	}
 
 	/************************************************************************
