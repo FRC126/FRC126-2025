@@ -32,7 +32,9 @@ public class RobotMap {
 	public static int throwerBottom=0;
 	public static int throwerTop=throwerSixtyTicks+170;
 
-
+	public static final int elevatorExtendedPosition=100;
+	public static final int elevatorRetractedPosition=0;
+	public static final double elevatorBufferPercentage=.1;
 
 	///////////////////////////////////////////////////////////////////////////
 	// Controls for Xbox 360 / Xbox One
@@ -124,7 +126,7 @@ public class RobotMap {
 
 			///////////////////////////////////////////////////////////////////////////
 			// Swerve Drive Encoders
-			SwerveFrontRightEncoderCanID = 30;
+			SwerveFrontRightEncoderCanID = 33;
 			SwerveFrontLeftEncoderCanID = 31;
 			SwerveRearRightEncoderCanID = 33;
 			SwerveRearLeftEncoderCanID = 32;
@@ -145,21 +147,22 @@ public class RobotMap {
 
 			///////////////////////////////////////////////////////////////////////////
 			// Swerve Drive Motors 
-			swerveFrontRightDriveCanID = 41;
-			swerveFrontRightTurnCanID = 40;
-			swerveFrontLeftDriveCanID = 42;
-			swerveFrontLeftTurnCanID = 43;
-			swerveRearRightDriveCanID = 47;
-			swerveRearRightTurnCanID = 46;
-			swerveRearLeftDriveCanID = 44;
-			swerveRearLeftTurnCanID = 45;
+			swerveFrontRightDriveCanID = 13;
+			swerveFrontLeftDriveCanID = 11;
+			swerveRearRightDriveCanID = 10;
+			swerveRearLeftDriveCanID = 12;
+
+			swerveFrontRightTurnCanID = 45;
+			swerveFrontLeftTurnCanID = 47;
+			swerveRearRightTurnCanID = 44;
+			swerveRearLeftTurnCanID = 40;
 
 			///////////////////////////////////////////////////////////////////////////
 			// Swerve Drive Encoders
-			SwerveFrontRightEncoderCanID = 30;
-			SwerveFrontLeftEncoderCanID = 31;
-			SwerveRearRightEncoderCanID = 32;
-			SwerveRearLeftEncoderCanID = 33;
+			SwerveFrontRightEncoderCanID = 33;
+			SwerveFrontLeftEncoderCanID = 30;
+			SwerveRearRightEncoderCanID = 31;
+			SwerveRearLeftEncoderCanID = 32;
 
 			yawOffset=0;
 
@@ -167,7 +170,7 @@ public class RobotMap {
 			leftRightInversion=-1;
 			rotateInversion=-1;
 
-	        SwerveFrontRightInversion=1;
+	        SwerveFrontRightInversion=-1;
 			SwerveFrontLeftInversion=-1;
 			SwerveRearRightInversion=1;
 			SwerveRearLeftInversion=-1;

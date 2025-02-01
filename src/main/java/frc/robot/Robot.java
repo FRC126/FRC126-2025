@@ -61,15 +61,7 @@ public class Robot extends TimedRobot {
     public static Log log;
     public static InternalData internalData;
     public static SwerveDrive swerveDrive;
-    public static Thrower thrower;    
-    public static Climber climber;
-    public static Pickup pickup;
-    public static LEDSubsystem Leds;
-    // Lidar Light Distance Measure
-    //public static LidarLite lidar;
-    // Lime Light
-    //public static LimeLight limeLight;
-
+    public static Elevator elevator;
 	public static UsbCamera driveCam;
 	public static VideoSink server;
     public static JoystickWrapper driveJoystick;
@@ -146,25 +138,18 @@ public class Robot extends TimedRobot {
         // Swerve drive subsystem 
         swerveDrive = new SwerveDrive();
 
-        // Thrower Devices
-        thrower = new Thrower();
-        thrower.resetEncoders(RobotMap.throwerSixtyTicks);
-
-        // Climber
-        climber = new Climber();
-  
-        // Pickup SubSystem
-        pickup = new Pickup();
+        // Elevator subsystem
+        elevator = new Elevator();
 
         // LED Subsystem
-        Leds = new LEDSubsystem();
+        // Leds = new LEDSubsystem();
 
         // Limelight subsystem1
         //limeLight = new LimeLight();
        
         // Navx Subsystem
         try {
-            new AHRS(NavXComType.kMXP_SPI  );
+            navxMXP = new AHRS(NavXComType.kMXP_SPI);
         } catch (RuntimeException ex) {
             DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
         }
@@ -254,6 +239,7 @@ public class Robot extends TimedRobot {
             target=Robot.targetTypes.TargetSeek; 
         }
 
+/*
         switch (selectedautoNext) {
             case threeNoteAuto:
                 SmartDashboard.putString("AutoCommand","Speaker Three Notes");
@@ -288,6 +274,7 @@ public class Robot extends TimedRobot {
                 autonomous=null;
                 break;    
         }         
+*/
 
         if (autonomous != null) {
             autonomous.schedule();
@@ -299,9 +286,9 @@ public class Robot extends TimedRobot {
     ************************************************************************/
     @Override
     public void autonomousPeriodic() {
-        Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
+        //Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
         CommandScheduler.getInstance().run();
-        Robot.Leds.doLights();
+        //Robot.Leds.doLights();
     }
 
     /************************************************************************
@@ -320,8 +307,6 @@ public class Robot extends TimedRobot {
 
 		Robot.swerveDrive.cancel();
         Robot.swerveDrive.brakesOff();
-        Robot.thrower.cancel();
-        Robot.pickup.cancel();
     }
 
     /************************************************************************
@@ -329,9 +314,9 @@ public class Robot extends TimedRobot {
     ************************************************************************/
     @Override
     public void teleopPeriodic() {
-        Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
+        //Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
         CommandScheduler.getInstance().run();
-        Robot.Leds.doLights();
+        //Robot.Leds.doLights();
         check();
     }
 
@@ -353,7 +338,7 @@ public class Robot extends TimedRobot {
 
         if (operatorJoystick.isBackButton()) {
             Robot.overrideEncoders=true;
-            Robot.climber.setPosition(0);
+            //Robot.climber.setPosition(0);
             //Robot.thrower.resetEncoders(); 
         } else {
             Robot.overrideEncoders=false;
@@ -375,9 +360,9 @@ public class Robot extends TimedRobot {
     ************************************************************************/
    @Override
     public void testPeriodic() {
-        Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
+        //Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
         CommandScheduler.getInstance().run();
-        Robot.Leds.doLights();
+        //Robot.Leds.doLights();
 }
 
     /************************************************************************
@@ -434,9 +419,6 @@ public class Robot extends TimedRobot {
         SmartDashboard.putBoolean("RobotIsAutoCommand",Robot.isAutoCommand);
 
       	Robot.swerveDrive.cancel();
-        Robot.thrower.cancel();
-        Robot.pickup.cancel();
-        Robot.climber.cancel();
 
         Robot.swerveDrive.setAutoMove(false);
 	}		

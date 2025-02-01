@@ -7,7 +7,7 @@
 	    \ \_\/\______/ \ \____/
 		 \/_/\/_____/   \/___/
 
-    Team 126 2024 Code       
+    Team 126 2025 Code       
 	Go get em gaels!
 
 ***********************************/
@@ -20,13 +20,13 @@ import frc.robot.JoystickWrapper;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class ClimberControl extends Command {
+public class ElevatorControl extends Command {
 	JoystickWrapper operatorJoystick;
 
 	/**********************************************************************************
 	 **********************************************************************************/
 
-	public ClimberControl(Climber subsystem) {
+	public ElevatorControl(Elevator subsystem) {
 		addRequirements(subsystem);
 		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.15);
 	}
@@ -45,21 +45,14 @@ public class ClimberControl extends Command {
 
 	@Override
 	public void execute() {
-    	// Climber Movement Control
+    	// Elevator Movement Control
 		double y = operatorJoystick.getRightStickY();
 
-		if (y > 0) {
-	        Robot.climber.extendClimber(y);
-			Robot.Leds.setMode(LEDSubsystem.LEDModes.Climbing);
-			SmartDashboard.putString("Climbing", "Climbing");
-
-		} else if (	y < 0 ) {
-	        Robot.climber.retractClimber(y);
-			Robot.Leds.setMode(LEDSubsystem.LEDModes.Climbing);
-			SmartDashboard.putString("Climbing", "lowering");
+		if (y != 0) {
+			Robot.elevator.moveElevator(y);
 		} else {
-			Robot.climber.cancel();
-			SmartDashboard.putString("Climbing", "no action");
+			Robot.elevator.cancel();
 		}
+		SmartDashboard.putNumber("Elevator Movement", y);
 	}
 }
