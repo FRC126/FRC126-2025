@@ -7,7 +7,7 @@
 	    \ \_\/\______/ \ \____/
 		 \/_/\/_____/   \/___/
 
-    Team 126 2024 Code       
+    Team 126 2025 Code       
 	Go get em gaels!
 
 ***********************************/
@@ -45,21 +45,14 @@ public class ElevatorControl extends Command {
 
 	@Override
 	public void execute() {
-    	// Climber Movement Control
+    	// Elevator Movement Control
 		double y = operatorJoystick.getRightStickY();
 
-		// if (y > 0) {
-	    //     Robot.climber.extendClimber(y);
-		// 	Robot.Leds.setMode(LEDSubsystem.LEDModes.Climbing);
-		// 	SmartDashboard.putString("Climbing", "Climbing");
-
-		// } else if (	y < 0 ) {
-	    //     Robot.climber.retractClimber(y);
-		// 	Robot.Leds.setMode(LEDSubsystem.LEDModes.Climbing);
-		// 	SmartDashboard.putString("Climbing", "lowering");
-		// } else {
-		// 	Robot.climber.cancel();
-		// 	SmartDashboard.putString("Climbing", "no action");
-		// }
+		if (y != 0) {
+			Robot.elevator.moveElevator(y);
+		} else {
+			Robot.elevator.cancel();
+		}
+		SmartDashboard.putNumber("Elevator Movement", y);
 	}
 }

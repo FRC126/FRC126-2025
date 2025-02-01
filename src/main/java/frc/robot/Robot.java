@@ -61,7 +61,7 @@ public class Robot extends TimedRobot {
     public static Log log;
     public static InternalData internalData;
     public static SwerveDrive swerveDrive;
-
+    public static Elevator elevator;
 	public static UsbCamera driveCam;
 	public static VideoSink server;
     public static JoystickWrapper driveJoystick;
@@ -137,6 +137,9 @@ public class Robot extends TimedRobot {
 
         // Swerve drive subsystem 
         swerveDrive = new SwerveDrive();
+
+        // Elevator subsystem
+        elevator = new Elevator();
 
         // LED Subsystem
         // Leds = new LEDSubsystem();
