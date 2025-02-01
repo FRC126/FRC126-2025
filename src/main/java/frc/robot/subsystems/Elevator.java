@@ -42,8 +42,8 @@ public class Elevator extends SubsystemBase {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
-    SparkMax elevatorMotor1 = new SparkMax(RobotMap.ClimberCanID, SparkMax.MotorType.kBrushless);
-    SparkMax elevatorMotor2 = new SparkMax(RobotMap.ClimberCanID, SparkMax.MotorType.kBrushless);
+    SparkMax elevatorMotor1 = new SparkMax(RobotMap.ElevatorCanID, SparkMax.MotorType.kBrushless);
+    SparkMax elevatorMotor2 = new SparkMax(RobotMap.ElevatorCanID2, SparkMax.MotorType.kBrushless);
 	SparkMaxConfig elevatorMotor1Config = new SparkMaxConfig();
 	SparkMaxConfig elevatorMotor2Config = new SparkMaxConfig();
     RelativeEncoder elevatorMotor1Encoder = elevatorMotor1.getEncoder();
