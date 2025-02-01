@@ -7,7 +7,7 @@
 	    \ \_\/\______/ \ \____/
 		 \/_/\/_____/   \/___/
 
-    Team 126 2024 Code       
+    Team 126 2025 Code       
 	Go get em gaels!
 
 ***********************************/
@@ -111,7 +111,7 @@ public class RobotMap {
 		robotID = robotIDIn;
 
 		if(robotID == 0) { 
-			// 2024 DriveBase
+			// 2025 DriveBase
 
 			///////////////////////////////////////////////////////////////////////////
 			// Swerve Drive Motors 
@@ -143,7 +143,7 @@ public class RobotMap {
 			SwerveRearLeftInversion=1;
 
 		} else { 
-			// 2024 Official Robot
+			// 2025 Official Robot
 
 			///////////////////////////////////////////////////////////////////////////
 			// Swerve Drive Motors 
