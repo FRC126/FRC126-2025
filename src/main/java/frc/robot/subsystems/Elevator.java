@@ -40,9 +40,6 @@ public class Elevator extends SubsystemBase {
 	double pickupRPM;
 	int called = 0;
 
-	static final double extendedPosition=0;
-	static final double retractedPosition=600;
-
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
     SparkMax elevatorMotor1 = new SparkMax(RobotMap.ClimberCanID, SparkMax.MotorType.kBrushless);
@@ -54,6 +51,8 @@ public class Elevator extends SubsystemBase {
 
     DigitalInput elevatorBottomLimit = new DigitalInput(7);
     DigitalInput elevatorTopLimit = new DigitalInput(8);
+	boolean useLimitSwiches=true;
+
 
 	/************************************************************************
 	 ************************************************************************/
@@ -64,9 +63,11 @@ public class Elevator extends SubsystemBase {
 		setDefaultCommand(new ElevatorControl(this));
 		setPosition(0);
 
-		//ClimberMotorConfig.encoder.countsPerRevolution(42);
 		elevatorMotor1.configure(elevatorMotor1Config, null, null);
 		elevatorMotor1Config.idleMode(SparkBaseConfig.IdleMode.kBrake);
+		elevatorMotor2.configure(elevatorMotor2Config, null, null);
+		elevatorMotor2Config.idleMode(SparkBaseConfig.IdleMode.kBrake);
+
 	}
 
 	/************************************************************************
@@ -79,9 +80,10 @@ public class Elevator extends SubsystemBase {
 	 ************************************************************************/
 
 	private void runMotor(double speed) {
-
 		elevatorMotor1.configure(elevatorMotor1Config, null, null);
 		elevatorMotor1.set(speed);
+		elevatorMotor2.configure(elevatorMotor2Config, null, null);
+		elevatorMotor2.set(-1*speed);
 	}
 
  	/************************************************************************
@@ -90,7 +92,7 @@ public class Elevator extends SubsystemBase {
 	private double getPosition() {
 		double pos=elevatorMotor1Encoder.getPosition();
 
-		SmartDashboard.putNumber("Climber Position",pos);
+		SmartDashboard.putNumber("Elevator Position",pos);
 
 		return(pos);
 	}
@@ -99,51 +101,38 @@ public class Elevator extends SubsystemBase {
 	 ************************************************************************/
 
 	public void setPosition(double value) {
+		// We only need to set Position of encoder on Motor1
 		elevatorMotor1Encoder.setPosition(value);
-	}
 
-	/************************************************************************
-	 ************************************************************************/
-
-	public boolean extendClimber(double speed) {
-		if (speed < 0) { 
-			return(true);
-		}
-
-		// Check Thrower Position before moving Climber
-		if (getPosition() > extendedPosition || Robot.overrideEncoders ) {
-			if ( getPosition() > 350 ) { speed *= .5; }
-    		runMotor(speed*-1);
-			return(false);
-		} else {
-			cancel();
-			return(true);
-		}	
 	}
 
     /************************************************************************
 	 ************************************************************************/
 
-	public boolean retractClimber(double speed) {
-		boolean useLimitSwiches=true;
-
-		if (speed > 0) { 
-			return(true);
+	public void moveElevator(double speed) {
+		if (speed > 1) {
+			speed = 1;
+		} else if (speed < -1) {
+			speed = -1;
 		}
-
-		// Check Thrower Position before moving Climber
-		if (getPosition() < retractedPosition || Robot.overrideEncoders ) {
-			if (elevatorBottomLimit.get() == true && useLimitSwiches) {
-       		    cancel();
-				return(true);
-			} else {	
-     		    runMotor(speed*-1);
-				return(false);
-			}	
-		} else {
-     		cancel();
-			return(true);
-		}	
+		if ( elevatorTopLimit.get() == true || elevatorBottomLimit.get() == true ) {
+			runMotor(0);
+			cancel();
+			return;
+		}
+		if (getPosition() > RobotMap.elevatorExtendedPosition || getPosition() < RobotMap.elevatorRetractedPosition) {
+			runMotor(0);
+			cancel();
+			return;
+		}
+		// Checking if close to top or bottom
+		if ( getPosition() > RobotMap.elevatorExtendedPosition*(1-RobotMap.elevatorBufferPercentage) 
+		|| getPosition() < RobotMap.elevatorRetractedPosition*RobotMap.elevatorBufferPercentage) {
+			speed*=.5;
+		} 
+		
+		runMotor(speed);
+		
 	}
 
 	/************************************************************************

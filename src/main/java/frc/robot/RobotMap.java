@@ -32,7 +32,9 @@ public class RobotMap {
 	public static int throwerBottom=0;
 	public static int throwerTop=throwerSixtyTicks+170;
 
-
+	public static final int elevatorExtendedPosition=100;
+	public static final int elevatorRetractedPosition=0;
+	public static final double elevatorBufferPercentage=.1;
 
 	///////////////////////////////////////////////////////////////////////////
 	// Controls for Xbox 360 / Xbox One
