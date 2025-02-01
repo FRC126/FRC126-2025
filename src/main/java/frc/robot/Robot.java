@@ -146,7 +146,7 @@ public class Robot extends TimedRobot {
        
         // Navx Subsystem
         try {
-            new AHRS(NavXComType.kMXP_SPI  );
+            navxMXP = new AHRS(NavXComType.kMXP_SPI);
         } catch (RuntimeException ex) {
             DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
         }
