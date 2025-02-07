@@ -72,7 +72,8 @@ public class RobotMap {
 
     ///////////////////////////////////////////////////////////////////////////
 	//Pickup Motor Can ID's
-	public static final int ClimberCanID = 51;
+	public static final int ClimberCanID = 20;
+	public static final int ClimberCanID2 = 21;
 
 	///////////////////////////////////////////////////////////////////////////
 	// Swerve Drive Motors 
@@ -170,10 +171,10 @@ public class RobotMap {
 			leftRightInversion=-1;
 			rotateInversion=-1;
 
-	        SwerveFrontRightInversion=-1;
+	        SwerveFrontRightInversion=1;
 			SwerveFrontLeftInversion=-1;
-			SwerveRearRightInversion=1;
-			SwerveRearLeftInversion=-1;
+			SwerveRearRightInversion=-1;
+			SwerveRearLeftInversion=1;
 		}
 	}
 }

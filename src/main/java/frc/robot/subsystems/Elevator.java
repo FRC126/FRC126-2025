@@ -43,16 +43,17 @@ public class Elevator extends SubsystemBase {
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
     SparkMax elevatorMotor1 = new SparkMax(RobotMap.ClimberCanID, SparkMax.MotorType.kBrushless);
-    SparkMax elevatorMotor2 = new SparkMax(RobotMap.ClimberCanID, SparkMax.MotorType.kBrushless);
-	SparkMaxConfig elevatorMotor1Config = new SparkMaxConfig();
-	SparkMaxConfig elevatorMotor2Config = new SparkMaxConfig();
-    RelativeEncoder elevatorMotor1Encoder = elevatorMotor1.getEncoder();
+    SparkMax elevatorMotor2 = new SparkMax(RobotMap.ClimberCanID2, SparkMax.MotorType.kBrushless);
+    
+	RelativeEncoder elevatorMotor1Encoder = elevatorMotor1.getEncoder();
     RelativeEncoder elevatorMotor2Encoder = elevatorMotor1.getEncoder();
+
+	SparkMaxConfig elevatorMotorConfig = new SparkMaxConfig();
 
     DigitalInput elevatorBottomLimit = new DigitalInput(7);
     DigitalInput elevatorTopLimit = new DigitalInput(8);
-	boolean useLimitSwiches=true;
 
+	boolean useLimitSwiches=true;
 
 	/************************************************************************
 	 ************************************************************************/
@@ -63,11 +64,9 @@ public class Elevator extends SubsystemBase {
 		setDefaultCommand(new ElevatorControl(this));
 		setPosition(0);
 
-		elevatorMotor1.configure(elevatorMotor1Config, null, null);
-		elevatorMotor1Config.idleMode(SparkBaseConfig.IdleMode.kBrake);
-		elevatorMotor2.configure(elevatorMotor2Config, null, null);
-		elevatorMotor2Config.idleMode(SparkBaseConfig.IdleMode.kBrake);
-
+		elevatorMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
+		elevatorMotor1.configure(elevatorMotorConfig, null, null);
+		elevatorMotor2.configure(elevatorMotorConfig, null, null);
 	}
 
 	/************************************************************************
@@ -80,9 +79,7 @@ public class Elevator extends SubsystemBase {
 	 ************************************************************************/
 
 	private void runMotor(double speed) {
-		elevatorMotor1.configure(elevatorMotor1Config, null, null);
 		elevatorMotor1.set(speed);
-		elevatorMotor2.configure(elevatorMotor2Config, null, null);
 		elevatorMotor2.set(-1*speed);
 	}
 
@@ -115,24 +112,27 @@ public class Elevator extends SubsystemBase {
 		} else if (speed < -1) {
 			speed = -1;
 		}
+
 		if ( elevatorTopLimit.get() == true || elevatorBottomLimit.get() == true ) {
-			runMotor(0);
+			// TODO Reset encoder value based on which limit it hit to correct
+			// for any encoder drift during the match
 			cancel();
 			return;
 		}
-		if (getPosition() > RobotMap.elevatorExtendedPosition || getPosition() < RobotMap.elevatorRetractedPosition) {
-			runMotor(0);
+
+		if ( getPosition() > RobotMap.elevatorExtendedPosition ||
+		    getPosition() < RobotMap.elevatorRetractedPosition ) {
 			cancel();
 			return;
 		}
+
 		// Checking if close to top or bottom
-		if ( getPosition() > RobotMap.elevatorExtendedPosition*(1-RobotMap.elevatorBufferPercentage) 
-		|| getPosition() < RobotMap.elevatorRetractedPosition*RobotMap.elevatorBufferPercentage) {
-			speed*=.5;
+		if ( getPosition() > RobotMap.elevatorExtendedPosition * ( 1 - RobotMap.elevatorBufferPercentage ) ||
+		     getPosition() < RobotMap.elevatorRetractedPosition * RobotMap.elevatorBufferPercentage ) {
+			speed *= .5;
 		} 
 		
 		runMotor(speed);
-		
 	}
 
 	/************************************************************************

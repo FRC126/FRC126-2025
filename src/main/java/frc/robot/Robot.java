@@ -139,7 +139,7 @@ public class Robot extends TimedRobot {
         swerveDrive = new SwerveDrive();
 
         // Elevator subsystem
-        elevator = new Elevator();
+        // elevator = new Elevator();
 
         // LED Subsystem
         // Leds = new LEDSubsystem();
