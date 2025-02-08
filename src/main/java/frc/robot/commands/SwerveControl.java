@@ -7,7 +7,7 @@
 	    \ \_\/\______/ \ \____/
 		 \/_/\/_____/   \/___/
 
-    Team 126 2024 Code       
+    Team 126 2025 Code       
 	Go get em gaels!
 
 ***********************************/
@@ -25,6 +25,8 @@ public class SwerveControl extends Command {
 	JoystickWrapper driveJoystick;
 	public static boolean driveStraight = false;
 	public static double straightDegrees = 0;
+	double drift = 0.05;
+	double driftFactor = (1.0/(1.0-drift));
 	int delay=0;
 
 	/**********************************************************************************
@@ -32,7 +34,7 @@ public class SwerveControl extends Command {
 
 	public SwerveControl(SwerveDrive subsystem) {
 		addRequirements(subsystem);
-		driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.10);
+		driveJoystick = new JoystickWrapper(Robot.oi.driveController, drift);
 	}
 
 	/**********************************************************************************
@@ -51,6 +53,7 @@ public class SwerveControl extends Command {
 	public void execute() {
 		if (--delay < 0) { delay=0; }
 
+
 		// X buttom aborts any running auto commands
 		if (driveJoystick.isXButton()) {
 			Robot.stopAutoCommand();
@@ -65,22 +68,22 @@ public class SwerveControl extends Command {
 		// Get the driver inputs from the driver xbox controller
 		double forwardBack = driveJoystick.getLeftStickY();
 		if (forwardBack > 0) {
-			forwardBack = (forwardBack - .1) * 1.111;
+			forwardBack = (forwardBack - drift) * driftFactor;
 		} else if (forwardBack < 0) {
-			forwardBack = (forwardBack + .1) * 1.111;
+			forwardBack = (forwardBack + drift) * driftFactor;
 		}
 		double leftRight = driveJoystick.getLeftStickX();
 		if (leftRight > 0) {
-			leftRight = (leftRight - .1) * 1.111;
+			leftRight = (leftRight - drift) * driftFactor;
 		} else if (leftRight < 0) {
-			leftRight = (leftRight + .1) * 1.111;
+			leftRight = (leftRight + drift) * driftFactor;
 		}
 
 		double rotate = driveJoystick.getRightStickX();
 		if (rotate > 0) {
-			rotate = (rotate - .1) * 1.111;
+			rotate = (rotate - drift) * driftFactor;
 		} else if (rotate < 0) {
-			rotate = (rotate + .1) * 1.111;
+			rotate = (rotate + drift) * driftFactor;
 		}
 
 		if (forwardBack == 0 && leftRight == 0 && rotate == 0) {

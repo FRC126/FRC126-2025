@@ -11,7 +11,7 @@
 	    \ \_\/\______/ \ \____/
 		 \/_/\/_____/   \/___/
 
-    Team 126 2024 Code       
+    Team 126 2025 Code       
 	Go get em gaels!
 
 ***********************************/
@@ -62,6 +62,7 @@ public class Robot extends TimedRobot {
     public static InternalData internalData;
     public static SwerveDrive swerveDrive;
     public static Elevator elevator;
+    public static CoralShooter coralShooter;
 	public static UsbCamera driveCam;
 	public static VideoSink server;
     public static JoystickWrapper driveJoystick;
@@ -140,6 +141,9 @@ public class Robot extends TimedRobot {
 
         // Elevator subsystem
         elevator = new Elevator();
+
+        // Coral Shooter subsystem
+        coralShooter = new CoralShooter();
 
         // LED Subsystem
         // Leds = new LEDSubsystem();

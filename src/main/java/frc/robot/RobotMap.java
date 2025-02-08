@@ -7,7 +7,7 @@
 	    \ \_\/\______/ \ \____/
 		 \/_/\/_____/   \/___/
 
-    Team 126 2024 Code       
+    Team 126 2025 Code       
 	Go get em gaels!
 
 ***********************************/
@@ -15,6 +15,7 @@
 package frc.robot;
 
 public class RobotMap {
+    public static double joystickDrift = 0.05;
 
 	public static int robotID=1;
 
@@ -71,9 +72,14 @@ public class RobotMap {
 	public static final int PickupCanID = 50;
 
     ///////////////////////////////////////////////////////////////////////////
-	//Pickup Motor Can ID's
+	//Elevator Motor Can ID's
 	public static final int ElevatorCanID = 20;
 	public static final int ElevatorCanID2 = 21;
+
+	///////////////////////////////////////////////////////////////////////////
+	//CoralShooter Motor Can ID's
+	public static final int CoralShooterCanID = 22;
+	public static final int CoralShooterCanID2 = 23;
 
 	///////////////////////////////////////////////////////////////////////////
 	// Swerve Drive Motors 
@@ -112,7 +118,7 @@ public class RobotMap {
 		robotID = robotIDIn;
 
 		if(robotID == 0) { 
-			// 2024 DriveBase
+			// 2025 DriveBase
 
 			///////////////////////////////////////////////////////////////////////////
 			// Swerve Drive Motors 
@@ -144,7 +150,7 @@ public class RobotMap {
 			SwerveRearLeftInversion=1;
 
 		} else { 
-			// 2024 Official Robot
+			// 2025 Official Robot
 
 			///////////////////////////////////////////////////////////////////////////
 			// Swerve Drive Motors 
@@ -171,10 +177,10 @@ public class RobotMap {
 			leftRightInversion=-1;
 			rotateInversion=-1;
 
-	        SwerveFrontRightInversion=-1;
+	        SwerveFrontRightInversion=1;
 			SwerveFrontLeftInversion=-1;
-			SwerveRearRightInversion=1;
-			SwerveRearLeftInversion=-1;
+			SwerveRearRightInversion=-1;
+			SwerveRearLeftInversion=1;
 		}
 	}
 }
