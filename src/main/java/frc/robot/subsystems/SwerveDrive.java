@@ -100,11 +100,14 @@ public class SwerveDrive extends SubsystemBase {
 
 	private double currentTurnRatio = competitionTurnRatio;
 	private double currentSpeedRatio = competitionSpeedRatio;
-
+	private ImuDevice imuDevice;
+	
 	/************************************************************************
 	 ************************************************************************/
 
-	public SwerveDrive() {
+	public SwerveDrive(ImuDevice imuDevice) {
+		this.imuDevice = imuDevice;
+		
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new SwerveControl(this));
@@ -146,17 +149,9 @@ public class SwerveDrive extends SubsystemBase {
 	 ************************************************************************/
 
 	 public double getYaw() {
-        double angle=0;
-
-        if (Robot.useNavx) { 
-			angle=Robot.navxMXP.getAngle();
-		} else {
-		    angle=Robot.internalData.getGyroAngle();
-		}	
-
+        double angle = imuDevice.getYaw();
 		angle=angle + RobotMap.yawOffset;
-
-		return(angle);
+		return angle;
 	}
 
 	/************************************************************************
@@ -170,14 +165,10 @@ public class SwerveDrive extends SubsystemBase {
 	 ************************************************************************/
 
 	 public void resetYaw(double value) {
-        if (Robot.useNavx) { 
-			if (value==0) {
-			    Robot.navxMXP.zeroYaw();
-			} else {
-				Robot.navxMXP.setAngleAdjustment(value);
-			}	
-		} else {	
-		    Robot.internalData.resetGyro();
+		if (value==0) {
+			this.imuDevice.zeroYaw();
+		} else {
+			this.imuDevice.setAngleAdjustment(value);
 		}	
 	} 
 

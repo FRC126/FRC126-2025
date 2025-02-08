@@ -25,15 +25,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.*;
-import frc.robot.commands.*;
-
-// Navx-MXP Libraries and Connection Library
-import com.studica.frc.AHRS;
-import com.studica.frc.AHRS.NavXComType;
-
-import edu.wpi.first.wpilibj.SPI;
+import frc.robot.subsystems.imu.NavxImuDevice;
+import frc.robot.subsystems.imu.Pigeon2ImuDevice;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -44,11 +38,10 @@ import edu.wpi.first.wpilibj.SPI;
 public class Robot extends TimedRobot {
     // Global Robot Variables
     public int RobotID = 1;  
-    public static boolean useNavx=true;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // NavX-MXP
-    public static AHRS navxMXP;
+    // ImuDevice
+    public static ImuDevice imuDevice;
 
      /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Auto Routines
@@ -136,8 +129,11 @@ public class Robot extends TimedRobot {
         log = new Log();
         internalData = new InternalData();
 
+        // Initialize the built in gyro
+        imuDevice = new Pigeon2ImuDevice();
+
         // Swerve drive subsystem 
-        swerveDrive = new SwerveDrive();
+        swerveDrive = new SwerveDrive(imuDevice);
 
         // Elevator subsystem
         elevator = new Elevator();
@@ -150,17 +146,6 @@ public class Robot extends TimedRobot {
 
         // Limelight subsystem1
         //limeLight = new LimeLight();
-       
-        // Navx Subsystem
-        try {
-            navxMXP = new AHRS(NavXComType.kMXP_SPI);
-        } catch (RuntimeException ex) {
-            DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
-        }
-    
-        // Initialize the built in gyro
-        internalData.initGyro();
-        internalData.resetGyro();
 
         // create the lidarlite class
         // lidar = new LidarLite();
