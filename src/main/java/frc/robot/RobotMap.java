@@ -15,6 +15,7 @@
 package frc.robot;
 
 public class RobotMap {
+    public static double joystickDrift = 0.05;
 
 	public static int robotID=1;
 
@@ -71,8 +72,14 @@ public class RobotMap {
 	public static final int PickupCanID = 50;
 
     ///////////////////////////////////////////////////////////////////////////
-	//Pickup Motor Can ID's
-	public static final int ClimberCanID = 51;
+	//Elevator Motor Can ID's
+	public static final int ElevatorCanID = 20;
+	public static final int ElevatorCanID2 = 21;
+
+	///////////////////////////////////////////////////////////////////////////
+	//CoralShooter Motor Can ID's
+	public static final int CoralShooterCanID = 22;
+	public static final int CoralShooterCanID2 = 23;
 
 	///////////////////////////////////////////////////////////////////////////
 	// Swerve Drive Motors 
@@ -170,10 +177,10 @@ public class RobotMap {
 			leftRightInversion=-1;
 			rotateInversion=-1;
 
-	        SwerveFrontRightInversion=-1;
+	        SwerveFrontRightInversion=1;
 			SwerveFrontLeftInversion=-1;
-			SwerveRearRightInversion=1;
-			SwerveRearLeftInversion=-1;
+			SwerveRearRightInversion=-1;
+			SwerveRearLeftInversion=1;
 		}
 	}
 }

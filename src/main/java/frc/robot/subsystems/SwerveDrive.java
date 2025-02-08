@@ -30,10 +30,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkRelativeEncoder;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.ctre.phoenix6.controls.DutyCycleOut;
 
 
 /**********************************************************************************
@@ -55,12 +53,7 @@ public class SwerveDrive extends SubsystemBase {
     SparkMax swerveRearRightTurnMotor = new SparkMax(RobotMap.swerveRearRightTurnCanID, SparkMax.MotorType.kBrushless);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Built in Motor Encoders fo44444444r Swerve Drive
-    //RelativeEncoder swerveFrontRightDriveRelativeEncoder = swerveFrontRightDriveMotor.getEncoder();
-    //RelativeEncoder swerveFrontLeftDriveRelativeEncoder = swerveFrontLeftDriveMotor.getEncoder();
-    //RelativeEncoder swerveRearLeftDriveRelativeEncoder = swerveRearLeftDriveMotor.getEncoder();
-    //RelativeEncoder swerveRearRightDriveRelativeEncoder = swerveRearRightDriveMotor.getEncoder();
-
+    // Built in Motor Encoders for Swerve Drive
 	RelativeEncoder swerveFrontRightTurnRelativeEncoder = swerveFrontRightTurnMotor.getEncoder();
     RelativeEncoder swerveFrontLeftTurnRelativeEncoder = swerveFrontLeftTurnMotor.getEncoder();
     RelativeEncoder swerveRearLeftTurnRelativeEncoder = swerveRearLeftTurnMotor.getEncoder();
@@ -102,12 +95,11 @@ public class SwerveDrive extends SubsystemBase {
 
 	private static final double testTurnRatio = .6;
 	private static final double testSpeedRatio = .7;
-	private static final double competitionTurnRatio = 1.0;
+	private static final double competitionTurnRatio = .8;
 	private static final double competitionSpeedRatio = 1.0;
 
-	private double currentTurnRatio = testTurnRatio;
-	private double currentSpeedRatio = testSpeedRatio;
-
+	private double currentTurnRatio = competitionTurnRatio;
+	private double currentSpeedRatio = competitionSpeedRatio;
 
 	/************************************************************************
 	 ************************************************************************/
@@ -117,18 +109,17 @@ public class SwerveDrive extends SubsystemBase {
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new SwerveControl(this));
 
-		wheelSpeed[frontLeft] = 0;
 		wheelSpeed[frontRight] = 0;
-		wheelSpeed[rearLeft] = 0;
+		wheelSpeed[frontLeft] = 0;
 		wheelSpeed[rearRight] = 0;
+		wheelSpeed[rearLeft] = 0;
  
 		SwerveConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
-		//SwerveConfig.encoder.countsPerRevolution(42);
 
 		swerveFrontRightTurnMotor.configure(SwerveConfig, null, null);
 		swerveFrontLeftTurnMotor.configure(SwerveConfig, null, null);
-		swerveRearLeftTurnMotor.configure(SwerveConfig, null, null);
 		swerveRearRightTurnMotor.configure(SwerveConfig, null, null);
+		swerveRearLeftTurnMotor.configure(SwerveConfig, null, null);
 		
 		if (RobotMap.robotID == 0) {
 			enableFullSpeed=false;
@@ -139,11 +130,7 @@ public class SwerveDrive extends SubsystemBase {
 	 ************************************************************************/
 
 	public void periodic() {}
-
-	/************************************************************************
-	 ************************************************************************
-	 
-	 
+ 
 	/************************************************************************
 	 ************************************************************************/
 
@@ -247,8 +234,8 @@ public class SwerveDrive extends SubsystemBase {
         if (targetAngle > .25 && currentAngle < -.25) { reverse=-1; }
 
 		// Skip the fast move if we are just crossing the boundry
-        if (targetAngle < -0.45 && currentAngle > .45) { skip=true; }
-        if (targetAngle > .45 && currentAngle < -.45) { skip=true; }
+        if (targetAngle < -0.5 && currentAngle > .45) { skip=true; }
+        if (targetAngle > .5 && currentAngle < -.45) { skip=true; }
 
      	//SmartDashboard.putNumber("reverse angle", reverse);
 
@@ -269,6 +256,15 @@ public class SwerveDrive extends SubsystemBase {
 		} else if (targetAngle > (currentAngle + 0.0005) ) {
 			speed=0.01 * reverse;
 		}
+
+		
+
+
+
+
+
+
+
 		return(speed*currentTurnRatio);
 	}
 
@@ -332,6 +328,8 @@ public class SwerveDrive extends SubsystemBase {
 
 	public void Drive(double forwardBackIn, double leftRightIn, double rotateIn,
 	                boolean driveStraight, double straightDegrees) { 
+
+		/*
 		if (SmartDashboard.getBoolean(Robot.COMPETITION_ROBOT, true)) {
 			currentTurnRatio = competitionTurnRatio;
 			currentSpeedRatio = competitionSpeedRatio;
@@ -339,6 +337,7 @@ public class SwerveDrive extends SubsystemBase {
 			currentTurnRatio = testTurnRatio;
 			currentSpeedRatio = testSpeedRatio;
 		}
+        */
 
 		double forwardBack = forwardBackIn;
         double leftRight = leftRightIn;
@@ -396,8 +395,8 @@ public class SwerveDrive extends SubsystemBase {
 			// zero the speed offsets
             swerveFrontRightDriveMotor.set(0);
 			swerveFrontLeftDriveMotor.set(0);
-			swerveRearLeftDriveMotor.set(0);
 			swerveRearRightDriveMotor.set(0);
+			swerveRearLeftDriveMotor.set(0);
 
 			swerveFrontRightTurnMotor.set(0);
    			swerveFrontLeftTurnMotor.set(0);
@@ -435,8 +434,8 @@ public class SwerveDrive extends SubsystemBase {
 			// Run the turning motors based on the calculated target
 			swerveFrontRightTurnMotor.set(CalcTurnSpeed(frontRightPos,frontRightAngle));
 			swerveFrontLeftTurnMotor.set(CalcTurnSpeed(frontLeftPos,frontLeftAngle));
-			swerveRearLeftTurnMotor.set(CalcTurnSpeed(rearLeftPos,rearLeftAngle));
 			swerveRearRightTurnMotor.set(CalcTurnSpeed(rearRightPos,rearRightAngle));
+			swerveRearLeftTurnMotor.set(CalcTurnSpeed(rearLeftPos,rearLeftAngle));
 			
 			// Smooth the wheel speed so the robot isn't so jumpy
 			newWheelSpeed[frontRight] = smoothWheelSpeed(newWheelSpeed[frontRight],frontRight);
@@ -447,12 +446,13 @@ public class SwerveDrive extends SubsystemBase {
 			// Run the drive motors to the smoothed speed
 			double frs = newWheelSpeed[frontRight] * currentSpeedRatio * RobotMap.SwerveFrontRightInversion;
 			double fls = newWheelSpeed[frontLeft] * currentSpeedRatio  * RobotMap.SwerveFrontLeftInversion;
-			double rls = newWheelSpeed[rearLeft] * currentSpeedRatio  * RobotMap.SwerveRearLeftInversion;
 			double rrs = newWheelSpeed[rearRight] * currentSpeedRatio  * RobotMap.SwerveRearRightInversion;
+			double rls = newWheelSpeed[rearLeft] * currentSpeedRatio  * RobotMap.SwerveRearLeftInversion;
+
 			swerveFrontRightDriveMotor.set(frs);
 			swerveFrontLeftDriveMotor.set(fls);
-			swerveRearLeftDriveMotor.set(rls);
 			swerveRearRightDriveMotor.set(rrs);
+			swerveRearLeftDriveMotor.set(rls);
 		}
 
    		SmartDashboard.putNumber("currentAngle", currentAngle);
@@ -486,10 +486,10 @@ public class SwerveDrive extends SubsystemBase {
 	 ************************************************************************/
 
 	public void resetEncoders() {
-    	//swerveFrontLeftDriveRelativeEncoder.setPosition(0);
-    	//swerveRearLeftDriveRelativeEncoder.setPosition(0);
-    	//swerveFrontRightDriveRelativeEncoder.setPosition(0);
-    	//swerveRearRightDriveRelativeEncoder.setPosition(0);
+    	swerveFrontRightDriveMotor.setPosition(0);
+		swerveFrontLeftDriveMotor.setPosition(0);
+    	swerveRearRightDriveMotor.setPosition(0);
+    	swerveRearLeftDriveMotor.setPosition(0);
 	}
 
     /************************************************************************
@@ -500,15 +500,10 @@ public class SwerveDrive extends SubsystemBase {
 		//double gearRatio=18;
 		double gearRatio=14;
 		
-		//double left1 = swerveFrontLeftDriveRelativeEncoder.getPosition() * -1;
-		//double left2 = swerveFrontLeftDriveRelativeEncoder.getPosition() * -1;
-		//double right1 = swerveFrontRightDriveRelativeEncoder.getPosition();
-		//double right2 = swerveRearRightDriveRelativeEncoder.getPosition();
-
-		double left1 = 0;
-		double left2 = 0;
-		double right1 = 0;
-		double right2 = 0;
+		double left1 = swerveFrontLeftDriveMotor.getPosition().getValueAsDouble() * -1;
+		double left2 = swerveRearLeftDriveMotor.getPosition().getValueAsDouble() * -1;
+		double right1 = swerveFrontRightDriveMotor.getPosition().getValueAsDouble() * -1;
+		double right2 = swerveRearRightDriveMotor.getPosition().getValueAsDouble() * -1;
 
 		double avg = Math.abs((left1 + left2 + right1 + right2) / 4);
 	
