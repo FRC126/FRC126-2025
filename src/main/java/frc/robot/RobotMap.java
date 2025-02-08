@@ -37,6 +37,8 @@ public class RobotMap {
 	public static final int elevatorRetractedPosition=0;
 	public static final double elevatorBufferPercentage=.1;
 
+	public static final int pigeonID = 1;
+
 	///////////////////////////////////////////////////////////////////////////
 	// Controls for Xbox 360 / Xbox One
 	public static final int lStickX = 0; // Left stick X
