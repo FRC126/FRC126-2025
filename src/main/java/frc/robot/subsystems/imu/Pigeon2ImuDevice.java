@@ -6,7 +6,7 @@ import frc.robot.RobotMap;
 import frc.robot.subsystems.ImuDevice;
 
 public class Pigeon2ImuDevice implements ImuDevice {
-    private Pigeon2 pidgey = new Pigeon2(RobotMap.pigeonID, "rio");    
+    private Pigeon2 pidgey = new Pigeon2(RobotMap.pigeonCanID, "rio");    
 
     @Override
     public void zeroYaw() {
