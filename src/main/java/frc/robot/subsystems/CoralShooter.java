@@ -36,24 +36,17 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  **********************************************************************************/
 
 public class CoralShooter extends SubsystemBase {
-	boolean pickupDebug = false;
-	double pickupRPM;
+	boolean coralShooterDebug = false;
 	int called = 0;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
     SparkMax CoralShooterMotor1 = new SparkMax(RobotMap.CoralShooterCanID, SparkMax.MotorType.kBrushless);
-    SparkMax CoralShooterMotor2 = new SparkMax(RobotMap.CoralShooterCanID2, SparkMax.MotorType.kBrushless);
-    
-	RelativeEncoder CoralShooterMotor1Encoder = CoralShooterMotor1.getEncoder();
-    RelativeEncoder CoralShooterMotor2Encoder = CoralShooterMotor1.getEncoder();
-
+    SparkMax CoralShooterMotor2 = new SparkMax(RobotMap.CoralShooterCanID2, SparkMax.MotorType.kBrushless); 
 	SparkMaxConfig CoralShooterMotorConfig = new SparkMaxConfig();
 
-    DigitalInput elevatorBottomLimit = new DigitalInput(7);
-    DigitalInput elevatorTopLimit = new DigitalInput(8);
-
-	boolean useLimitSwiches=true;
+	// Photo sensor to stop the shooter once it has hold of the coral
+	DigitalInput photoSensor = new DigitalInput(4);
 
 	/************************************************************************
 	 ************************************************************************/
@@ -62,7 +55,6 @@ public class CoralShooter extends SubsystemBase {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new CoralShooterControl(this));
-		setPosition(0);
 
 		CoralShooterMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
 		CoralShooterMotor1.configure(CoralShooterMotorConfig, null, null);
@@ -86,22 +78,11 @@ public class CoralShooter extends SubsystemBase {
  	/************************************************************************
 	 ************************************************************************/
 
-	private double getPosition() {
-		double pos=CoralShooterMotor1Encoder.getPosition();
-
-		SmartDashboard.putNumber("CoralShooter Position",pos);
-
-		return(pos);
-	}
-
- 	/************************************************************************
-	 ************************************************************************/
-
-	public void setPosition(double value) {
-		// We only need to set Position of encoder on Motor1
-		CoralShooterMotor1Encoder.setPosition(value);
-
-	}
+	 public boolean getPhotoSensor() {
+        boolean here=photoSensor.get()?false:true;
+		SmartDashboard.putBoolean("photoSensor",here);
+		return(here);
+	}	
 
 	/************************************************************************
 	 ************************************************************************/
