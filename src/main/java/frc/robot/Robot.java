@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.imu.NavxImuDevice;
+import frc.robot.subsystems.imu.Pigeon2ImuDevice;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -129,7 +130,7 @@ public class Robot extends TimedRobot {
         internalData = new InternalData();
 
         // Initialize the built in gyro
-        imuDevice = new NavxImuDevice();
+        imuDevice = new Pigeon2ImuDevice();
 
         // Swerve drive subsystem 
         swerveDrive = new SwerveDrive(imuDevice);
