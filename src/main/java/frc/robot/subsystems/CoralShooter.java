@@ -35,20 +35,20 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 /**********************************************************************************
  **********************************************************************************/
 
-public class Elevator extends SubsystemBase {
+public class CoralShooter extends SubsystemBase {
 	boolean pickupDebug = false;
 	double pickupRPM;
 	int called = 0;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
-    SparkMax elevatorMotor1 = new SparkMax(RobotMap.ElevatorCanID, SparkMax.MotorType.kBrushless);
-    SparkMax elevatorMotor2 = new SparkMax(RobotMap.ElevatorCanID2, SparkMax.MotorType.kBrushless);
+    SparkMax CoralShooterMotor1 = new SparkMax(RobotMap.CoralShooterCanID, SparkMax.MotorType.kBrushless);
+    SparkMax CoralShooterMotor2 = new SparkMax(RobotMap.CoralShooterCanID2, SparkMax.MotorType.kBrushless);
     
-	RelativeEncoder elevatorMotor1Encoder = elevatorMotor1.getEncoder();
-    RelativeEncoder elevatorMotor2Encoder = elevatorMotor1.getEncoder();
+	RelativeEncoder CoralShooterMotor1Encoder = CoralShooterMotor1.getEncoder();
+    RelativeEncoder CoralShooterMotor2Encoder = CoralShooterMotor1.getEncoder();
 
-	SparkMaxConfig elevatorMotorConfig = new SparkMaxConfig();
+	SparkMaxConfig CoralShooterMotorConfig = new SparkMaxConfig();
 
     DigitalInput elevatorBottomLimit = new DigitalInput(7);
     DigitalInput elevatorTopLimit = new DigitalInput(8);
@@ -58,15 +58,15 @@ public class Elevator extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	public Elevator() {
+	public CoralShooter() {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
-		setDefaultCommand(new ElevatorControl(this));
+		setDefaultCommand(new CoralShooterControl(this));
 		setPosition(0);
 
-		elevatorMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
-		elevatorMotor1.configure(elevatorMotorConfig, null, null);
-		elevatorMotor2.configure(elevatorMotorConfig, null, null);
+		CoralShooterMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
+		CoralShooterMotor1.configure(CoralShooterMotorConfig, null, null);
+		CoralShooterMotor2.configure(CoralShooterMotorConfig, null, null);
 	}
 
 	/************************************************************************
@@ -78,18 +78,18 @@ public class Elevator extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	private void runMotor(double speed) {
-		elevatorMotor1.set(speed);
-		elevatorMotor2.set(-1*speed);
+	public  void runCoralShooter(double speed) {
+		CoralShooterMotor1.set(speed);
+		CoralShooterMotor2.set(-1*speed);
 	}
 
  	/************************************************************************
 	 ************************************************************************/
 
 	private double getPosition() {
-		double pos=elevatorMotor1Encoder.getPosition();
+		double pos=CoralShooterMotor1Encoder.getPosition();
 
-		SmartDashboard.putNumber("Elevator Position",pos);
+		SmartDashboard.putNumber("CoralShooter Position",pos);
 
 		return(pos);
 	}
@@ -99,46 +99,14 @@ public class Elevator extends SubsystemBase {
 
 	public void setPosition(double value) {
 		// We only need to set Position of encoder on Motor1
-		elevatorMotor1Encoder.setPosition(value);
+		CoralShooterMotor1Encoder.setPosition(value);
 
-	}
-
-    /************************************************************************
-	 ************************************************************************/
-
-	public void moveElevator(double speed) {
-		if (speed > 1) {
-			speed = 1;
-		} else if (speed < -1) {
-			speed = -1;
-		}
-
-		if ( elevatorTopLimit.get() == true || elevatorBottomLimit.get() == true ) {
-			// TODO Reset encoder value based on which limit it hit to correct
-			// for any encoder drift during the match
-			cancel();
-			return;
-		}
-
-		if ( getPosition() > RobotMap.elevatorExtendedPosition ||
-		    getPosition() < RobotMap.elevatorRetractedPosition ) {
-			cancel();
-			return;
-		}
-
-		// Checking if close to top or bottom
-		if ( getPosition() > RobotMap.elevatorExtendedPosition * ( 1 - RobotMap.elevatorBufferPercentage ) ||
-		     getPosition() < RobotMap.elevatorRetractedPosition * RobotMap.elevatorBufferPercentage ) {
-			speed *= .5;
-		} 
-		
-		runMotor(speed);
 	}
 
 	/************************************************************************
 	 ************************************************************************/
 
 	public void cancel() {
-		runMotor(0);
+		runCoralShooter(0);
 	}
 }

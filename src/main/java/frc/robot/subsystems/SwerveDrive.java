@@ -256,6 +256,15 @@ public class SwerveDrive extends SubsystemBase {
 		} else if (targetAngle > (currentAngle + 0.0005) ) {
 			speed=0.01 * reverse;
 		}
+
+		
+
+
+
+
+
+
+
 		return(speed*currentTurnRatio);
 	}
 
