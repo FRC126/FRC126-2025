@@ -1,7 +1,8 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.imu;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.subsystems.ImuDevice;
 
 public class Adxrs450ImuDevice implements ImuDevice {
     private ADXRS450_Gyro gyro;

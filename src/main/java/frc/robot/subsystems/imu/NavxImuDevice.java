@@ -1,9 +1,10 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.imu;
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.subsystems.ImuDevice;
 
 public class NavxImuDevice implements ImuDevice {
     private AHRS navxMXP;

@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.imu.NavxImuDevice;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -145,8 +146,6 @@ public class Robot extends TimedRobot {
         // Limelight subsystem1
         //limeLight = new LimeLight();
 
-        // pidgey = new Pigeon2(RobotMap.pigeonID, "rio");
-           
         // create the lidarlite class
         // lidar = new LidarLite();
 
