@@ -248,14 +248,6 @@ public class SwerveDrive extends SubsystemBase {
 			speed=0.01 * reverse;
 		}
 
-		
-
-
-
-
-
-
-
 		return(speed*currentTurnRatio);
 	}
 
