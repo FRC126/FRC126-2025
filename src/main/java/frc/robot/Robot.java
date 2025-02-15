@@ -44,7 +44,7 @@ import edu.wpi.first.wpilibj.SPI;
 public class Robot extends TimedRobot {
     // Global Robot Variables
     public int RobotID = 1;  
-    public static boolean useNavx=true;
+    public static boolean useNavx=false;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
