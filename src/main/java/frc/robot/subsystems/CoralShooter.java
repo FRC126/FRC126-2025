@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.imu.NavxImuDevice;
 import frc.robot.subsystems.imu.Pigeon2ImuDevice;
 
 /**
