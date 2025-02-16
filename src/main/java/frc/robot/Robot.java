@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.imu.NavxImuDevice;
 import frc.robot.subsystems.imu.Pigeon2ImuDevice;
 
 /**
@@ -60,6 +59,9 @@ public class Robot extends TimedRobot {
 	public static VideoSink server;
     public static JoystickWrapper driveJoystick;
     public static JoystickWrapper operatorJoystick;
+    public static MeasureDistance distance;
+    public static LEDs Leds;
+    public static LimeLight limeLight;
 
     public static enum targetTypes{
         NoTarget(-1),TargetSeek(0), TargetRed(1), TargetBlue(2);
@@ -78,18 +80,9 @@ public class Robot extends TimedRobot {
     public static final int speakerAuto=0;
     public static final int ampAuto=1;
 
-    public static final int oneNoteAutoNoMove=0;
-    public static final int oneNoteAutoBackup=1;
-    public static final int twoNoteAuto=2;
-    public static final int threeNoteAuto=3;
-    public static final int oneNoteAndAmp=4;
-    public static final int oneNoteFarAutoBackup=5;
-    public static final int TwoNoteFarAuto=6;
-    public static final int justAutoBackup=7;
-    public static final int twoNoteAutoMidField=8;
-    public static final int autoNothing=9;
-        public static final int sideShoot=10;
-
+    public static final int autoNothing=0;
+    public static final int oneNoteAutoNoMove=1;
+    public static final int oneNoteAutoBackup=2;
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Automation Variables
@@ -141,14 +134,14 @@ public class Robot extends TimedRobot {
         // Coral Shooter subsystem
         coralShooter = new CoralShooter();
 
+        // Disance sensor
+        distance = new MeasureDistance();
+
         // LED Subsystem
-        // Leds = new LEDSubsystem();
+        Leds = new LEDs();
 
         // Limelight subsystem1
-        //limeLight = new LimeLight();
-
-        // create the lidarlite class
-        // lidar = new LidarLite();
+        limeLight = new LimeLight();
 
         // Server for the drive camera
         //driveCam = CameraServer.startAutomaticCapture();
@@ -165,6 +158,7 @@ public class Robot extends TimedRobot {
         //    BuildConstants.GIT_SHA
         //    ));
         Log.print(0, "Robot", "Robot Init Complete");
+
         // Put information above onto Smart Dashboard
         //SmartDashboard.putString("Git Branch", BuildConstants.GIT_BRANCH);
         //SmartDashboard.putString("Build Date", BuildConstants.BUILD_DATE);
@@ -182,13 +176,8 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData("Alliance Color",allianceColor);
         
         autoNext.setDefaultOption("do nothing dummy!",autoNothing);
-        autoNext.addOption("just backup",justAutoBackup);
         autoNext.addOption("1 note, do nothing",oneNoteAutoNoMove);
         autoNext.addOption("1 note far side (source), backup",oneNoteAutoBackup);
-        autoNext.addOption("2 note close side (amp), backup",sideShoot);
-        autoNext.addOption("2 notes center",twoNoteAuto);
-        autoNext.addOption("2 notes center, go midfield",twoNoteAutoMidField);
-        autoNext.addOption("3 notes center",threeNoteAuto);
         SmartDashboard.putData("Auto Follow Choices",autoNext);
     }
 
@@ -207,7 +196,7 @@ public class Robot extends TimedRobot {
 		try {
 			selectedautoNext = (int)autoNext.getSelected();
 		} catch(NullPointerException e) {
-			selectedautoNext = oneNoteAutoNoMove;
+			selectedautoNext = autoNothing;
 		}
 		try {
 			selectedAllianceColor = (int)allianceColor.getSelected();
@@ -219,51 +208,25 @@ public class Robot extends TimedRobot {
         if (selectedAllianceColor == redAlliance) {
             target=Robot.targetTypes.TargetRed; 
             Robot.targetType = Robot.targetTypes.TargetRed;
-            // target ID=4
         } else if (selectedAllianceColor == blueAlliance) {
             target=Robot.targetTypes.TargetBlue; 
             Robot.targetType = Robot.targetTypes.TargetBlue;
-            // target ID=7
         } else {
             target=Robot.targetTypes.TargetSeek; 
         }
 
-/*
         switch (selectedautoNext) {
-            case threeNoteAuto:
-                SmartDashboard.putString("AutoCommand","Speaker Three Notes");
-                autonomous = new AutoShootThreeSpeaker(target); 
-                break;
-            case twoNoteAuto:
-                SmartDashboard.putString("AutoCommand","Speaker Two Notes");
-                autonomous = new AutoShootTwoSpeaker(target); 
-                break;   
-            case twoNoteAutoMidField:
-                SmartDashboard.putString("AutoCommand","Speaker Two Notes - Midfield");
-                autonomous = new AutoShootTwoSpeakerAndMidField(target); 
-                break;   
             case oneNoteAutoNoMove:
                 SmartDashboard.putString("AutoCommand","Speaker One Note, No Move");
-                autonomous = new AutoShootSpeakerAndStop();
-                break;
-            case oneNoteAutoBackup:
-                SmartDashboard.putString("AutoCommand","Speaker One Note - Backup");
-                autonomous = new AutoShootSpeakerFarSideAndBackup(target);
-                break;
-            case justAutoBackup:
-                SmartDashboard.putString("AutoCommand","Just Backup");
-                autonomous = new AutoJustBackup();
-                break;
-            case sideShoot:
-                SmartDashboard.putString("AutoCommand","Just Backup");
-                autonomous = new AutoSideShootBackup(target);
+                //autonomous = new AutoShootSpeakerAndStop();
+                autonomous=null;
                 break;
             case autoNothing:
                 // Do Nothing!
                 autonomous=null;
                 break;    
         }         
-*/
+
 
         if (autonomous != null) {
             autonomous.schedule();
@@ -275,9 +238,9 @@ public class Robot extends TimedRobot {
     ************************************************************************/
     @Override
     public void autonomousPeriodic() {
-        //Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
+        Robot.Leds.forceMode(LEDs.LEDModes.GaelForce);
         CommandScheduler.getInstance().run();
-        //Robot.Leds.doLights();
+        Robot.Leds.doLights();
     }
 
     /************************************************************************
@@ -289,7 +252,7 @@ public class Robot extends TimedRobot {
   
         if(autonomous != null){
             // Cancel the auto command if it was created
-	          autonomous.cancel();
+	        autonomous.cancel();
         }
 
         Robot.stopAutoCommand();
@@ -303,9 +266,9 @@ public class Robot extends TimedRobot {
     ************************************************************************/
     @Override
     public void teleopPeriodic() {
-        //Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
+        Robot.Leds.forceMode(LEDs.LEDModes.GaelForce);
         CommandScheduler.getInstance().run();
-        //Robot.Leds.doLights();
+        Robot.Leds.doLights();
         check();
     }
 
@@ -327,8 +290,6 @@ public class Robot extends TimedRobot {
 
         if (operatorJoystick.isBackButton()) {
             Robot.overrideEncoders=true;
-            //Robot.climber.setPosition(0);
-            //Robot.thrower.resetEncoders(); 
         } else {
             Robot.overrideEncoders=false;
         }
@@ -349,9 +310,9 @@ public class Robot extends TimedRobot {
     ************************************************************************/
    @Override
     public void testPeriodic() {
-        //Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
+        Robot.Leds.forceMode(LEDs.LEDModes.GaelForce);
         CommandScheduler.getInstance().run();
-        //Robot.Leds.doLights();
+        Robot.Leds.doLights();
 }
 
     /************************************************************************

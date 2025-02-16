@@ -31,12 +31,11 @@ public class DriveWork extends Command {
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public DriveWork(double fb, double lr, double r, double dis, int itersIn) {
+    public DriveWork(double fb, double lr, double dis, int itersIn) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         driveFb = fb;
         driveLr = lr;
-        rotate = r;
         distance = dis;
         iters = itersIn;
         distanceReached=0;
@@ -70,12 +69,12 @@ public class DriveWork extends Command {
 
         double tmp = Robot.swerveDrive.getDistanceInches();
 
-        if (tmp + 6 > distance) {
+        if (tmp + 4 > distance) {
             // Slow down as we get close to the distance
             FB=driveFb*.5;
             LR=driveLr*.5;
         } 
-        if (tmp + 4 > distance) {
+        if (tmp + 2 > distance) {
             // Slow down as we get close to the distance
             FB=driveFb*.25;
             LR=driveLr*.25;
@@ -88,10 +87,10 @@ public class DriveWork extends Command {
             distanceReached++;
         }
 
-        if (FB > 0 && FB < 0.08) { FB=.08; }
-        if (FB < 0 && FB > -0.08) { FB=-.08; }
-        if (LR > 0 && LR < 0.08) { LR=.08; }
-        if (LR < 0 && LR > -0.08) { LR=-.08; }
+        if (FB > 0 && FB < 0.05) { FB=.05; }
+        if (FB < 0 && FB > -0.05) { FB=-.05; }
+        if (LR > 0 && LR < 0.05) { LR=.05; }
+        if (LR < 0 && LR > -0.05) { LR=-.05; }
 
 
         if (driveWorkDebug) { 
@@ -110,7 +109,7 @@ public class DriveWork extends Command {
     // Make this return true when this Command no longer needs to run execute()
 	@Override
     public boolean isFinished() {       
-        if (iters == 0 || distanceReached > 1 || !Robot.checkAutoCommand()) {
+        if (iters == 0 || distanceReached >= 1 || !Robot.checkAutoCommand()) {
             Robot.swerveDrive.Drive(0, 0, 0);
             return true;
         }
