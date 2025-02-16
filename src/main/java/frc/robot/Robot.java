@@ -62,6 +62,7 @@ public class Robot extends TimedRobot {
     public static JoystickWrapper operatorJoystick;
     public static MeasureDistance distance;
     public static LEDs Leds;
+    public static LimeLight limeLight;
 
     public static enum targetTypes{
         NoTarget(-1),TargetSeek(0), TargetRed(1), TargetBlue(2);
@@ -141,7 +142,7 @@ public class Robot extends TimedRobot {
         Leds = new LEDs();
 
         // Limelight subsystem1
-        //limeLight = new LimeLight();
+        limeLight = new LimeLight();
 
         // Server for the drive camera
         //driveCam = CameraServer.startAutomaticCapture();
