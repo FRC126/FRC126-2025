@@ -57,14 +57,6 @@ public class RobotMap {
 	public static final int xboxRStick = 10; // Right stick button
 
 	///////////////////////////////////////////////////////////////////////////
- 	// Thrower Motor Can ID's
-	public static final int throwerTalonMotorOneCanID = 26;
-	public static final int throwerTalonMotorTwoCanID = 27;
-	public static final int throwerTriggerMotorCanID = 28;
-	public static final int throwerClimberMotorLeftCanID = 24;
-	public static final int throwerClimberMotorRightCanID = 25;
-
-	///////////////////////////////////////////////////////////////////////////
 	// CTRE components
 	public static final int pigeonCanID = 50;
 	public static final int canRangeCanID = 51;
@@ -85,6 +77,11 @@ public class RobotMap {
 	//CoralShooter Motor Can ID's
 	public static final int CoralShooterCanID = 22;
 	public static final int CoralShooterCanID2 = 23;
+
+		///////////////////////////////////////////////////////////////////////////
+	//CoralShooter Motor Can ID's
+	public static final int BallPickupRaiseLowerCanID = 24;
+	public static final int BallPickupWheelCanID = 25;
 
 	///////////////////////////////////////////////////////////////////////////
 	// Swerve Drive Motors 

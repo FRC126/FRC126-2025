@@ -225,40 +225,29 @@ public class SwerveDrive extends SubsystemBase {
         if (targetAngle > .25 && currentAngle < -.25) { reverse=-1; }
 
 		// Skip the fast move if we are just crossing the boundry
-        if (targetAngle < -0.45 && currentAngle > 0.45) { skip=true; }
-        if (targetAngle > 0.45 && currentAngle < -0.45) { skip=true; }
+        if (targetAngle < -0.48 && currentAngle > 0.48) { skip=true; }
+        if (targetAngle > 0.48 && currentAngle < -0.48) { skip=true; }
 
-
-        boolean ratio=true;
-
-		if (ratio) {
-		    if (targetAngle > 0 && currentAngle > 0) {
-				speed = currentAngle - targetAngle;
-		    } else if (targetAngle < 0 && currentAngle < 0) {
-				speed = currentAngle - targetAngle;
-		    } else if (targetAngle > 0 && currentAngle < 0) {
-
-		    } else if (targetAngle < 0 && currentAngle > 0) {
-
-		    }  
-		} else {	
-			if ( targetAngle < (currentAngle) - 0.1 && !skip) {
-				speed=-0.4 * reverse;
-			} else if (targetAngle > (currentAngle + 0.1) && !skip) {
-				speed=0.4 * reverse;
-			} else if ( targetAngle < (currentAngle - 0.02) && !skip ) {
-				speed=-0.1 * reverse;
-			} else if (targetAngle > (currentAngle + 0.02) && !skip) {
-				speed=0.1 * reverse;
-			} else if ( targetAngle < (currentAngle - 0.0010) ) {
-				speed=-0.025 * reverse;
-			} else if (targetAngle > (currentAngle + 0.0010) ) {
-				speed=0.025 * reverse;
-			} else if ( targetAngle < (currentAngle - 0.0005) ) {
-				speed=-0.01 * reverse;
-			} else if (targetAngle > (currentAngle + 0.0005) ) {
-				speed=0.01 * reverse;
-			}
+		if ( targetAngle < (currentAngle) - 0.1 && !skip) {
+			speed=-0.4 * reverse;
+		} else if (targetAngle > (currentAngle + 0.1) && !skip) {
+			speed=0.4 * reverse;
+		} else if ( targetAngle < (currentAngle - 0.05) && !skip ) {
+			speed=-0.2 * reverse;
+		} else if (targetAngle > (currentAngle + 0.05) && !skip) {
+			speed=0.2 * reverse;
+		} else if ( targetAngle < (currentAngle - 0.02) && !skip ) {
+			speed=-0.1 * reverse;
+		} else if (targetAngle > (currentAngle + 0.02) && !skip) {
+			speed=0.1 * reverse;
+		} else if ( targetAngle < (currentAngle - 0.0050) ) {
+			speed=-0.05 * reverse;
+		} else if (targetAngle > (currentAngle + 0.0050) ) {
+			speed=0.05 * reverse;
+		} else if ( targetAngle < (currentAngle - 0.001) ) {
+			speed=-0.025 * reverse;
+		} else if (targetAngle > (currentAngle + 0.001) ) {
+			speed=0.025 * reverse;
 		}
 
 		return(speed*currentTurnRatio);

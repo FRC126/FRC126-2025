@@ -37,16 +37,16 @@ public class Elevator extends SubsystemBase {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
-    SparkMax elevatorMotor1 = new SparkMax(RobotMap.ElevatorCanID, SparkMax.MotorType.kBrushless);
-    SparkMax elevatorMotor2 = new SparkMax(RobotMap.ElevatorCanID2, SparkMax.MotorType.kBrushless);
+    SparkMax leftMotor = new SparkMax(RobotMap.ElevatorCanID, SparkMax.MotorType.kBrushless);
+    SparkMax rightMotor = new SparkMax(RobotMap.ElevatorCanID2, SparkMax.MotorType.kBrushless);
 
-	RelativeEncoder elevatorMotor1Encoder = elevatorMotor1.getEncoder();
-    RelativeEncoder elevatorMotor2Encoder = elevatorMotor2.getEncoder();
+	RelativeEncoder leftMotorEncoder = leftMotor.getEncoder();
+    RelativeEncoder rightMotorEncoder = rightMotor.getEncoder();
 
-	SparkMaxConfig elevatorMotorConfig = new SparkMaxConfig();
+	SparkMaxConfig motorConfig = new SparkMaxConfig();
 
-    DigitalInput elevatorBottomLimit = new DigitalInput(7);
-    DigitalInput elevatorTopLimit = new DigitalInput(8);
+    DigitalInput bottomLimit = new DigitalInput(7);
+    DigitalInput topLimit = new DigitalInput(8);
 
 	boolean useLimitSwiches=true;
 
@@ -59,9 +59,9 @@ public class Elevator extends SubsystemBase {
 		setDefaultCommand(new ElevatorControl(this));
 		setPosition(0);
 
-		elevatorMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
-		elevatorMotor1.configure(elevatorMotorConfig, null, null);
-		elevatorMotor2.configure(elevatorMotorConfig, null, null);
+		motorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
+		leftMotor.configure(motorConfig, null, null);
+		rightMotor.configure(motorConfig, null, null);
 	}
 
 	/************************************************************************
@@ -74,15 +74,15 @@ public class Elevator extends SubsystemBase {
 	 ************************************************************************/
 
 	private void runMotor(double speed) {
-		elevatorMotor1.set(speed);
-		elevatorMotor2.set(-1*speed);
+		leftMotor.set(speed);
+		rightMotor.set(-1*speed);
 	}
 
  	/************************************************************************
 	 ************************************************************************/
 
 	private double getPosition() {
-		double pos=elevatorMotor1Encoder.getPosition();
+		double pos=leftMotorEncoder.getPosition();
 
 		SmartDashboard.putNumber("Elevator Position",pos);
 
@@ -94,7 +94,7 @@ public class Elevator extends SubsystemBase {
 
 	public void setPosition(double value) {
 		// We only need to set Position of encoder on Motor1
-		elevatorMotor1Encoder.setPosition(value);
+		leftMotorEncoder.setPosition(value);
 
 	}
 
@@ -108,7 +108,7 @@ public class Elevator extends SubsystemBase {
 			speed = -1;
 		}
 
-		if ( elevatorTopLimit.get() == true || elevatorBottomLimit.get() == true ) {
+		if ( topLimit.get() == true || bottomLimit.get() == true ) {
 			// TODO Reset encoder value based on which limit it hit to correct
 			// for any encoder drift during the match
 			cancel();

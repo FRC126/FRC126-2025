@@ -18,6 +18,7 @@ import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -29,30 +30,36 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 /**********************************************************************************
  **********************************************************************************/
 
-public class CoralShooter extends SubsystemBase {
+public class BallPickup extends SubsystemBase {
 	boolean coralShooterDebug = false;
 	int called = 0;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
-    SparkMax leftMotor = new SparkMax(RobotMap.CoralShooterCanID, SparkMax.MotorType.kBrushless);
-    SparkMax rightMotor = new SparkMax(RobotMap.CoralShooterCanID2, SparkMax.MotorType.kBrushless); 
+    SparkMax raiseLowerMotor = new SparkMax(RobotMap.BallPickupRaiseLowerCanID, SparkMax.MotorType.kBrushless);
+    SparkMax wheelMotor = new SparkMax(RobotMap.BallPickupWheelCanID, SparkMax.MotorType.kBrushless); 
+
+	RelativeEncoder raiseLowerEncoder = raiseLowerMotor.getEncoder();
+
 	SparkMaxConfig motorConfig = new SparkMaxConfig();
 
-	// Photo sensor to stop the shooter once it has hold of the coral
-	DigitalInput photoSensor = new DigitalInput(4);
+    DigitalInput BottomLimit = new DigitalInput(5);
+    DigitalInput TopLimit = new DigitalInput(6);
+
+	boolean useLimitSwiches=false;
 
 	/************************************************************************
 	 ************************************************************************/
 
-	public CoralShooter() {
+	public BallPickup() {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
-		setDefaultCommand(new CoralShooterControl(this));
+		setDefaultCommand(new BallPickupControl(this));
 
 		motorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
-		leftMotor.configure(motorConfig, null, null);
-		rightMotor.configure(motorConfig, null, null);
+		raiseLowerMotor.configure(motorConfig, null, null);
+		wheelMotor.configure(motorConfig, null, null);
+
 	}
 
 	/************************************************************************
@@ -61,27 +68,51 @@ public class CoralShooter extends SubsystemBase {
 	public void periodic() {
 	}
 
-	/************************************************************************
+ 	/************************************************************************
 	 ************************************************************************/
 
-	public  void runCoralShooter(double speed) {
-		leftMotor.set(speed);
-		rightMotor.set(-1*speed);
+	 private double getPosition() {
+		double pos=raiseLowerEncoder.getPosition();
+
+		SmartDashboard.putNumber("ballPickup Position",pos);
+
+		return(pos);
 	}
 
  	/************************************************************************
 	 ************************************************************************/
 
-	 public boolean getPhotoSensor() {
-        boolean here=photoSensor.get()?false:true;
-		SmartDashboard.putBoolean("photoSensor",here);
-		return(here);
-	}	
+	public void setPosition(double value) {
+		// We only need to set Position of encoder on Motor1
+		raiseLowerEncoder.setPosition(value);
+
+	}
+	
+	/************************************************************************
+	 ************************************************************************/
+
+	public void raiseLower(double speedin) {
+		double speed = speedin;
+
+        if (speed > .1) { speed = .1; }
+		if (speed < -.1) { speed = -.1; }
+
+		// TODO Check Encoder
+
+		raiseLowerMotor.set(speed);
+	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public void runWheel(double speed) {
+		wheelMotor.set(speed);
+	}
 
 	/************************************************************************
 	 ************************************************************************/
 
 	public void cancel() {
-		runCoralShooter(0);
+		raiseLower(0);
 	}
 }

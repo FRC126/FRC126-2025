@@ -55,6 +55,7 @@ public class Robot extends TimedRobot {
     public static SwerveDrive swerveDrive;
     public static Elevator elevator;
     public static CoralShooter coralShooter;
+    public static BallPickup ballPickup;
 	public static UsbCamera driveCam;
 	public static VideoSink server;
     public static JoystickWrapper driveJoystick;
@@ -133,6 +134,9 @@ public class Robot extends TimedRobot {
 
         // Coral Shooter subsystem
         coralShooter = new CoralShooter();
+
+        // Ball Pickup subsystem
+        ballPickup = new BallPickup();
 
         // Disance sensor
         distance = new MeasureDistance();

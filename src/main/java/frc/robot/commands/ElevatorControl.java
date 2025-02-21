@@ -22,12 +22,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class ElevatorControl extends Command {
 	JoystickWrapper operatorJoystick;
+	Elevator subsystem;
 
 	/**********************************************************************************
 	 **********************************************************************************/
 
-	public ElevatorControl(Elevator subsystem) {
-		addRequirements(subsystem);
+	public ElevatorControl(Elevator subsystemIn) {
+		addRequirements(subsystemIn);
+		subsystem = subsystemIn;
 		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.15);
 	}
 
@@ -49,9 +51,9 @@ public class ElevatorControl extends Command {
 		double y = operatorJoystick.getRightStickY();
 
 		if (y != 0) {
-			Robot.elevator.moveElevator(y);
+			subsystem.moveElevator(y);
 		} else {
-			Robot.elevator.cancel();
+			subsystem.cancel();
 		}
 		SmartDashboard.putNumber("Elevator Movement", y);
 	}

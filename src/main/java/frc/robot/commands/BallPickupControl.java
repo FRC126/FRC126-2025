@@ -21,16 +21,16 @@ import frc.robot.JoystickWrapper;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class CoralShooterControl extends Command {
+public class BallPickupControl extends Command {
 	JoystickWrapper operatorJoystick;
-	CoralShooter subsystem;
+	BallPickup subsystem;
 
 	/**********************************************************************************
 	 **********************************************************************************/
 
-	public CoralShooterControl(CoralShooter subsystemIn) {
-		addRequirements(subsystemIn);
-		subsystem = subsystemIn;
+	public BallPickupControl(BallPickup subsystemin) {
+		addRequirements(subsystemin);
+		subsystem=subsystemin;
 		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, RobotMap.joystickDrift);
 	}
 
@@ -48,14 +48,25 @@ public class CoralShooterControl extends Command {
 
 	@Override
 	public void execute() {
-    	// Elevator Movement Control
-		double y = operatorJoystick.getLeftStickY();
+    	// Ball Pickup Movement Control
+		double y = operatorJoystick.getRightStickY();
+
 
 		if (y != 0) {
-			subsystem.runCoralShooter(y);
+			subsystem.raiseLower(y);
 		} else {
-			subsystem.cancel();
+			subsystem.raiseLower(0);
 		}
-		SmartDashboard.putNumber("Coral Shooter Movement", y);
+
+		if (operatorJoystick.isAButton()) {
+			subsystem.runWheel(.25);
+		} else if (operatorJoystick.isBButton()) {
+			subsystem.runWheel(-.25);
+		} else {
+			subsystem.runWheel(0);
+		}
+
+
+		SmartDashboard.putNumber("Ball Pickup Movement", y);
 	}
 }

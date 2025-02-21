@@ -33,7 +33,6 @@ public class LimeLight extends SubsystemBase {
     private int validCount;
     private int missedCount;
     private int centered;
-    private int aimed;    
 
     public static SequentialCommandGroup throwCommand;
     boolean limeLightDebug=false;
