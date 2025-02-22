@@ -67,24 +67,20 @@ public class RobotMap {
 	///////////////////////////////////////////////////////////////////////////
 	public static final int LidarChannel = 3; 
 
-	///////////////////////////////////////////////////////////////////////////
-	//Pickup Motor Can ID's
-	public static final int PickupCanID = 50;
-
     ///////////////////////////////////////////////////////////////////////////
 	//Elevator Motor Can ID's
-	public static final int ElevatorLeftCanID = 20;
-	public static final int ElevatorRightCanID = 21;
-	public static final int ElevatorExtensionID = 19;
+	public static final int ElevatorLeftCanID = 40;
+	public static final int ElevatorRightCanID = 47;
+	public static final int ElevatorExtensionID = 25;
 
 	///////////////////////////////////////////////////////////////////////////
 	//CoralShooter Motor Can ID's
-	public static final int CoralShooterCanID = 22;
+	public static final int CoralShooterCanID = 17;
 
 		///////////////////////////////////////////////////////////////////////////
 	//CoralShooter Motor Can ID's
-	public static final int BallPickupRaiseLowerCanID = 24;
-	public static final int BallPickupWheelCanID = 25;
+	public static final int BallPickupRaiseLowerCanID = 43;
+	public static final int BallPickupWheelCanID = 44;
 
 	///////////////////////////////////////////////////////////////////////////
 	// Swerve Drive Motors 
@@ -127,19 +123,19 @@ public class RobotMap {
 
 			///////////////////////////////////////////////////////////////////////////
 			// Swerve Drive Motors 
-			swerveFrontRightDriveCanID = 40;
-			swerveFrontRightTurnCanID = 41;
-			swerveFrontLeftDriveCanID = 43;
-			swerveFrontLeftTurnCanID = 42;
-			swerveRearRightDriveCanID = 46;
-			swerveRearRightTurnCanID = 47;
-			swerveRearLeftDriveCanID = 44;
-			swerveRearLeftTurnCanID = 45;
+			swerveFrontRightDriveCanID = 11;
+			swerveFrontRightTurnCanID = 19;
+			swerveFrontLeftDriveCanID = 12;
+			swerveFrontLeftTurnCanID = 18;
+			swerveRearRightDriveCanID = 13;
+			swerveRearRightTurnCanID = 16;
+			swerveRearLeftDriveCanID = 10;
+			swerveRearLeftTurnCanID = 9;
 
 			///////////////////////////////////////////////////////////////////////////
 			// Swerve Drive Encoders
-			SwerveFrontRightEncoderCanID = 33;
-			SwerveFrontLeftEncoderCanID = 31;
+			SwerveFrontRightEncoderCanID = 30;
+			SwerveFrontLeftEncoderCanID = 32;
 			SwerveRearRightEncoderCanID = 33;
 			SwerveRearLeftEncoderCanID = 32;
 

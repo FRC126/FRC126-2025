@@ -77,8 +77,18 @@ public class Elevator extends SubsystemBase {
 	 ************************************************************************/
 
 	private void runMotor(double speed) {
-		leftMotor.set(speed);
-		rightMotor.set(-1*speed);
+		leftMotor.set(speed*-1);
+		rightMotor.set(speed);
+	}
+
+	public void moveExtension(double speedIn) {
+        double speed = speedIn;
+
+
+
+
+
+		extensionMotor.set(speed);
 	}
 
  	/************************************************************************
@@ -110,7 +120,7 @@ public class Elevator extends SubsystemBase {
 		} else if (speed < -1) {
 			speed = -1;
 		}
-
+/*
 		if ( topLimit.get() == true || bottomLimit.get() == true ) {
 			// TODO Reset encoder value based on which limit it hit to correct
 			// for any encoder drift during the match
@@ -129,7 +139,7 @@ public class Elevator extends SubsystemBase {
 		     getPosition() < RobotMap.elevatorRetractedPosition * RobotMap.elevatorBufferPercentage ) {
 			speed *= .5;
 		} 
-		
+*/		
 		runMotor(speed);
 	}
 

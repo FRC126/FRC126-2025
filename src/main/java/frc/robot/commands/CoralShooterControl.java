@@ -49,7 +49,7 @@ public class CoralShooterControl extends Command {
 	@Override
 	public void execute() {
     	// Elevator Movement Control
-		double y = operatorJoystick.getLeftStickY() * .1;
+		double y = operatorJoystick.getLeftStickY() * .25;
 
 		if (y != 0) {
 			subsystem.runCoralShooter(y);

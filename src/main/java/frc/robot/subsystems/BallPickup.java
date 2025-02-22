@@ -96,16 +96,16 @@ public class BallPickup extends SubsystemBase {
 	public void raiseLower(double speedin) {
 		double speed = speedin;
 
-        if (speed > .3) { speed = .3; }
-		if (speed < -.3) { speed = -.3; }
-
+        if (speed > .5) { speed = .5; }
+		if (speed < -.5) { speed = -.5; }
+/* 
 		// Check Encoder
 		if ( speed > 0  && getPosition() > RobotMap.pickupExtendedPosition) { speed=0; }
 		if ( speed > 0  && getPosition() > RobotMap.pickupExtendedPosition-50) { speed=speed*.5; }
 
 		if ( speed < 0  && getPosition() < RobotMap.pickupRetracedPosition) { speed=0; }
 		if ( speed < 0  && getPosition() > RobotMap.pickupRetracedPosition+50) { speed=speed*.5; }
-
+*/
 		raiseLowerMotor.set(speed);
 	}
 
