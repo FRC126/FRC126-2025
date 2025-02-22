@@ -264,7 +264,7 @@ public class SwerveDrive extends SubsystemBase {
 
 		if (driveSlow) {
 			// Cap at 20 percent for driveSlow
-			if (input > 0.25) { input=0.25; }
+			input=input*.25;
 		} else {
 			// Cap at 50 percent for now
 			if (input > 0.5 && !enableFullSpeed ) { input=0.5; }

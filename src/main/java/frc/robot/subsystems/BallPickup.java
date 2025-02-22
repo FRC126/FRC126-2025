@@ -60,6 +60,8 @@ public class BallPickup extends SubsystemBase {
 		raiseLowerMotor.configure(motorConfig, null, null);
 		wheelMotor.configure(motorConfig, null, null);
 
+		setPosition(0);
+
 	}
 
 	/************************************************************************
@@ -94,10 +96,15 @@ public class BallPickup extends SubsystemBase {
 	public void raiseLower(double speedin) {
 		double speed = speedin;
 
-        if (speed > .1) { speed = .1; }
-		if (speed < -.1) { speed = -.1; }
+        if (speed > .3) { speed = .3; }
+		if (speed < -.3) { speed = -.3; }
 
-		// TODO Check Encoder
+		// Check Encoder
+		if ( speed > 0  && getPosition() > RobotMap.pickupExtendedPosition) { speed=0; }
+		if ( speed > 0  && getPosition() > RobotMap.pickupExtendedPosition-50) { speed=speed*.5; }
+
+		if ( speed < 0  && getPosition() < RobotMap.pickupRetracedPosition) { speed=0; }
+		if ( speed < 0  && getPosition() > RobotMap.pickupRetracedPosition+50) { speed=speed*.5; }
 
 		raiseLowerMotor.set(speed);
 	}

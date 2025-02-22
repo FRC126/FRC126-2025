@@ -48,7 +48,7 @@ public class ElevatorControl extends Command {
 	@Override
 	public void execute() {
     	// Elevator Movement Control
-		double y = operatorJoystick.getRightStickY();
+		double y = operatorJoystick.getRightStickY() * .1;
 
 		if (y != 0) {
 			subsystem.moveElevator(y);

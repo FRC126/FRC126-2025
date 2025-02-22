@@ -35,8 +35,7 @@ public class CoralShooter extends SubsystemBase {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
-    SparkMax leftMotor = new SparkMax(RobotMap.CoralShooterCanID, SparkMax.MotorType.kBrushless);
-    SparkMax rightMotor = new SparkMax(RobotMap.CoralShooterCanID2, SparkMax.MotorType.kBrushless); 
+    SparkMax motor = new SparkMax(RobotMap.CoralShooterCanID, SparkMax.MotorType.kBrushless);
 	SparkMaxConfig motorConfig = new SparkMaxConfig();
 
 	// Photo sensor to stop the shooter once it has hold of the coral
@@ -51,8 +50,7 @@ public class CoralShooter extends SubsystemBase {
 		setDefaultCommand(new CoralShooterControl(this));
 
 		motorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
-		leftMotor.configure(motorConfig, null, null);
-		rightMotor.configure(motorConfig, null, null);
+		motor.configure(motorConfig, null, null);
 	}
 
 	/************************************************************************
@@ -65,8 +63,7 @@ public class CoralShooter extends SubsystemBase {
 	 ************************************************************************/
 
 	public  void runCoralShooter(double speed) {
-		leftMotor.set(speed);
-		rightMotor.set(-1*speed);
+		motor.set(speed);
 	}
 
  	/************************************************************************

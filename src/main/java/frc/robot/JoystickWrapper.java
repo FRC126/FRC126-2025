@@ -48,9 +48,14 @@ public class JoystickWrapper {
     }
     private double getRawAxis(int axis) {
         double value = joystick.getRawAxis(axis);
-        if(Math.abs(value) < driftOffset) { // Prevent control drifting (driver controller)
+        if(Math.abs(value) < driftOffset) { 
+            // Prevent control drifting
 		    value = 0;
         }
+        // Adjust 0 for drift factor
+        double driftFactor = (1.0 / (1.0 - driftOffset));
+        if (value < 0) { value=(value + driftOffset) * driftFactor; }
+        if (value > 0) { value=(value - driftOffset) * driftFactor; }
         return value;
     }
 

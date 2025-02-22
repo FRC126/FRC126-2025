@@ -36,7 +36,7 @@ import frc.robot.subsystems.imu.Pigeon2ImuDevice;
  */
 public class Robot extends TimedRobot {
     // Global Robot Variables
-    public int RobotID = 1;  
+    public int RobotID = 0;  
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // ImuDevice

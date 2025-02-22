@@ -49,8 +49,10 @@ public class BallPickupControl extends Command {
 	@Override
 	public void execute() {
     	// Ball Pickup Movement Control
-		double y = operatorJoystick.getRightStickY();
 
+        double y=0;
+		if (operatorJoystick.getPovUp()) { y=.1; }
+		if (operatorJoystick.getPovDown()) { y=-.1; }
 
 		if (y != 0) {
 			subsystem.raiseLower(y);
@@ -58,10 +60,10 @@ public class BallPickupControl extends Command {
 			subsystem.raiseLower(0);
 		}
 
-		if (operatorJoystick.isAButton()) {
-			subsystem.runWheel(.25);
-		} else if (operatorJoystick.isBButton()) {
-			subsystem.runWheel(-.25);
+		if (operatorJoystick.getPovLeft()) {
+			subsystem.runWheel(.1);
+		} else if (operatorJoystick.getPovRight()) {
+			subsystem.runWheel(-.1);
 		} else {
 			subsystem.runWheel(0);
 		}

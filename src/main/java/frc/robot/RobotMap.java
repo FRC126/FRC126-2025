@@ -15,9 +15,9 @@
 package frc.robot;
 
 public class RobotMap {
-    public static double joystickDrift = 0.05;
+    public static double joystickDrift = 0.1;
 
-	public static int robotID=1;
+	public static int robotID=0;
 
     public static int NeoTicksPerRotation=42;
 	public static double ThrowerGearRatio=750;
@@ -33,9 +33,12 @@ public class RobotMap {
 	public static int throwerBottom=0;
 	public static int throwerTop=throwerSixtyTicks+170;
 
-	public static final int elevatorExtendedPosition=100;
+	public static final int elevatorExtendedPosition=250;
 	public static final int elevatorRetractedPosition=0;
 	public static final double elevatorBufferPercentage=.1;
+
+	public static final int pickupExtendedPosition=250;
+	public static final int pickupRetracedPosition=0;
 
 	///////////////////////////////////////////////////////////////////////////
 	// Controls for Xbox 360 / Xbox One
@@ -70,13 +73,13 @@ public class RobotMap {
 
     ///////////////////////////////////////////////////////////////////////////
 	//Elevator Motor Can ID's
-	public static final int ElevatorCanID = 20;
-	public static final int ElevatorCanID2 = 21;
+	public static final int ElevatorLeftCanID = 20;
+	public static final int ElevatorRightCanID = 21;
+	public static final int ElevatorExtensionID = 19;
 
 	///////////////////////////////////////////////////////////////////////////
 	//CoralShooter Motor Can ID's
 	public static final int CoralShooterCanID = 22;
-	public static final int CoralShooterCanID2 = 23;
 
 		///////////////////////////////////////////////////////////////////////////
 	//CoralShooter Motor Can ID's

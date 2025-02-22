@@ -37,11 +37,13 @@ public class Elevator extends SubsystemBase {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
-    SparkMax leftMotor = new SparkMax(RobotMap.ElevatorCanID, SparkMax.MotorType.kBrushless);
-    SparkMax rightMotor = new SparkMax(RobotMap.ElevatorCanID2, SparkMax.MotorType.kBrushless);
+    SparkMax leftMotor = new SparkMax(RobotMap.ElevatorLeftCanID, SparkMax.MotorType.kBrushless);
+    SparkMax rightMotor = new SparkMax(RobotMap.ElevatorRightCanID, SparkMax.MotorType.kBrushless);
+    SparkMax extensionMotor = new SparkMax(RobotMap.ElevatorExtensionID, SparkMax.MotorType.kBrushless);
 
 	RelativeEncoder leftMotorEncoder = leftMotor.getEncoder();
     RelativeEncoder rightMotorEncoder = rightMotor.getEncoder();
+    RelativeEncoder extensionMotorEncoder = extensionMotor.getEncoder();
 
 	SparkMaxConfig motorConfig = new SparkMaxConfig();
 
@@ -62,6 +64,7 @@ public class Elevator extends SubsystemBase {
 		motorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
 		leftMotor.configure(motorConfig, null, null);
 		rightMotor.configure(motorConfig, null, null);
+		extensionMotor.configure(motorConfig, null, null);
 	}
 
 	/************************************************************************
@@ -135,5 +138,6 @@ public class Elevator extends SubsystemBase {
 
 	public void cancel() {
 		runMotor(0);
+		extensionMotor.set(0);
 	}
 }
