@@ -153,40 +153,7 @@ public class RobotMap {
 			SwerveFrontLeftInversion=1;
 			SwerveRearRightInversion=1;
 			SwerveRearLeftInversion=1;
-
-		} else { 
-			// 2025 Official Robot
-
-			///////////////////////////////////////////////////////////////////////////
-			// Swerve Drive Motors 
-			swerveFrontRightDriveCanID = 13;
-			swerveFrontLeftDriveCanID = 11;
-			swerveRearRightDriveCanID = 10;
-			swerveRearLeftDriveCanID = 12;
-
-			swerveFrontRightTurnCanID = 45;
-			swerveFrontLeftTurnCanID = 47;
-			swerveRearRightTurnCanID = 44;
-			swerveRearLeftTurnCanID = 40;
-
-			///////////////////////////////////////////////////////////////////////////
-			// Swerve Drive Encoders
-			SwerveFrontRightEncoderCanID = 33;
-			SwerveFrontLeftEncoderCanID = 30;
-			SwerveRearRightEncoderCanID = 31;
-			SwerveRearLeftEncoderCanID = 32;
-
-			yawOffset=0;
-
-			frontBackInversion=1;
-			leftRightInversion=-1;
-			rotateInversion=-1;
-
-	        SwerveFrontRightInversion=1;
-			SwerveFrontLeftInversion=-1;
-			SwerveRearRightInversion=-1;
-			SwerveRearLeftInversion=1;
-		}
+		}	
 	}
 }
 

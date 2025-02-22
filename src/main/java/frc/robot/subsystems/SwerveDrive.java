@@ -124,7 +124,7 @@ public class SwerveDrive extends SubsystemBase {
 		swerveRearRightTurnMotor.configure(SwerveConfig, null, null);
 		swerveRearLeftTurnMotor.configure(SwerveConfig, null, null);
 		
-		if (RobotMap.robotID == 0) {
+		if (RobotMap.robotID == 1) {
 			enableFullSpeed=false;
 		}		
 	}
