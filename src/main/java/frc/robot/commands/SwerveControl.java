@@ -7,7 +7,7 @@
 	    \ \_\/\______/ \ \____/
 		 \/_/\/_____/   \/___/
 
-    Team 126 2025 Code       
+    Team 126 2024 Code       
 	Go get em gaels!
 
 ***********************************/
@@ -18,9 +18,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.JoystickWrapper;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
-import frc.robot.subsystems.*;
-
+import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.LEDs;
 
 public class SwerveControl extends Command {
 	JoystickWrapper driveJoystick;
@@ -33,7 +32,7 @@ public class SwerveControl extends Command {
 
 	public SwerveControl(SwerveDrive subsystem) {
 		addRequirements(subsystem);
-		driveJoystick = new JoystickWrapper(Robot.oi.driveController, RobotMap.joystickDrift);
+		driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.10);
 	}
 
 	/**********************************************************************************
@@ -52,7 +51,6 @@ public class SwerveControl extends Command {
 	public void execute() {
 		if (--delay < 0) { delay=0; }
 
-
 		// X buttom aborts any running auto commands
 		if (driveJoystick.isXButton()) {
 			Robot.stopAutoCommand();
@@ -66,8 +64,24 @@ public class SwerveControl extends Command {
 
 		// Get the driver inputs from the driver xbox controller
 		double forwardBack = driveJoystick.getLeftStickY();
+		if (forwardBack > 0) {
+			forwardBack = (forwardBack - .1) * 1.111;
+		} else if (forwardBack < 0) {
+			forwardBack = (forwardBack + .1) * 1.111;
+		}
 		double leftRight = driveJoystick.getLeftStickX();
+		if (leftRight > 0) {
+			leftRight = (leftRight - .1) * 1.111;
+		} else if (leftRight < 0) {
+			leftRight = (leftRight + .1) * 1.111;
+		}
+
 		double rotate = driveJoystick.getRightStickX();
+		if (rotate > 0) {
+			rotate = (rotate - .1) * 1.111;
+		} else if (rotate < 0) {
+			rotate = (rotate + .1) * 1.111;
+		}
 
 		if (forwardBack == 0 && leftRight == 0 && rotate == 0) {
 	        Robot.Leds.setMode(LEDs.LEDModes.GaelForce);
@@ -79,8 +93,14 @@ public class SwerveControl extends Command {
 		if (driveJoystick.getLeftTrigger() > .25) {
 			Robot.swerveDrive.driveSlow(true);
 		    Robot.Leds.setMode(LEDs.LEDModes.SlowMode);
+			forwardBack*=.3;
+			leftRight*=.3;
+			rotate*=.3;
 		} else {
 			Robot.swerveDrive.driveSlow(false);
+			forwardBack*=.7;
+			leftRight*=.7;
+			rotate*=.7;		
 		}
 
 		// Apply motor braking when the right trigger is pressed

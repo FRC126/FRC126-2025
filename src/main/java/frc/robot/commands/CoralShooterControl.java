@@ -18,6 +18,9 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.*;
 import frc.robot.JoystickWrapper;
+
+import com.ctre.phoenix6.signals.SensorDirectionValue;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -49,13 +52,25 @@ public class CoralShooterControl extends Command {
 	@Override
 	public void execute() {
     	// Elevator Movement Control
-		double y = operatorJoystick.getLeftStickY() * .25;
+		double y = operatorJoystick.getLeftStickY() * -0.5;
 
+		if (y < 0) {
+			if (!subsystem.getSensorTriggered()) {
+				if (subsystem.getPhotoSensor()) {
+					subsystem.setSensorTriggered(true);
+				}
+			} else {
+				if (!subsystem.getPhotoSensor()) {
+					subsystem.setSensorTriggered(false);
+					y=0;
+				} 
+			}
+		}
+		
 		if (y != 0) {
 			subsystem.runCoralShooter(y);
 		} else {
 			subsystem.cancel();
 		}
-		SmartDashboard.putNumber("Coral Shooter Movement", y);
 	}
 }

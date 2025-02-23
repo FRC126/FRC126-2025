@@ -73,7 +73,7 @@ public class BallPickup extends SubsystemBase {
  	/************************************************************************
 	 ************************************************************************/
 
-	 private double getPosition() {
+	 public double getPosition() {
 		double pos=raiseLowerEncoder.getPosition();
 
 		SmartDashboard.putNumber("ballPickup Position",pos);
@@ -87,9 +87,30 @@ public class BallPickup extends SubsystemBase {
 	public void setPosition(double value) {
 		// We only need to set Position of encoder on Motor1
 		raiseLowerEncoder.setPosition(value);
-
 	}
 	
+    /************************************************************************
+	 ************************************************************************/
+
+	 public void moveTarget(double target) {
+		double speed = 0;
+		double currentPosition = getPosition();
+
+		if (target > currentPosition + 3) {
+			speed = .5;
+			if (target - currentPosition < 10) { speed = .25;}
+			if (target - currentPosition < 5) { speed = .1;}
+		} else if (target < currentPosition - 3) {
+			speed = -.5;
+			if (currentPosition - target < 10) { speed = -.25;}
+			if (currentPosition - target < 5) { speed = -.1;}
+		} else {
+			speed = 0;
+		}
+
+		raiseLower(speed);
+	}
+
 	/************************************************************************
 	 ************************************************************************/
 
@@ -98,14 +119,15 @@ public class BallPickup extends SubsystemBase {
 
         if (speed > .5) { speed = .5; }
 		if (speed < -.5) { speed = -.5; }
-/* 
-		// Check Encoder
-		if ( speed > 0  && getPosition() > RobotMap.pickupExtendedPosition) { speed=0; }
-		if ( speed > 0  && getPosition() > RobotMap.pickupExtendedPosition-50) { speed=speed*.5; }
 
-		if ( speed < 0  && getPosition() < RobotMap.pickupRetracedPosition) { speed=0; }
-		if ( speed < 0  && getPosition() > RobotMap.pickupRetracedPosition+50) { speed=speed*.5; }
-*/
+		if (speed < 0 && getPosition() <=1) { speed = 0; }
+		if (speed < 0 && getPosition() <=2) { speed *= .25; }
+		if (speed < 0 && getPosition() <=3) { speed *= .5; }
+
+		if (speed > 0 && getPosition() >=20) { speed = 0; }
+		if (speed > 0 && getPosition() >=19) { speed = .25; }
+		if (speed > 0 && getPosition() >=18 ) { speed *= .5; }
+
 		raiseLowerMotor.set(speed);
 	}
 

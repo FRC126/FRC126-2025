@@ -15,7 +15,7 @@
 package frc.robot;
 
 public class RobotMap {
-    public static double joystickDrift = 0.1;
+    public static double joystickDrift = 0.15;
 
 	public static int robotID=0;
 
@@ -137,18 +137,18 @@ public class RobotMap {
 			SwerveFrontRightEncoderCanID = 30;
 			SwerveFrontLeftEncoderCanID = 32;
 			SwerveRearRightEncoderCanID = 33;
-			SwerveRearLeftEncoderCanID = 32;
+			SwerveRearLeftEncoderCanID = 31;
 
 			yawOffset=0;
 
-			frontBackInversion=-1;
-			leftRightInversion=1;
-			rotateInversion=1;
+			frontBackInversion=1;
+			leftRightInversion=-1;
+			rotateInversion=-1;
 
 	        SwerveFrontRightInversion=1;
-			SwerveFrontLeftInversion=1;
+			SwerveFrontLeftInversion=-1;
 			SwerveRearRightInversion=1;
-			SwerveRearLeftInversion=1;
+			SwerveRearLeftInversion=-1;
 		}	
 	}
 }

@@ -52,19 +52,38 @@ public class ElevatorControl extends Command {
 		double left =operatorJoystick.getLeftTrigger() *.5;
 		double right =operatorJoystick.getRightTrigger() *.5;
 
-		if (y != 0) {
-			subsystem.moveElevator(y);
-		} else {
-			subsystem.cancel();
-		}
-		SmartDashboard.putNumber("Elevator Movement", y);
+        boolean aButton = operatorJoystick.isAButton();
+		boolean bButton = operatorJoystick.isBButton();
+		boolean xButton = operatorJoystick.isXButton();
+		boolean yButton = operatorJoystick.isYButton();
 
-		if (left > 0) {
-			subsystem.moveExtension(left);
-		} else if (right > 0) {
-			subsystem.moveExtension(-right);
+		if (aButton) {
+			subsystem.moveElevatorTarget(0);
+			subsystem.moveExtensionTarget(0);
+		} else if (bButton) {
+			subsystem.moveElevatorTarget(50);
+			subsystem.moveExtensionTarget(0);
+		} else if (xButton) {
+			subsystem.moveElevatorTarget(75);
+			subsystem.moveExtensionTarget(0);
+		} else if (yButton) {
+			subsystem.moveElevatorTarget(100);
+			subsystem.moveExtensionTarget(10);
 		} else {
-			subsystem.moveExtension(0);
-		}
+			if (y != 0) {
+				subsystem.moveElevator(y);
+			} else {
+				subsystem.moveElevator(0);
+			}
+			SmartDashboard.putNumber("Elevator Movement", y);
+
+			if (left > 0) {
+				subsystem.moveExtension(left);
+			} else if (right > 0) {
+				subsystem.moveExtension(-right);
+			} else {
+				subsystem.moveExtension(0);
+			}
+		}	
 	}
 }

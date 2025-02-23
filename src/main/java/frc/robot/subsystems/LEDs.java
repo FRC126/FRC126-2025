@@ -33,16 +33,16 @@ import frc.robot.Robot;
         delay=0;
     JoystickWrapper driveJoystick;
 
-    public static enum LEDModes{None,BrakeMode,DriveMode,SlowMode,AimingRed,AimingBlue,
+    public static enum LEDModes{None,BrakeMode,DriveMode,SlowMode,ElevatorUp,ElevatorDown,
                                 ShootingSpeaker,ShootingAmp,Climbing,AutoDrive,
-                                AutoTurn,RunPickup, Rainbow, GaelForce, HaveNote, HaveNoteHigh};
+                                AutoTurn,RunPickup, Rainbow, GaelForce, HaveCoral, HaveNoteHigh};
     LEDModes LEDMode = LEDModes.GaelForce;
 
     /**********************************************************************************
      **********************************************************************************/
 
     public LEDs() {
-        m_led = new AddressableLED(9);
+        m_led = new AddressableLED(7);
 
         // LED's go into PWM #9
         m_ledBuffer = new AddressableLEDBuffer(LENGTH);
@@ -102,15 +102,15 @@ import frc.robot.Robot;
                                         break; 
                                     }
             case SlowMode:          { setColorSliding(64,64,0,125,125,0); break; }
-            case AimingRed:         { setColorSliding(0,125,0,125,0,0); break; }
-            case AimingBlue:        { setColorSliding(0,125,0,0,0,125); break; }
+            case ElevatorUp:         { setColorSliding(0,125,0,125,0,0); break; }
+            case ElevatorDown:        { setColorSliding(0,125,0,0,0,125); break; }
             case ShootingSpeaker:   { setColorSliding(64,0,64,0,0,125); break; }
             case ShootingAmp:       { setColorSliding(64,0,64,125,0,0); break; }
             case Climbing:          { rainbow(); break; } //setColorSliding(64,64,64,64,0,0); break; }
             case AutoDrive:         { setColorSliding(125,75,100,0,0,125); break; }
             case AutoTurn:          { setColorSliding(125,75,100,125,0,0); break; }
             case RunPickup:         { setColorSliding(0,64,0,100,100,100); break; }
-            case HaveNote:          { setColorSliding(237,145,15,120,70,15); break; }
+            case HaveCoral:          { setColorSliding(237,145,15,120,70,15); break; }
             case HaveNoteHigh:      { setColorSliding(0,150,150,50,0,50); break; }
             case Rainbow:           { rainbow(); break; }
             case GaelForce:         { setColorSliding(0, 64, 0, 128, 90, 0); break; }

@@ -26,7 +26,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.imu.Pigeon2ImuDevice;
+
+// Navx-MXP Libraries and Connection Library
+import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -39,9 +42,9 @@ public class Robot extends TimedRobot {
     public int RobotID = 0;  
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // ImuDevice
-    public static ImuDevice imuDevice;
-
+    // 
+    public static AHRS navxMXP;
+    
      /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Auto Routines
     public static boolean isAutoCommand=false;
@@ -63,6 +66,7 @@ public class Robot extends TimedRobot {
     public static MeasureDistance distance;
     public static LEDs Leds;
     public static LimeLight limeLight;
+    public static boolean useNavx=true;
 
     public static enum targetTypes{
         NoTarget(-1),TargetSeek(0), TargetRed(1), TargetBlue(2);
@@ -123,11 +127,9 @@ public class Robot extends TimedRobot {
         log = new Log();
         internalData = new InternalData();
 
-        // Initialize the built in gyro
-        imuDevice = new Pigeon2ImuDevice();
 
         // Swerve drive subsystem 
-        swerveDrive = new SwerveDrive(imuDevice);
+        swerveDrive = new SwerveDrive();
 
         // Elevator subsystem
         elevator = new Elevator();
@@ -146,6 +148,8 @@ public class Robot extends TimedRobot {
 
         // Limelight subsystem1
         limeLight = new LimeLight();
+
+        navxMXP = new AHRS(NavXComType.kMXP_SPI);
 
         // Server for the drive camera
         //driveCam = CameraServer.startAutomaticCapture();
@@ -294,6 +298,9 @@ public class Robot extends TimedRobot {
 
         if (operatorJoystick.isBackButton()) {
             Robot.overrideEncoders=true;
+            Robot.elevator.setPosition(0);
+            Robot.elevator.setExtensionPosition(0);
+            
         } else {
             Robot.overrideEncoders=false;
         }

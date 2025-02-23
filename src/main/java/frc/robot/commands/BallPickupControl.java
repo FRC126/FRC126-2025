@@ -52,7 +52,7 @@ public class BallPickupControl extends Command {
 
         double y=0;
 		if (operatorJoystick.getPovUp()) { y=-.20; }
-		if (operatorJoystick.getPovDown()) { y=.05; }
+		if (operatorJoystick.getPovDown()) { y=.2; }
 
 		if (y != 0) {
 			subsystem.raiseLower(y);

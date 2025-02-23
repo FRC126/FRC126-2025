@@ -14,6 +14,7 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -81,14 +82,36 @@ public class Elevator extends SubsystemBase {
 		rightMotor.set(speed);
 	}
 
- 	/************************************************************************
+    /************************************************************************
+	 ************************************************************************/
+
+	 public void moveExtensionTarget(double target) {
+		double speed = 0;
+		double currentPosition = getExtensionPosition();
+
+		if (target > currentPosition + 3) {
+			speed = .5;
+			if (target - currentPosition < 10) { speed = .25;}
+			if (target - currentPosition < 5) { speed = .1;}
+		} else if (target < currentPosition - 3) {
+			speed = -.5;
+			if (currentPosition - target < 10) { speed = -.25;}
+			if (currentPosition - target < 5) { speed = -.1;}
+		} else {
+			speed = 0;
+		}
+
+		moveExtension(speed);
+	}
+
+	/************************************************************************
 	 ************************************************************************/
 
 	 public void moveExtension(double speedIn) {
         double speed = speedIn;
 
-		if (speed < 0 && getExtensionPosition() < 50) { speed=speed*.5; }
-        if (speed < 0 && getExtensionPosition() <= 5) { speed=0; }
+		if (speed < 0 && getExtensionPosition() < 20) { speed=speed*.5; }
+        if (speed < 0 && getExtensionPosition() <= 1) { speed=0; }
 
 		/*
 		if (speed > 0 && getExtensionPosition() > 500) { speed=speed*.5; }
@@ -102,13 +125,20 @@ public class Elevator extends SubsystemBase {
 	 ************************************************************************/
 
 	 private double getExtensionPosition() {
-		double pos=extensionMotorEncoder.getPosition();
+		double pos=extensionMotorEncoder.getPosition() * -1;
 
 		SmartDashboard.putNumber("Extension Position",pos);
 
 		return(pos);
 	}
 
+ 	/************************************************************************
+	 ************************************************************************/
+
+	 public void setExtensionPosition(double value) {
+		// We only need to set Position of encoder on Motor1
+		extensionMotorEncoder.setPosition(value);
+	}
 
  	/************************************************************************
 	 ************************************************************************/
@@ -133,36 +163,52 @@ public class Elevator extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
+	public void moveElevatorTarget(double target) {
+		double speed = 0;
+		double currentPosition = getPosition();
+
+		if (target > currentPosition + 3) {
+			speed = .5;
+			if (target - currentPosition < 10) { speed = .25;}
+			if (target - currentPosition < 5) { speed = .1;}
+		} else if (target < currentPosition - 3) {
+			speed = -.5;
+			if (currentPosition - target < 10) { speed = -.25;}
+			if (currentPosition - target < 5) { speed = -.1;}
+		} else {
+			speed = 0;
+		}
+
+		moveElevator(speed);
+	}
+
+    /************************************************************************
+	 ************************************************************************/	
+
 	public void moveElevator(double speed) {
+
 		if (speed > 1) {
 			speed = 1;
 		} else if (speed < -1) {
 			speed = -1;
 		}
 
-		if (speed < 0 && getPosition() < 50) { speed=speed*.5; }
-        if (speed < 0 && getPosition() <= 5) { speed=0; }
+		if (Robot.overrideEncoders != true ) {
+			if (speed < 0 && getPosition() < 20) { speed=speed*.5; }
+			if (speed < 0 && getPosition() <= 1) { speed=0; }
+		}	
 
-/*
-		if ( topLimit.get() == true || bottomLimit.get() == true ) {
-			// TODO Reset encoder value based on which limit it hit to correct
-			// for any encoder drift during the match
-			cancel();
-			return;
+	    if (bottomLimit.get() == true && speed < 0) {
+			speed = 0;
+			setPosition(0);
 		}
 
-		if ( getPosition() > RobotMap.elevatorExtendedPosition ||
-		    getPosition() < RobotMap.elevatorRetractedPosition ) {
-			cancel();
-			return;
+        if (speed > 0) {
+			Robot.Leds.setMode(LEDs.LEDModes.ElevatorUp);
+		} else if (speed < 0) {	
+			Robot.Leds.setMode(LEDs.LEDModes.ElevatorDown);
 		}
 
-		// Checking if close to top or bottom
-		if ( getPosition() > RobotMap.elevatorExtendedPosition * ( 1 - RobotMap.elevatorBufferPercentage ) ||
-		     getPosition() < RobotMap.elevatorRetractedPosition * RobotMap.elevatorBufferPercentage ) {
-			speed *= .5;
-		} 
-*/		
 		runMotor(speed);
 	}
 

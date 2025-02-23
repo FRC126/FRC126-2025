@@ -59,9 +59,9 @@ public class LimeLightControl extends Command {
         if (driveJoystick.getPovUp() || driveJoystick.getPovDown()) {
             //Robot.limeLight.setActiveSeek(true);
             if (Robot.targetType == Robot.targetTypes.TargetRed) {
-                Robot.Leds.setMode(LEDs.LEDModes.AimingRed);
+                //Robot.Leds.setMode(LEDs.LEDModes.AimingRed);
             } else if (Robot.targetType == Robot.targetTypes.TargetBlue) {
-               Robot.Leds.setMode(LEDs.LEDModes.AimingBlue);
+               //Robot.Leds.setMode(LEDs.LEDModes.AimingBlue);
             }
             if (driveJoystick.getPovDown()) { 
                 noAngle=true;

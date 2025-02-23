@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class CoralShooter extends SubsystemBase {
 	boolean coralShooterDebug = false;
 	int called = 0;
+	static boolean sensorTriggered = false;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
@@ -51,6 +52,8 @@ public class CoralShooter extends SubsystemBase {
 
 		motorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
 		motor.configure(motorConfig, null, null);
+
+		sensorTriggered = false;
 	}
 
 	/************************************************************************
@@ -78,7 +81,22 @@ public class CoralShooter extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
+	public boolean getSensorTriggered() {
+		return(sensorTriggered);
+	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+	public void setSensorTriggered(boolean triggered) {
+		sensorTriggered = triggered;
+	}
+
+	/************************************************************************
+	 ************************************************************************/
+
 	public void cancel() {
 		runCoralShooter(0);
+		sensorTriggered = false;
 	}
 }
