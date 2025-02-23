@@ -81,21 +81,40 @@ public class Elevator extends SubsystemBase {
 		rightMotor.set(speed);
 	}
 
-	public void moveExtension(double speedIn) {
+ 	/************************************************************************
+	 ************************************************************************/
+
+	 public void moveExtension(double speedIn) {
         double speed = speedIn;
 
+		if (speed < 0 && getExtensionPosition() < 50) { speed=speed*.5; }
+        if (speed < 0 && getExtensionPosition() <= 5) { speed=0; }
 
-
-
-
+		/*
+		if (speed > 0 && getExtensionPosition() > 500) { speed=speed*.5; }
+        if (speed > 0 && getExtensionPosition() > 550) { speed=0; }
+        */
+		
 		extensionMotor.set(speed);
 	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 private double getExtensionPosition() {
+		double pos=extensionMotorEncoder.getPosition();
+
+		SmartDashboard.putNumber("Extension Position",pos);
+
+		return(pos);
+	}
+
 
  	/************************************************************************
 	 ************************************************************************/
 
 	private double getPosition() {
-		double pos=leftMotorEncoder.getPosition();
+		double pos=rightMotorEncoder.getPosition();
 
 		SmartDashboard.putNumber("Elevator Position",pos);
 
@@ -107,7 +126,7 @@ public class Elevator extends SubsystemBase {
 
 	public void setPosition(double value) {
 		// We only need to set Position of encoder on Motor1
-		leftMotorEncoder.setPosition(value);
+		rightMotorEncoder.setPosition(value);
 
 	}
 
@@ -120,6 +139,10 @@ public class Elevator extends SubsystemBase {
 		} else if (speed < -1) {
 			speed = -1;
 		}
+
+		if (speed < 0 && getPosition() < 50) { speed=speed*.5; }
+        if (speed < 0 && getPosition() <= 5) { speed=0; }
+
 /*
 		if ( topLimit.get() == true || bottomLimit.get() == true ) {
 			// TODO Reset encoder value based on which limit it hit to correct

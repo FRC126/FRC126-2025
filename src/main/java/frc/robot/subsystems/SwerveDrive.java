@@ -314,16 +314,6 @@ public class SwerveDrive extends SubsystemBase {
 	public void Drive(double forwardBackIn, double leftRightIn, double rotateIn,
 	                boolean driveStraight, double straightDegrees) { 
 
-		/*
-		if (SmartDashboard.getBoolean(Robot.COMPETITION_ROBOT, true)) {
-			currentTurnRatio = competitionTurnRatio;
-			currentSpeedRatio = competitionSpeedRatio;
-		} else {
-			currentTurnRatio = testTurnRatio;
-			currentSpeedRatio = testSpeedRatio;
-		}
-        */
-
 		double forwardBack = forwardBackIn;
         double leftRight = leftRightIn;
 		double rotate = rotateIn;
@@ -440,10 +430,9 @@ public class SwerveDrive extends SubsystemBase {
 			swerveRearLeftDriveMotor.set(rls);
 		}
 
-   		SmartDashboard.putNumber("currentAngle", currentAngle);
-
 		if (swerveDebug) { 
- 		    // Log debug data to the smart dashboard
+			SmartDashboard.putNumber("currentAngle", currentAngle);
+			// Log debug data to the smart dashboard
 			SmartDashboard.putNumber("forwardBack", forwardBack);
 			SmartDashboard.putNumber("leftRight", leftRight);
 
