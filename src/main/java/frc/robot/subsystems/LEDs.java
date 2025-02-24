@@ -34,7 +34,7 @@ import frc.robot.Robot;
     JoystickWrapper driveJoystick;
 
     public static enum LEDModes{None,BrakeMode,DriveMode,SlowMode,ElevatorUp,ElevatorDown,
-                                ShootingSpeaker,ShootingAmp,Climbing,AutoDrive,
+                                ShootingCoral,BallPickup,Climbing,AutoDrive,
                                 AutoTurn,RunPickup, Rainbow, GaelForce, HaveCoral, HaveNoteHigh};
     LEDModes LEDMode = LEDModes.GaelForce;
 
@@ -104,8 +104,8 @@ import frc.robot.Robot;
             case SlowMode:          { setColorSliding(64,64,0,125,125,0); break; }
             case ElevatorUp:         { setColorSliding(0,125,0,125,0,0); break; }
             case ElevatorDown:        { setColorSliding(0,125,0,0,0,125); break; }
-            case ShootingSpeaker:   { setColorSliding(64,0,64,0,0,125); break; }
-            case ShootingAmp:       { setColorSliding(64,0,64,125,0,0); break; }
+            case ShootingCoral:   { setColorSliding(64,0,64,0,0,125); break; }
+            case BallPickup:       { setColorSliding(64,0,64,125,0,0); break; }
             case Climbing:          { rainbow(); break; } //setColorSliding(64,64,64,64,0,0); break; }
             case AutoDrive:         { setColorSliding(125,75,100,0,0,125); break; }
             case AutoTurn:          { setColorSliding(125,75,100,125,0,0); break; }

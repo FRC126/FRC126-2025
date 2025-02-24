@@ -18,10 +18,6 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.*;
 import frc.robot.JoystickWrapper;
-
-import com.ctre.phoenix6.signals.SensorDirectionValue;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class CoralShooterControl extends Command {
@@ -56,6 +52,7 @@ public class CoralShooterControl extends Command {
 		double yorig=y;
 
 		if (y < 0) {
+			Robot.Leds.setMode(LEDs.LEDModes.ShootingCoral);
 			if (!subsystem.getSensorTriggered()) {
 				if (subsystem.getPhotoSensor()) {
 					subsystem.setSensorTriggered(true);
@@ -66,11 +63,12 @@ public class CoralShooterControl extends Command {
 					Robot.Leds.setMode(LEDs.LEDModes.ElevatorUp);
 				} 
 			}
+		} else if ( y > 0 ) {
+			Robot.Leds.setMode(LEDs.LEDModes.ShootingCoral);
 		}
 		
-		if (y != 0) {
-			subsystem.runCoralShooter(y);
-		} else {
+    	subsystem.runCoralShooter(y);
+		if (yorig == 0) {
 			subsystem.cancel();
 		}
 	}

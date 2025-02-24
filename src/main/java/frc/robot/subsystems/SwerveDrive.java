@@ -93,13 +93,11 @@ public class SwerveDrive extends SubsystemBase {
 	public final double LENGTH = 26 * inchesPerMeter;
 	public final double WIDTH = 26 * inchesPerMeter;
 
-	private static final double testTurnRatio = .6;
-	private static final double testSpeedRatio = .7;
 	private static final double competitionTurnRatio = 1.0;
 	private static final double competitionSpeedRatio = 1.0;
 
-	private double currentTurnRatio = testTurnRatio;
-	private double currentSpeedRatio = testSpeedRatio;
+	private double currentTurnRatio = competitionTurnRatio;
+	private double currentSpeedRatio = competitionTurnRatio;
 			
 	/************************************************************************
 	 ************************************************************************/
@@ -331,13 +329,6 @@ public class SwerveDrive extends SubsystemBase {
 
 	public void Drive(double forwardBackIn, double leftRightIn, double rotateIn,
 	                boolean driveStraight, double straightDegrees) { 
-		if (SmartDashboard.getBoolean(Robot.COMPETITION_ROBOT, true)) {
-			currentTurnRatio = competitionTurnRatio;
-			currentSpeedRatio = competitionSpeedRatio;
-		} else {
-			currentTurnRatio = testTurnRatio;
-			currentSpeedRatio = testSpeedRatio;
-		}
 
 		double forwardBack = forwardBackIn;
         double leftRight = leftRightIn;
@@ -451,10 +442,9 @@ public class SwerveDrive extends SubsystemBase {
 			swerveRearRightDriveMotor.set(newWheelSpeed[rearRight] * currentSpeedRatio  * RobotMap.SwerveRearRightInversion);
 		}
 
-   		SmartDashboard.putNumber("currentAngle", currentAngle);
-
 		if (swerveDebug) { 
  		    // Log debug data to the smart dashboard
+    		SmartDashboard.putNumber("currentAngle", currentAngle);
 			SmartDashboard.putNumber("forwardBack", forwardBack);
 			SmartDashboard.putNumber("leftRight", leftRight);
 

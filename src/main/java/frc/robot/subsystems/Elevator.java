@@ -112,13 +112,16 @@ public class Elevator extends SubsystemBase {
 
 	 public void moveExtension(double speedIn) {
         double speed = speedIn;
+		double currentPosition = getExtensionPosition();
 
-		if (speed < 0 && getExtensionPosition() < 20) { speed=speed*.5; }
-        if (speed < 0 && getExtensionPosition() <= 1) { speed=0; }
+		if (Robot.overrideEncoders != true ) {
+			if (speed < 0 && currentPosition < 20) { speed=speed*.5; }
+            if (speed < 0 && currentPosition <= 1) { speed=0; }
+		}	
 
 		/*
-		if (speed > 0 && getExtensionPosition() > 500) { speed=speed*.5; }
-        if (speed > 0 && getExtensionPosition() > 550) { speed=0; }
+		if (speed > 0 && currentPosition > 500) { speed=speed*.5; }
+        if (speed > 0 && currentPosition > 550) { speed=0; }
         */
 		
 		extensionMotor.set(speed);
@@ -160,7 +163,6 @@ public class Elevator extends SubsystemBase {
 	public void setPosition(double value) {
 		// We only need to set Position of encoder on Motor1
 		rightMotorEncoder.setPosition(value);
-
 	}
 
     /************************************************************************
@@ -209,9 +211,11 @@ public class Elevator extends SubsystemBase {
 			speed = -1;
 		}
 
+		double currentPosition = getPosition();
+
 		if (Robot.overrideEncoders != true ) {
-			if (speed < 0 && getPosition() < 20) { speed=speed*.5; }
-			if (speed < 0 && getPosition() <= 1) { speed=0; }
+			if (speed < 0 && currentPosition < 20) { speed=speed*.5; }
+			if (speed < 0 && currentPosition <= 1) { speed=0; }
 		}	
 
 	    if (bottomLimit.get() == true && speed < 0) {

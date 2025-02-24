@@ -17,18 +17,17 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
-public class ElevatorWork extends Command {
+public class BallPickupWork extends Command {
 
     int iters;
-    int elevatorTarget, extensionTarget;
+    int target;
 
     /**********************************************************************************
      **********************************************************************************/
 
-    public ElevatorWork(int elevatorTarget, int extensionTarget, int iters) {
+    public BallPickupWork(int target, int iters) {
         this.iters = iters;
-        this.elevatorTarget = elevatorTarget;
-        this.extensionTarget = extensionTarget; 
+        this.target = target;
     }
 
     /**********************************************************************************
@@ -45,8 +44,7 @@ public class ElevatorWork extends Command {
 
     @Override
     public void execute() {
-		Robot.elevator.moveElevatorTarget(elevatorTarget);
-		Robot.elevator.moveExtensionTarget(extensionTarget);
+		Robot.ballPickup.moveTarget(target);
     }
 
     /**********************************************************************************

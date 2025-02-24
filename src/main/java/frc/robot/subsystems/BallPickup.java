@@ -7,13 +7,14 @@
 	    \ \_\/\______/ \ \____/
 		 \/_/\/_____/   \/___/
 
-    Team 126 2024 Code       
+    Team 126 2025 Code       
 	Go get em gaels!
 
 ***********************************/
 
 package frc.robot.subsystems;
 
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -92,9 +93,12 @@ public class BallPickup extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
-	 public void moveTarget(double target) {
+	 public void moveTarget(double targetIn) {
 		double speed = 0;
 		double currentPosition = getPosition();
+
+		double target=0;
+		if (targetIn==1) { target=20; }
 
 		if (target > currentPosition + 3) {
 			speed = .5;
@@ -120,13 +124,17 @@ public class BallPickup extends SubsystemBase {
         if (speed > .5) { speed = .5; }
 		if (speed < -.5) { speed = -.5; }
 
-		if (speed < 0 && getPosition() <=1) { speed = 0; }
+		if (Robot.overrideEncoders != true ) {
+ 		    if (speed < 0 && getPosition() <=1) { speed = 0; }
+		}
+
 		if (speed < 0 && getPosition() <=2) { speed *= .25; }
 		if (speed < 0 && getPosition() <=3) { speed *= .5; }
 
 		if (speed > 0 && getPosition() >=20) { speed = 0; }
 		if (speed > 0 && getPosition() >=19) { speed = .25; }
 		if (speed > 0 && getPosition() >=18 ) { speed *= .5; }
+
 
 		raiseLowerMotor.set(speed);
 	}
