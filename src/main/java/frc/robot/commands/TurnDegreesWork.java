@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**********************************************************************************
  **********************************************************************************/
 
- public class TurnDegreesWorkFixed extends Command {
+ public class TurnDegreesWork extends Command {
     boolean turnDebug=false;
     double startAngle=Robot.swerveDrive.getYaw();    
     double targetDegrees;
@@ -32,7 +32,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public TurnDegreesWorkFixed(double degrees_in, int iters_in ) {
+    public TurnDegreesWork(double degrees_in, int iters_in ) {
         targetDegrees = degrees_in;
         iters = iters_in;
         targetReached=0;

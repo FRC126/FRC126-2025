@@ -160,13 +160,13 @@ Controls
 Driver:
     Left Joystick Y-Axis: Robot Forward and Backwards (LEDs light up green)
 	Left Joystick X-Axis: Robot Left and Right (LEDs light up green)
-	Right Joystick Y-Axis:
+	Right Joystick Y-Axis: 
 	Right Joystick X-Axis: Robot Rotate Left and Right (LEDs light up green)
 
-	POV-Up: Hold down for active aiming at selected target
+	POV-Up:
 	POV-Down: 
-	POV-Right: Seek Target 2 (LEDs light up green and blue when targeting)
-	POV_Left: Seek Target 1 (LEDs light up green and red when targeting)
+	POV-Right:
+	POV_Left:
 
 	A Button:
 	B Button: Zero Drive Gyro
@@ -183,28 +183,29 @@ Driver:
 	Start Button: Toggle Full Speed (On by default)
 
 Operator:
-    Left Joystick Y-Axis: Move Thrower Up and Down
+    Left Joystick Y-Axis: Run Coral Shooter
 	Left Joystick X-Axis:
-	Right Joystick Y-Axis: Climber Up and Down (LEDs light up rainbow)
+	Right Joystick Y-Axis: Elevator Up and Down
 	Right Joystick X-Axis:
 
-	POV-Up: Set Thrower to Climb Position
-	POV-Down: Set Thrower to Down Position
-	POV-Right: set Thrower to 45 degrees
-	POV_Left: set Thrower to 145 degrees
+	POV-Up: Raise Ball Pickup
+	POV-Down: Lower Ball Pickup
+	POV-Right: Run Ball Pickup In
+	POV_Left: Run Ball Pickup Out
 
-	A Button: Hold A button, trigger throws once wheels spin up. 
-	B Button: Toggle Thrower Idle on and off
-	X Button: Run Pick and Thrower Trigger at the same time 
-	Y Button: Pickup 
+	A Button: Hold Button, elevator and extension to bottom 
+	B Button: Hold Button, elevator and extension to first Coral Position
+	X Button: Hold Button, elevator and extension to second Coral Position
+	Y Button: Hold Button, elevator and extension to thrid Coral Position
 
-	Left Trigger: Run Pickup (LEDs light up green and white)
-	Right Trigger: Hold Right Shoulder Button, trigger throws once wheels spin up (LEDs light purple and blue).
+	Left Trigger: Lower elevator extension
+	Right Trigger: Raise elevator extension
 
-	Left Shoulder Button: Reverse Pickup, Thrower Trigger and Thrower WHeels
-	Right Shoulder Button: Auto Amp Throw
+	Left Shoulder Button: Hold Button, Raise Ball Pickup'
+	Right Shoulder Button: Hold Button, Lower and run Ball Pickup
 
 	Back Button: Ignore encoders (to lower thrower angle)
 	Start Button:
+	
 ******************************************************************************/
 

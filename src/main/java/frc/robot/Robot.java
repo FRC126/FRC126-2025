@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.*;
+import frc.robot.commands.*;
 
 // Navx-MXP Libraries and Connection Library
 import com.studica.frc.AHRS;
@@ -82,12 +83,9 @@ public class Robot extends TimedRobot {
     public static final int redAlliance=0;
     public static final int blueAlliance=1;
 
-    public static final int speakerAuto=0;
-    public static final int ampAuto=1;
-
     public static final int autoNothing=0;
-    public static final int oneNoteAutoNoMove=1;
-    public static final int oneNoteAutoBackup=2;
+    public static final int coralLowStraight=1;
+    public static final int coralHighStraight=2;
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Automation Variables
@@ -103,8 +101,6 @@ public class Robot extends TimedRobot {
     int selectedautoNext;
     int selectedAllianceColor;
 	
-    private final SendableChooser<Integer> autoFunction = new SendableChooser<>();
-    private final SendableChooser<Integer> autoPosition = new SendableChooser<>();
     private final SendableChooser<Integer> autoNext = new SendableChooser<>();
     private final SendableChooser<Integer> allianceColor = new SendableChooser<>();
 
@@ -127,7 +123,6 @@ public class Robot extends TimedRobot {
         log = new Log();
         internalData = new InternalData();
 
-
         // Swerve drive subsystem 
         swerveDrive = new SwerveDrive();
 
@@ -141,13 +136,13 @@ public class Robot extends TimedRobot {
         ballPickup = new BallPickup();
 
         // Disance sensor
-        distance = new MeasureDistance();
+        // distance = new MeasureDistance();
 
         // LED Subsystem
         Leds = new LEDs();
 
         // Limelight subsystem1
-        limeLight = new LimeLight();
+        // limeLight = new LimeLight();
 
         navxMXP = new AHRS(NavXComType.kMXP_SPI);
 
@@ -159,24 +154,8 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putBoolean(COMPETITION_ROBOT, true);
 
-        //Log.print(0, "Git Info", "branch: %s buildDate: %s gitDate: %s sha: %s".formatted(
-        //   BuildConstants.GIT_BRANCH,
-        //    BuildConstants.BUILD_DATE,
-        //    BuildConstants.GIT_DATE,
-        //    BuildConstants.GIT_SHA
-        //    ));
         Log.print(0, "Robot", "Robot Init Complete");
-
-        // Put information above onto Smart Dashboard
-        //SmartDashboard.putString("Git Branch", BuildConstants.GIT_BRANCH);
-        //SmartDashboard.putString("Build Date", BuildConstants.BUILD_DATE);
-
-        // Dashboard Cooser for the Autonomous mode move
-        autoFunction.setDefaultOption("Speaker Shot",speakerAuto);
-        //autoFunction.addOption("Amplifier",ampAuto);
-        SmartDashboard.putData("Auto Target",autoFunction);
-
-   
+ 
         // Dashboard Cooser for the Autonomous mode position
         allianceColor.setDefaultOption("No Alliance",noAlliance);
         allianceColor.addOption("Red Alliance",redAlliance);
@@ -184,9 +163,9 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData("Alliance Color",allianceColor);
         
         autoNext.setDefaultOption("do nothing dummy!",autoNothing);
-        autoNext.addOption("1 note, do nothing",oneNoteAutoNoMove);
-        autoNext.addOption("1 note far side (source), backup",oneNoteAutoBackup);
-        SmartDashboard.putData("Auto Follow Choices",autoNext);
+        autoNext.addOption("Coral Low Straight",coralLowStraight);
+        autoNext.addOption("Coral High Straight",coralHighStraight);
+        SmartDashboard.putData("Auto Choices",autoNext);
     }
 
  	  /************************************************************************
@@ -212,22 +191,22 @@ public class Robot extends TimedRobot {
 			selectedAllianceColor = noAlliance;
 		}
 
-        Robot.targetTypes target;
+        Robot.targetTypes target = Robot.targetTypes.TargetSeek; 
         if (selectedAllianceColor == redAlliance) {
             target=Robot.targetTypes.TargetRed; 
-            Robot.targetType = Robot.targetTypes.TargetRed;
         } else if (selectedAllianceColor == blueAlliance) {
             target=Robot.targetTypes.TargetBlue; 
-            Robot.targetType = Robot.targetTypes.TargetBlue;
-        } else {
-            target=Robot.targetTypes.TargetSeek; 
         }
+        Robot.targetType = target;
 
         switch (selectedautoNext) {
-            case oneNoteAutoNoMove:
-                SmartDashboard.putString("AutoCommand","Speaker One Note, No Move");
-                //autonomous = new AutoShootSpeakerAndStop();
-                autonomous=null;
+            case coralLowStraight:
+                SmartDashboard.putString("AutoCommand","Coral Low Straight");
+                autonomous = new AutoCoralLow();
+                break;
+            case coralHighStraight:
+                SmartDashboard.putString("AutoCommand","Coral High Straight");
+                autonomous = new AutoCoralHigh();
                 break;
             case autoNothing:
                 // Do Nothing!
@@ -285,7 +264,7 @@ public class Robot extends TimedRobot {
 
     private void check() {
         if (operatorJoystick==null) {
-            operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.15);
+            operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, RobotMap.joystickDrift);
         }
 		
         //if (operatorJoystick.isRShoulderButton()) {
@@ -300,7 +279,7 @@ public class Robot extends TimedRobot {
             Robot.overrideEncoders=true;
             Robot.elevator.setPosition(0);
             Robot.elevator.setExtensionPosition(0);
-            
+            Robot.ballPickup.setPosition(0);
         } else {
             Robot.overrideEncoders=false;
         }

@@ -53,6 +53,7 @@ public class CoralShooterControl extends Command {
 	public void execute() {
     	// Elevator Movement Control
 		double y = operatorJoystick.getLeftStickY() * -0.5;
+		double yorig=y;
 
 		if (y < 0) {
 			if (!subsystem.getSensorTriggered()) {
@@ -61,8 +62,8 @@ public class CoralShooterControl extends Command {
 				}
 			} else {
 				if (!subsystem.getPhotoSensor()) {
-					subsystem.setSensorTriggered(false);
 					y=0;
+					Robot.Leds.setMode(LEDs.LEDModes.ElevatorUp);
 				} 
 			}
 		}

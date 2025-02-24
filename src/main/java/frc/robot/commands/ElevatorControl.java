@@ -61,14 +61,14 @@ public class ElevatorControl extends Command {
 			subsystem.moveElevatorTarget(0);
 			subsystem.moveExtensionTarget(0);
 		} else if (bButton) {
-			subsystem.moveElevatorTarget(50);
+			subsystem.moveElevatorTarget(1);
 			subsystem.moveExtensionTarget(0);
 		} else if (xButton) {
-			subsystem.moveElevatorTarget(75);
+			subsystem.moveElevatorTarget(2);
 			subsystem.moveExtensionTarget(0);
 		} else if (yButton) {
-			subsystem.moveElevatorTarget(100);
-			subsystem.moveExtensionTarget(10);
+			subsystem.moveElevatorTarget(3);
+			subsystem.moveExtensionTarget(1);
 		} else {
 			if (y != 0) {
 				subsystem.moveElevator(y);

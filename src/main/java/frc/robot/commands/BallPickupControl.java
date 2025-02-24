@@ -51,24 +51,32 @@ public class BallPickupControl extends Command {
     	// Ball Pickup Movement Control
 
         double y=0;
-		if (operatorJoystick.getPovUp()) { y=-.20; }
-		if (operatorJoystick.getPovDown()) { y=.2; }
 
-		if (y != 0) {
-			subsystem.raiseLower(y);
-		} else {
-			subsystem.raiseLower(0);
-		}
-
-		if (operatorJoystick.getPovLeft()) {
-			subsystem.runWheel(.25);
-		} else if (operatorJoystick.getPovRight()) {
-			subsystem.runWheel(-.25);
-		} else {
+		if (operatorJoystick.isLShoulderButton()) {
+			subsystem.moveTarget(0);
 			subsystem.runWheel(0);
-		}
+		} else if (operatorJoystick.isRShoulderButton()) {
+			subsystem.moveTarget(15);
+			subsystem.runWheel(.25);
+		} else {
+			if (operatorJoystick.getPovUp()) { y=-.20; }
+			if (operatorJoystick.getPovDown()) { y=.2; }
 
+			if (y != 0) {
+				subsystem.raiseLower(y);
+			} else {
+				subsystem.raiseLower(0);
+			}
 
-		SmartDashboard.putNumber("Ball Pickup Movement", y);
+			if (operatorJoystick.getPovLeft()) {
+				subsystem.runWheel(.25);
+			} else if (operatorJoystick.getPovRight()) {
+				subsystem.runWheel(-.25);
+			} else {
+				subsystem.runWheel(0);
+			}
+
+   		    SmartDashboard.putNumber("Ball Pickup Movement", y);
+		}	
 	}
 }

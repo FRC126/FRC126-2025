@@ -85,9 +85,12 @@ public class Elevator extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
-	 public void moveExtensionTarget(double target) {
+	 public void moveExtensionTarget(int targetIn) {
 		double speed = 0;
 		double currentPosition = getExtensionPosition();
+
+		double target=0;
+		if (targetIn==1) { target=20; }
 
 		if (target > currentPosition + 3) {
 			speed = .5;
@@ -163,9 +166,22 @@ public class Elevator extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
-	public void moveElevatorTarget(double target) {
+	public void moveElevatorTarget(int targetIn) {
 		double speed = 0;
 		double currentPosition = getPosition();
+
+		double target=0;
+		switch(targetIn) {
+			case 1:              // Low
+				target=50;
+				break;
+			case 2:             // Middle
+				target=75;
+				break;
+			case 3:		    	// High
+				target=100;
+				break;
+		}
 
 		if (target > currentPosition + 3) {
 			speed = .5;
