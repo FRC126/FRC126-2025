@@ -52,16 +52,18 @@ public class CoralShooterControl extends Command {
 		double yorig=y;
 
 		if (y < 0) {
-			Robot.Leds.setMode(LEDs.LEDModes.ShootingCoral);
 			if (!subsystem.getSensorTriggered()) {
 				if (subsystem.getPhotoSensor()) {
 					subsystem.setSensorTriggered(true);
 				}
+				Robot.Leds.setMode(LEDs.LEDModes.ShootingCoral);
 			} else {
 				if (!subsystem.getPhotoSensor()) {
 					y=0;
 					Robot.Leds.setMode(LEDs.LEDModes.ElevatorUp);
-				} 
+				} else {
+					Robot.Leds.setMode(LEDs.LEDModes.ShootingCoral);
+				}
 			}
 		} else if ( y > 0 ) {
 			Robot.Leds.setMode(LEDs.LEDModes.ShootingCoral);
