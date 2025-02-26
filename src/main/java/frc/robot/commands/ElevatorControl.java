@@ -48,9 +48,8 @@ public class ElevatorControl extends Command {
 	@Override
 	public void execute() {
     	// Elevator Movement Control
-		double y = operatorJoystick.getRightStickY() * .25;
-		double left =operatorJoystick.getLeftTrigger() *.5;
-		double right =operatorJoystick.getRightTrigger() *.5;
+		double y = operatorJoystick.getRightStickY() * .4;
+		double y2 =operatorJoystick.getLeftStickY() * -.75;
 
         boolean aButton = operatorJoystick.isAButton();
 		boolean bButton = operatorJoystick.isBButton();
@@ -63,10 +62,10 @@ public class ElevatorControl extends Command {
 		} else if (bButton) {
 			subsystem.moveElevatorTarget(1);
 			subsystem.moveExtensionTarget(0);
-		} else if (xButton) {
+		} else if (yButton) {
 			subsystem.moveElevatorTarget(2);
 			subsystem.moveExtensionTarget(0);
-		} else if (yButton) {
+		} else if (xButton) {
 			subsystem.moveElevatorTarget(3);
 			subsystem.moveExtensionTarget(1);
 		} else {
@@ -77,10 +76,8 @@ public class ElevatorControl extends Command {
 			}
 			SmartDashboard.putNumber("Elevator Movement", y);
 
-			if (left > 0) {
-				subsystem.moveExtension(left);
-			} else if (right > 0) {
-				subsystem.moveExtension(-right);
+			if (y2!=0) {
+				subsystem.moveExtension(y2);
 			} else {
 				subsystem.moveExtension(0);
 			}

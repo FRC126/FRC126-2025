@@ -40,7 +40,7 @@ public class CoralShooter extends SubsystemBase {
 	SparkMaxConfig motorConfig = new SparkMaxConfig();
 
 	// Photo sensor to stop the shooter once it has hold of the coral
-	DigitalInput photoSensor = new DigitalInput(4);
+	DigitalInput photoSensor = new DigitalInput(7);
 
 	/************************************************************************
 	 ************************************************************************/

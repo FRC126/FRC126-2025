@@ -121,19 +121,20 @@ public class BallPickup extends SubsystemBase {
 	public void raiseLower(double speedin) {
 		double speed = speedin;
 
+		double pos=getPosition();
+
         if (speed > .5) { speed = .5; }
 		if (speed < -.5) { speed = -.5; }
 
 		if (Robot.overrideEncoders != true ) {
- 		    if (speed < 0 && getPosition() <=1) { speed = 0; }
+ 		    if (speed < 0 && pos <=1) { speed = 0; }
 		}
 
-		if (speed < 0 && getPosition() <=2) { speed *= .25; }
-		if (speed < 0 && getPosition() <=3) { speed *= .5; }
+		if (speed < 0 && pos <=2) { speed *= .25; }
 
-		if (speed > 0 && getPosition() >=20) { speed = 0; }
-		if (speed > 0 && getPosition() >=19) { speed = .25; }
-		if (speed > 0 && getPosition() >=18 ) { speed *= .5; }
+		if (speed > 0 && getPosition() >= 12.3) { speed = 0; }
+		//if (speed > 0 && getPosition() >=19) { speed = .25; }
+		//if (speed > 0 && getPosition() >=18 ) { speed *= .5; }
 
 
 		raiseLowerMotor.set(speed);

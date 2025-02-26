@@ -28,6 +28,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
+import edu.wpi.first.cameraserver.CameraServer;
+
 // Navx-MXP Libraries and Connection Library
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
@@ -122,6 +124,8 @@ public class Robot extends TimedRobot {
         oi = new Controllers();
         log = new Log();
         internalData = new InternalData();
+        
+        navxMXP = new AHRS(NavXComType.kMXP_SPI);
 
         // Swerve drive subsystem 
         swerveDrive = new SwerveDrive();
@@ -144,13 +148,9 @@ public class Robot extends TimedRobot {
         // Limelight subsystem1
         // limeLight = new LimeLight();
 
-        navxMXP = new AHRS(NavXComType.kMXP_SPI);
 
         // Server for the drive camera
-        //driveCam = CameraServer.startAutomaticCapture();
-		//server = CameraServer.getServer();
-        //driveCam.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
-		//server.setSource(driveCam);
+        CameraServer.startAutomaticCapture();
 
         SmartDashboard.putBoolean(COMPETITION_ROBOT, true);
 

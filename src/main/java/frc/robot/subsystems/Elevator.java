@@ -48,8 +48,7 @@ public class Elevator extends SubsystemBase {
 
 	SparkMaxConfig motorConfig = new SparkMaxConfig();
 
-    DigitalInput bottomLimit = new DigitalInput(7);
-    DigitalInput topLimit = new DigitalInput(8);
+    DigitalInput bottomLimit = new DigitalInput(2);
 
 	boolean useLimitSwiches=true;
 
@@ -90,16 +89,18 @@ public class Elevator extends SubsystemBase {
 		double currentPosition = getExtensionPosition();
 
 		double target=0;
-		if (targetIn==1) { target=20; }
+		if (targetIn==1) { target=50; }
+		SmartDashboard.putNumber("Extension target",target);
+		SmartDashboard.putNumber("Extension current",currentPosition);
 
-		if (target > currentPosition + 3) {
-			speed = .5;
-			if (target - currentPosition < 10) { speed = .25;}
-			if (target - currentPosition < 5) { speed = .1;}
-		} else if (target < currentPosition - 3) {
-			speed = -.5;
-			if (currentPosition - target < 10) { speed = -.25;}
-			if (currentPosition - target < 5) { speed = -.1;}
+		if (target > currentPosition + 1) {
+			speed = -.75;
+			if (target - currentPosition < 2) { speed = -.5;}
+			if (target - currentPosition < 1) { speed = -.25;}
+		} else if (target < currentPosition - .5) {
+			speed = .75;
+			if (currentPosition - target < 2) { speed = .5;}
+			if (currentPosition - target < 1) { speed = .25;}
 		} else {
 			speed = 0;
 		}
@@ -115,14 +116,14 @@ public class Elevator extends SubsystemBase {
 		double currentPosition = getExtensionPosition();
 
 		if (Robot.overrideEncoders != true ) {
-			if (speed < 0 && currentPosition < 20) { speed=speed*.5; }
-            if (speed < 0 && currentPosition <= 1) { speed=0; }
+			if (speed > 0 && currentPosition < 20) { speed=speed*.5; }
+            if (speed > 0 && currentPosition <= 1) { speed=0; }
 		}	
+		SmartDashboard.putNumber("Extension current2",currentPosition);
+		SmartDashboard.putNumber("Extension speed",speed);
 
-		/*
-		if (speed > 0 && currentPosition > 500) { speed=speed*.5; }
-        if (speed > 0 && currentPosition > 550) { speed=0; }
-        */
+		if (speed < 0 && currentPosition > 60) { speed=speed*.5; }
+        if (speed < 0 && currentPosition > 62) { speed=0; }
 		
 		extensionMotor.set(speed);
 	}
@@ -175,25 +176,28 @@ public class Elevator extends SubsystemBase {
 		double target=0;
 		switch(targetIn) {
 			case 1:              // Low
-				target=50;
+				target=32;
 				break;
 			case 2:             // Middle
-				target=75;
+				target=65;
 				break;
 			case 3:		    	// High
-				target=100;
+				target=111.5;
 				break;
 		}
 
-		if (target > currentPosition + 3) {
-			speed = .5;
-			if (target - currentPosition < 10) { speed = .25;}
-			if (target - currentPosition < 5) { speed = .1;}
-		} else if (target < currentPosition - 3) {
-			speed = -.5;
-			if (currentPosition - target < 10) { speed = -.25;}
-			if (currentPosition - target < 5) { speed = -.1;}
+		if (target > currentPosition + .5) {
+			speed = .6;
+			if (target - currentPosition < 5) { speed = .3;}
+			if (target - currentPosition < 1) { speed = .2;}
+		} else if (target < currentPosition - 1) {
+			speed = -.6;
+			if (currentPosition - target < 5) { speed = -.3;}
+			if (currentPosition - target < 1) { speed = -.2;}
 		} else {
+			motorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
+	    	leftMotor.configure(motorConfig, null, null);
+		    rightMotor.configure(motorConfig, null, null);
 			speed = 0;
 		}
 
@@ -217,6 +221,9 @@ public class Elevator extends SubsystemBase {
 			if (speed < 0 && currentPosition < 20) { speed=speed*.5; }
 			if (speed < 0 && currentPosition <= 1) { speed=0; }
 		}	
+
+		if (speed > 0 && currentPosition >113) { speed=speed*.5; }
+		if (speed > 0 && currentPosition >113) { speed=0; }
 
 	    if (bottomLimit.get() == true && speed < 0) {
 			speed = 0;
