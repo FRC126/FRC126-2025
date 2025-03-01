@@ -187,12 +187,12 @@ public class Elevator extends SubsystemBase {
 		}
 
 		if (target > currentPosition + .5) {
-			speed = .6;
-			if (target - currentPosition < 5) { speed = .3;}
+			speed = .75;
+			if (target - currentPosition < 8) { speed = .35;}
 			if (target - currentPosition < 1) { speed = .2;}
 		} else if (target < currentPosition - 1) {
-			speed = -.6;
-			if (currentPosition - target < 5) { speed = -.3;}
+			speed = -.75;
+			if (currentPosition - target < 8) { speed = -.35;}
 			if (currentPosition - target < 1) { speed = -.2;}
 		} else {
 			motorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);

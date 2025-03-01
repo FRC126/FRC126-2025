@@ -163,10 +163,10 @@ public class Robot extends TimedRobot {
         allianceColor.addOption("Blue Alliance",blueAlliance);
         SmartDashboard.putData("Alliance Color",allianceColor);
         
-        autoNext.setDefaultOption("do nothing dummy!",autoNothing);
+        autoNext.addOption("do nothing dummy!",autoNothing);
         autoNext.setDefaultOption("Just Drive",autoJustDrive);
-        autoNext.addOption("Coral Low Straight",coralLowStraight);
-        autoNext.addOption("Coral High Straight",coralHighStraight);
+        //autoNext.addOption("Coral Low Straight",coralLowStraight);
+        //autoNext.addOption("Coral High Straight",coralHighStraight);
         SmartDashboard.putData("Auto Choices",autoNext);
     }
 
@@ -212,7 +212,7 @@ public class Robot extends TimedRobot {
                 break;
             case autoJustDrive:
                 SmartDashboard.putString("AutoCommand","Just Drive");
-                autonomous = new AutoCoralHigh();
+                autonomous = new AutoJustDrive();
                 break;
             case autoNothing:
                 // Do Nothing!
