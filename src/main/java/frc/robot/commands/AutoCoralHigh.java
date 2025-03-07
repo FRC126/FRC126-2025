@@ -30,12 +30,12 @@ public class AutoCoralHigh extends SequentialCommandGroup {
 
             new ParallelCommandGroup(
                 new DriveWork(.3,0,30,125),
-                new ElevatorWork(Robot.heightTargets.LFour,1,true,200)
+                new ElevatorWork(Robot.heightTargets.LFour,true,200)
             ),    
 
             new ParallelCommandGroup(
                 new DriveWork(-.25,0,10,125),
-                new ElevatorWork(Robot.heightTargets.LOne,0,false,200)
+                new ElevatorWork(Robot.heightTargets.LOne, false,200)
             ),    
 
             new FinishAuto()
