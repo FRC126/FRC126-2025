@@ -35,6 +35,7 @@ public class Elevator extends SubsystemBase {
 	boolean pickupDebug = false;
 	double pickupRPM;
 	int called = 0;
+	boolean autoMove=false;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
@@ -76,7 +77,7 @@ public class Elevator extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	private void runMotor(double speed) {
+	private void runElevatorMotor(double speed) {
 		leftMotor.set(speed*-1);
 		rightMotor.set(speed);
 	}
@@ -84,12 +85,25 @@ public class Elevator extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
-	 public void moveExtensionTarget(int targetIn) {
+	 private boolean moveExtensionTarget(Robot.heightTargets targetIn) {
 		double speed = 0;
 		double currentPosition = getExtensionPosition();
 
 		double target=0;
-		if (targetIn==1) { target=50; }
+		switch(targetIn) {
+			case LOne:              // Bottom
+				target=0;
+				break;
+			case LTwo:              // Low
+				target=0;
+				break;
+			case LThree:             // Middle
+				target=0;
+				break;
+			case LFour:		    	// High
+				target=50;
+				break;
+		}		
 		SmartDashboard.putNumber("Extension target",target);
 		SmartDashboard.putNumber("Extension current",currentPosition);
 
@@ -106,6 +120,12 @@ public class Elevator extends SubsystemBase {
 		}
 
 		moveExtension(speed);
+
+		if (speed == 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/************************************************************************
@@ -125,6 +145,13 @@ public class Elevator extends SubsystemBase {
 		if (speed < 0 && currentPosition > 60) { speed=speed*.5; }
         if (speed < 0 && currentPosition > 62) { speed=0; }
 		
+		runExtensionMotor(speed);
+	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public void runExtensionMotor(double speed) {
 		extensionMotor.set(speed);
 	}
 
@@ -168,20 +195,23 @@ public class Elevator extends SubsystemBase {
 
     /************************************************************************
 	 ************************************************************************/
-
-	public void moveElevatorTarget(int targetIn) {
+ 
+	private boolean moveElevatorTarget(Robot.heightTargets targetIn) {
 		double speed = 0;
 		double currentPosition = getPosition();
 
 		double target=0;
 		switch(targetIn) {
-			case 1:              // Low
+			case LOne:              // Bottom
 				target=32;
 				break;
-			case 2:             // Middle
+			case LTwo:              // Low
+				target=32;
+				break;
+			case LThree:             // Middle
 				target=65;
 				break;
-			case 3:		    	// High
+			case LFour:		    	// High
 				target=111.5;
 				break;
 		}
@@ -202,6 +232,12 @@ public class Elevator extends SubsystemBase {
 		}
 
 		moveElevator(speed);
+
+		if (speed == 0) {
+			return(true);
+		} else {
+			return(false);
+		}
 	}
 
     /************************************************************************
@@ -236,14 +272,40 @@ public class Elevator extends SubsystemBase {
 			Robot.Leds.setMode(LEDs.LEDModes.ElevatorDown);
 		}
 
-		runMotor(speed);
+		runElevatorMotor(speed);
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+    
+	public boolean moveTarget(Robot.heightTargets targetIn) {
+		boolean extReached, elevReached;
+
+		extReached=moveExtensionTarget(targetIn); 
+		elevReached=moveElevatorTarget(targetIn);
+
+	    return(extReached && elevReached);
 	}
 
 	/************************************************************************
 	 ************************************************************************/
 
-	public void cancel() {
-		runMotor(0);
-		extensionMotor.set(0);
+	public boolean getAutoMove() {
+		return(autoMove);
+	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public void setAutoMove(boolean move) {
+		autoMove = move;
+	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public void cancel() {
+		runElevatorMotor(0);
+		runExtensionMotor(0);
 	}
 }

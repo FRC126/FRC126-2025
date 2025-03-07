@@ -33,6 +33,7 @@ public class CoralShooter extends SubsystemBase {
 	boolean coralShooterDebug = false;
 	int called = 0;
 	static boolean sensorTriggered = false;
+	boolean autoMove=false;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
@@ -92,6 +93,20 @@ public class CoralShooter extends SubsystemBase {
 		sensorTriggered = triggered;
 	}
 
+	/************************************************************************
+	 ************************************************************************/
+
+	 public boolean getAutoMove() {
+		return(autoMove);
+	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public void setAutoMove(boolean move) {
+		autoMove = move;
+	}
+	
 	/************************************************************************
 	 ************************************************************************/
 

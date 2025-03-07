@@ -26,6 +26,7 @@ public class CoralShooterControl extends Command {
 
 	boolean triggered=false;
 	int trigCount=0;
+	boolean centered=false;
 
 	/**********************************************************************************
 	 **********************************************************************************/
@@ -51,6 +52,11 @@ public class CoralShooterControl extends Command {
 	@Override
 	public void execute() {
 
+		if (Robot.internalData.isAuto() || subsystem.getAutoMove() || Robot.isAutoCommand) {
+			// Ignore user controls during Autonomous
+			return;
+		}
+				
     	// Elevator Movement Control
 		double y=0;
 		if (operatorJoystick.getLeftTrigger() != 0) {
@@ -64,27 +70,38 @@ public class CoralShooterControl extends Command {
 		double yorig=y;
 
 		if (y < 0) {
-				if (!subsystem.getPhotoSensor()) {
+				if (!subsystem.getPhotoSensor() && !centered) {
 				    trigCount++;
-					if (trigCount > 5) {
-						y=-.25;
+					if (trigCount > 3) {
+						y=-.20;
 					} else {
-						y=-.4;
+						y=-.5;
 					}
-				} else {
-					if (trigCount > 5) {
+				} else{
+					if (trigCount > 3) {
 						y=0;
 						Robot.Leds.setMode(LEDs.LEDModes.Rainbow);
-
+						if (!subsystem.getPhotoSensor()) {
+							y=.1;
+							centered=false;
+						} else {
+							centered=true;	
+						}
 					}	
 				}
 				Robot.Leds.setMode(LEDs.LEDModes.ShootingCoral);
 			
 		} else if ( y > 0 ) {
-			Robot.Leds.setMode(LEDs.LEDModes.ShootingCoral);
-			trigCount=0;
+			if (subsystem.getPhotoSensor()) {
+				y=0;
+				Robot.Leds.setMode(LEDs.LEDModes.Rainbow);
+			} else {
+				Robot.Leds.setMode(LEDs.LEDModes.ShootingCoral);
+			    trigCount=0;
+			}	
 		} else {
 			trigCount=0;
+			centered=false;
 		}
 		
     	subsystem.runCoralShooter(y);

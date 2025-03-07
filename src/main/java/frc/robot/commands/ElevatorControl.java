@@ -47,6 +47,12 @@ public class ElevatorControl extends Command {
 
 	@Override
 	public void execute() {
+
+		if (Robot.internalData.isAuto() || subsystem.getAutoMove() || Robot.isAutoCommand) {
+			// Ignore user controls during Autonomous
+			return;
+		}
+
     	// Elevator Movement Control
 		double y = operatorJoystick.getRightStickY() * .4;
 		double y2 =operatorJoystick.getLeftStickY() * -.75;
@@ -57,17 +63,13 @@ public class ElevatorControl extends Command {
 		boolean yButton = operatorJoystick.isYButton();
 
 		if (aButton) {
-			subsystem.moveElevatorTarget(0);
-			subsystem.moveExtensionTarget(0);
+			subsystem.moveTarget(Robot.heightTargets.LOne);
 		} else if (bButton) {
-			subsystem.moveElevatorTarget(1);
-			subsystem.moveExtensionTarget(0);
+			subsystem.moveTarget(Robot.heightTargets.LTwo);
 		} else if (yButton) {
-			subsystem.moveElevatorTarget(2);
-			subsystem.moveExtensionTarget(0);
+			subsystem.moveTarget(Robot.heightTargets.LThree);
 		} else if (xButton) {
-			subsystem.moveElevatorTarget(3);
-			subsystem.moveExtensionTarget(1);
+			subsystem.moveTarget(Robot.heightTargets.LFour);
 		} else {
 			if (y != 0) {
 				subsystem.moveElevator(y);

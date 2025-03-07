@@ -33,6 +33,8 @@ public class LimeLight extends SubsystemBase {
     private int validCount;
     private int missedCount;
     private int centered;
+    private Robot.heightTargets coralLevel=Robot.heightTargets.LFour;
+    private int runCount=0;
 
     public static SequentialCommandGroup throwCommand;
     boolean limeLightDebug=false;
@@ -167,7 +169,10 @@ public class LimeLight extends SubsystemBase {
             !llTargetValid ||
             validCount <= 3) {
             centered=0;
+            runCount=0;
             Robot.swerveDrive.setAutoMove(false);
+            Robot.elevator.setAutoMove(false);
+            Robot.coralShooter.setAutoMove(false);
             return(false);
         }     
 
@@ -182,17 +187,70 @@ public class LimeLight extends SubsystemBase {
             } else {
                 Robot.swerveDrive.setAutoMove(false);
             }    
+            runCount=0;
             centered=0;
         } else {
             Robot.swerveDrive.cancel();
             centered++;
-        }   
-
-        if (centered > 2) {
-            Robot.swerveDrive.setAutoMove(false);
-            return(true);
-        } else {
-            return(false);
         }
-    }          
+
+        double leftRight=0, forwardBack=0, rotate=0;
+
+        if ( llTargetXOffset < -1.5 ) {
+                leftRight=-0.1;
+        } else if ( llTargetXOffset > 1.5 ) {
+                leftRight=0.1;
+        } else {
+            Robot.swerveDrive.setAutoMove(false);
+            Robot.swerveDrive.cancel();            
+        }
+        
+        if (Robot.distance.getDistance() > 20) {
+            forwardBack=0.1;
+        }
+
+        /*
+        ////////////////////////////////////////////////////////////////
+        // TODO: how do we figure out the rotate vs left right?
+        //
+        if ( llTargetXOffset < -1.5 || llTargetXOffset > 1.5) {
+            rotate = Robot.swerveDrive.rotateToDegrees(llTargetXOffset);
+        }   
+        */
+
+        if (leftRight != 0 || forwardBack != 0 || rotate != 0) {
+            Robot.swerveDrive.brakesOn();
+            Robot.swerveDrive.setAutoMove(true);
+            Robot.swerveDrive.Drive(forwardBack, leftRight, rotate, false, 0);
+            centered=0;
+            runCount=0;
+        } else {
+            Robot.swerveDrive.setAutoMove(false);
+            Robot.swerveDrive.cancel();            
+            centered++;
+        }
+        
+        if (centered > 4) {
+            Robot.elevator.setAutoMove(true);
+            // TODO: Place the coral at the correct level
+            boolean reached = Robot.elevator.moveTarget(coralLevel);
+
+            if (reached || runCount > 0) {
+                runCount++;
+                if (runCount > 10) {
+                    Robot.elevator.setAutoMove(false);
+                    Robot.coralShooter.setAutoMove(false);
+                    return(true);
+                } else {
+                    Robot.coralShooter.setAutoMove(true);
+                    Robot.coralShooter.runCoralShooter(.5);          
+                }
+            } else {
+                runCount=0;
+            }
+        }
+        
+        return(false);
+    }
+    
 }

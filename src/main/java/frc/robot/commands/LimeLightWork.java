@@ -17,23 +17,24 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
-public class ElevatorWork extends Command {
+public class LimeLightWork extends Command {
 
     int iters;
     Robot.heightTargets target;
     boolean shootAfter;
     int runCount;
-    boolean reached;
+    boolean elevatorReached, extensionReached;
 
     /**********************************************************************************
      **********************************************************************************/
 
-    public ElevatorWork(Robot.heightTargets target, boolean shootAfter, int iters) {
+    public LimeLightWork(Robot.heightTargets target, oolean shootAfter, int iters) {
         this.iters = iters;
         this.target = target;
         this.shootAfter = shootAfter;
         runCount=0;
-        reached=false;
+        elevatorReached=false;
+        extensionReached=false;
     }
 
     /**********************************************************************************
@@ -50,9 +51,10 @@ public class ElevatorWork extends Command {
 
     @Override
     public void execute() {
-        reached=Robot.elevator.moveTarget(target);
+		elevatorReached=Robot.elevator.moveElevatorTarget(elevatorTarget);
+		extensionReached=Robot.elevator.moveExtensionTarget(extensionTarget);
 
-        if ((reached || runCount > 0) && shootAfter) {
+        if (((elevatorReached && extensionReached) || runCount > 0) && shootAfter) {
             Robot.coralShooter.runCoralShooter(.5);
             runCount++;
         } 
@@ -67,7 +69,7 @@ public class ElevatorWork extends Command {
     public boolean isFinished() {
         iters--;
         if (iters == 0 || 
-           (reached && !shootAfter) ||
+           (elevatorReached && extensionReached && !shootAfter) ||
            (shootAfter && runCount > 5)) {
             return true;
         }

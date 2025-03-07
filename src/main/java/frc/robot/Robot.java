@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
     public static boolean useNavx=true;
 
     public static enum targetTypes{
-        NoTarget(-1),TargetSeek(0);
+        NoTarget(-1),TargetSeek(0), TargetRed(1), TargetBlue(2);
         private final int pipeline;
         private targetTypes(int v) {pipeline = v;}
         public int getPipeline() {
@@ -80,6 +80,15 @@ public class Robot extends TimedRobot {
         }
     };
     public static enum allianceColor{Red,Blue};
+
+    public static enum heightTargets {
+        LOne(0),LTwo(1), LThree(2), LFour(3);
+        private final int target;
+        private heightTargets(int v) {target = v;}
+        public int getTarget() {
+            return target;
+        }
+    };
 
     public static final int noAlliance=-1;
     public static final int redAlliance=0;
@@ -141,14 +150,13 @@ public class Robot extends TimedRobot {
         ballPickup = new BallPickup();
 
         // Disance sensor
-        // distance = new MeasureDistance();
+        distance = new MeasureDistance();
 
         // LED Subsystem
         Leds = new LEDs();
 
         // Limelight subsystem1
-        // limeLight = new LimeLight();
-
+        limeLight = new LimeLight();
 
         // Server for the drive camera
         CameraServer.startAutomaticCapture();
@@ -195,11 +203,11 @@ public class Robot extends TimedRobot {
 
         Robot.targetTypes target = Robot.targetTypes.TargetSeek; 
         if (selectedAllianceColor == redAlliance) {
+            // target = Robot.targetTypes.TargetRed; 
             target = Robot.targetTypes.TargetSeek; 
-            //target=Robot.targetTypes.TargetRed; 
         } else if (selectedAllianceColor == blueAlliance) {
+            // target = Robot.targetTypes.TargetBlue; 
             target = Robot.targetTypes.TargetSeek; 
-            //target=Robot.targetTypes.TargetBlue; 
         }
         Robot.targetType = target;
 
