@@ -8,8 +8,7 @@
 		 \/_/\/_____/   \/___/
 
     Team 126 2025 Code       
-	Go get em gaels!
-
+	Go get em gaels!7
 ***********************************/
 
 package frc.robot.subsystems;
@@ -35,6 +34,7 @@ public class Elevator extends SubsystemBase {
 	boolean pickupDebug = false;
 	double pickupRPM;
 	int called = 0;
+	double startSpeed=0;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
@@ -187,17 +187,28 @@ public class Elevator extends SubsystemBase {
 		}
 
 		if (target > currentPosition + .5) {
-			speed = .75;
+			if ( startSpeed < .70) {
+				speed=startSpeed+.1;
+				startSpeed=speed;
+			} else {
+				speed=.75;
+			}
 			if (target - currentPosition < 8) { speed = .35;}
 			if (target - currentPosition < 1) { speed = .2;}
 		} else if (target < currentPosition - 1) {
-			speed = -.75;
+			if ( startSpeed > -.75) {
+				speed=startSpeed-.1;
+				startSpeed=speed;
+			} else {
+				speed=-.75;
+			}
 			if (currentPosition - target < 8) { speed = -.35;}
 			if (currentPosition - target < 1) { speed = -.2;}
 		} else {
 			motorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
 	    	leftMotor.configure(motorConfig, null, null);
 		    rightMotor.configure(motorConfig, null, null);
+			startSpeed=0;
 			speed = 0;
 		}
 
@@ -222,8 +233,8 @@ public class Elevator extends SubsystemBase {
 			if (speed < 0 && currentPosition <= 1) { speed=0; }
 		}	
 
-		if (speed > 0 && currentPosition >113) { speed=speed*.5; }
-		if (speed > 0 && currentPosition >113) { speed=0; }
+		if (speed > 0 && currentPosition >110) { speed=speed*.5; }
+		if (speed > 0 && currentPosition >112) { speed=0; }
 
 	    if (bottomLimit.get() == true && speed < 0) {
 			speed = 0;
