@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
     public static boolean useNavx=true;
 
     public static enum targetTypes{
-        NoTarget(-1),TargetSeek(0), TargetRed(1), TargetBlue(2);
+        NoTarget(-1),TargetSeek(0);
         private final int pipeline;
         private targetTypes(int v) {pipeline = v;}
         public int getPipeline() {
@@ -195,9 +195,11 @@ public class Robot extends TimedRobot {
 
         Robot.targetTypes target = Robot.targetTypes.TargetSeek; 
         if (selectedAllianceColor == redAlliance) {
-            target=Robot.targetTypes.TargetRed; 
+            target = Robot.targetTypes.TargetSeek; 
+            //target=Robot.targetTypes.TargetRed; 
         } else if (selectedAllianceColor == blueAlliance) {
-            target=Robot.targetTypes.TargetBlue; 
+            target = Robot.targetTypes.TargetSeek; 
+            //target=Robot.targetTypes.TargetBlue; 
         }
         Robot.targetType = target;
 
