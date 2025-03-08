@@ -21,18 +21,14 @@ public class LimeLightWork extends Command {
 
     int iters;
     Robot.heightTargets target;
-    boolean shootAfter;
-    int runCount;
     boolean reached;
 
     /**********************************************************************************
      **********************************************************************************/
 
-    public LimeLightWork(Robot.heightTargets target, boolean shootAfter, int iters) {
+    public LimeLightWork(Robot.heightTargets target, int iters) {
         this.iters = iters;
         this.target = target;
-        this.shootAfter = shootAfter;
-        runCount=0;
         reached=false;
     }
 
@@ -50,14 +46,8 @@ public class LimeLightWork extends Command {
 
     @Override
     public void execute() {
-		reached=Robot.elevator.moveTarget(target);
-
-        if ((reached || runCount > 0) && shootAfter) {
-            Robot.coralShooter.runCoralShooter(.5);
-            runCount++;
-        } 
+		reached=Robot.limeLight.seekTarget();
     }
-
 
     /**********************************************************************************
      * Make this return true when this Command no longer needs to run execute()
@@ -66,9 +56,7 @@ public class LimeLightWork extends Command {
     @Override
     public boolean isFinished() {
         iters--;
-        if (iters == 0 || 
-           (reached && !shootAfter) ||
-           (shootAfter && runCount > 5)) {
+        if (iters == 0 || reached) {
             return true;
         }
         return false;
@@ -82,6 +70,5 @@ public class LimeLightWork extends Command {
     public void end(boolean isInteruppted) {
         Robot.coralShooter.runCoralShooter(0);
         Robot.elevator.cancel();
-        
     }
 }

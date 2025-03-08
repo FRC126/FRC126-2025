@@ -36,6 +36,7 @@ public class Elevator extends SubsystemBase {
 	int called = 0;
 	boolean autoMove=false;
 	double startSpeed=0;
+	double extStartSpeed=0;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
@@ -88,6 +89,8 @@ public class Elevator extends SubsystemBase {
 	 private boolean moveExtensionTarget(Robot.heightTargets targetIn) {
 		double speed = 0;
 		double currentPosition = getExtensionPosition();
+		double topSpeed= 1.0;
+		double speedIncr = 0.075;
 
 		double target=0;
 		switch(targetIn) {
@@ -107,15 +110,28 @@ public class Elevator extends SubsystemBase {
 		SmartDashboard.putNumber("Extension target",target);
 		SmartDashboard.putNumber("Extension current",currentPosition);
 
-		if (target > currentPosition + 1) {
-			speed = -.75;
-			if (target - currentPosition < 2) { speed = -.5;}
-			if (target - currentPosition < 1) { speed = -.25;}
+		if (target > currentPosition + .5) {
+			if ( extStartSpeed < topSpeed-.05) {
+				speed = extStartSpeed + speedIncr;
+				extStartSpeed = speed;
+			} else {
+				speed = topSpeed;
+			}
+			if (target - currentPosition < 8) { speed = .4;}
+			if (target - currentPosition < 4) { speed = .25;}
+			if (target - currentPosition < 1) { speed = .1;}
 		} else if (target < currentPosition - .5) {
-			speed = .75;
-			if (currentPosition - target < 2) { speed = .5;}
-			if (currentPosition - target < 1) { speed = .25;}
+			if ( extStartSpeed > (topSpeed -.05) * -1) {
+				speed = extStartSpeed - speedIncr;
+				extStartSpeed=speed;
+			} else {
+				speed = topSpeed * -1;
+			}
+			if (currentPosition - target < 8) { speed = -.4;}
+			if (currentPosition - target < 4) { speed = -.25;}
+			if (currentPosition - target < 1) { speed = -.1;}
 		} else {
+			extStartSpeed=0;
 			speed = 0;
 		}
 

@@ -16,19 +16,20 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
+import frc.robot.Robot.shootAction;
 
 public class ElevatorWork extends Command {
 
     int iters;
     Robot.heightTargets target;
-    boolean shootAfter;
+    shootAction shootAfter;
     int runCount;
     boolean reached;
 
     /**********************************************************************************
      **********************************************************************************/
 
-    public ElevatorWork(Robot.heightTargets target, boolean shootAfter, int iters) {
+    public ElevatorWork(Robot.heightTargets target, shootAction shootAfter, int iters) {
         this.iters = iters;
         this.target = target;
         this.shootAfter = shootAfter;
@@ -55,7 +56,9 @@ public class ElevatorWork extends Command {
         if ((reached || runCount > 0) && shootAfter) {
             Robot.coralShooter.runCoralShooter(.5);
             runCount++;
-        } 
+        } else {
+            runCount=0;
+        }
     }
 
 
@@ -67,8 +70,8 @@ public class ElevatorWork extends Command {
     public boolean isFinished() {
         iters--;
         if (iters == 0 || 
-           (reached && !shootAfter) ||
-           (shootAfter && runCount > 5)) {
+           (reached && shootAfter == Robot.shootAction.NoShoot) ||
+           (shootAfter == Robot.shootAction.Shoot && runCount > 5)) {
             return true;
         }
         return false;
@@ -82,6 +85,6 @@ public class ElevatorWork extends Command {
     public void end(boolean isInteruppted) {
         Robot.coralShooter.runCoralShooter(0);
         Robot.elevator.cancel();
-        
+        runCount=0;
     }
 }

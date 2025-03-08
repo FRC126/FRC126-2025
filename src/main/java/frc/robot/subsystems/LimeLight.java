@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class LimeLight extends SubsystemBase {
 
-    private boolean activeSeek=false;
     private boolean llTargetValid;
     private double llTargetArea;
     private double llTargetX;
@@ -33,9 +32,7 @@ public class LimeLight extends SubsystemBase {
     private int validCount;
     private int missedCount;
     private int centered;
-    private Robot.heightTargets coralLevel=Robot.heightTargets.LFour;
-    private int runCount=0;
-
+ 
     public static SequentialCommandGroup throwCommand;
     boolean limeLightDebug=false;
     double pipelineLast=0;
@@ -62,13 +59,6 @@ public class LimeLight extends SubsystemBase {
         missedCount=0;
         centered=0;
     }
-
-    /************************************************************************
-	 ************************************************************************/
-
-     public void setActiveSeek(boolean seek) {
-        activeSeek = seek;
-    }   
 
    	/************************************************************************
 	 ************************************************************************/
@@ -165,11 +155,9 @@ public class LimeLight extends SubsystemBase {
      public boolean seekTarget() {   
         int cameraOffset = 8;    
 
-        if (!activeSeek ||
-            !llTargetValid ||
+        if (!llTargetValid ||
             validCount <= 3) {
             centered=0;
-            runCount=0;
             Robot.swerveDrive.setAutoMove(false);
             Robot.elevator.setAutoMove(false);
             Robot.coralShooter.setAutoMove(false);
@@ -187,7 +175,6 @@ public class LimeLight extends SubsystemBase {
             } else {
                 Robot.swerveDrive.setAutoMove(false);
             }    
-            runCount=0;
             centered=0;
         } else {
             Robot.swerveDrive.cancel();
@@ -205,7 +192,7 @@ public class LimeLight extends SubsystemBase {
             Robot.swerveDrive.cancel();            
         }
         
-        if (Robot.distance.getDistance() > 20) {
+        if (Robot.distance.getDistance() > 12) {
             forwardBack=0.1;
         }
 
@@ -223,7 +210,6 @@ public class LimeLight extends SubsystemBase {
             Robot.swerveDrive.setAutoMove(true);
             Robot.swerveDrive.Drive(forwardBack, leftRight, rotate, false, 0);
             centered=0;
-            runCount=0;
         } else {
             Robot.swerveDrive.setAutoMove(false);
             Robot.swerveDrive.cancel();            
@@ -231,23 +217,7 @@ public class LimeLight extends SubsystemBase {
         }
         
         if (centered > 4) {
-            Robot.elevator.setAutoMove(true);
-            // TODO: Place the coral at the correct level
-            boolean reached = Robot.elevator.moveTarget(coralLevel);
-
-            if (reached || runCount > 0) {
-                runCount++;
-                if (runCount > 10) {
-                    Robot.elevator.setAutoMove(false);
-                    Robot.coralShooter.setAutoMove(false);
-                    return(true);
-                } else {
-                    Robot.coralShooter.setAutoMove(true);
-                    Robot.coralShooter.runCoralShooter(.5);          
-                }
-            } else {
-                runCount=0;
-            }
+             return(true);
         }
         
         return(false);

@@ -35,7 +35,7 @@ import frc.robot.Robot;
 
     public static enum LEDModes{None,BrakeMode,DriveMode,SlowMode,ElevatorUp,ElevatorDown,
                                 ShootingCoral,BallPickup,Climbing,AutoDrive,
-                                AutoTurn,RunPickup, Rainbow, GaelForce, HaveCoral, HaveNoteHigh};
+                                AutoTurn,RunPickup, Rainbow, GaelForce, HaveCoral, Aiming};
     LEDModes LEDMode = LEDModes.GaelForce;
 
     /**********************************************************************************
@@ -102,16 +102,16 @@ import frc.robot.Robot;
                                         break; 
                                     }
             case SlowMode:          { setColorSliding(64,64,0,125,125,0); break; }
-            case ElevatorUp:         { setColorSliding(0,125,0,125,0,0); break; }
-            case ElevatorDown:        { setColorSliding(0,125,0,0,0,125); break; }
-            case ShootingCoral:   { setColorSliding(64,0,64,0,0,125); break; }
-            case BallPickup:       { setColorSliding(64,0,64,125,0,0); break; }
+            case ElevatorUp:        { setColorSliding(0,125,0,125,0,0); break; }
+            case ElevatorDown:      { setColorSliding(0,125,0,0,0,125); break; }
+            case ShootingCoral:     { setColorSliding(64,0,64,0,0,125); break; }
+            case BallPickup:        { setColorSliding(64,0,64,125,0,0); break; }
             case Climbing:          { rainbow(); break; } //setColorSliding(64,64,64,64,0,0); break; }
             case AutoDrive:         { setColorSliding(125,75,100,0,0,125); break; }
             case AutoTurn:          { setColorSliding(125,75,100,125,0,0); break; }
             case RunPickup:         { setColorSliding(0,64,0,100,100,100); break; }
-            case HaveCoral:          { setColorSliding(237,145,15,120,70,15); break; }
-            case HaveNoteHigh:      { setColorSliding(0,150,150,50,0,50); break; }
+            case HaveCoral:         { setColorSliding(237,145,15,120,70,15); break; }
+            case Aiming:            { setColorSliding(0,150,150,50,0,50); break; }
             case Rainbow:           { rainbow(); break; }
             case GaelForce:         { setColorSliding(0, 64, 0, 128, 90, 0); break; }
         }

@@ -74,7 +74,7 @@ public class CoralShooter extends SubsystemBase {
 	 ************************************************************************/
 
 	 public boolean getPhotoSensor() {
-        boolean here=photoSensor.get()?false:true;
+        boolean here=photoSensor.get()?true:false;
 		SmartDashboard.putBoolean("photoSensor",here);
 		return(here);
 	}	

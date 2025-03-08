@@ -72,23 +72,18 @@ public class Robot extends TimedRobot {
     public static boolean useNavx=true;
 
     public static enum targetTypes{
-        NoTarget(-1),TargetSeek(0), TargetRed(1), TargetBlue(2);
+        NoTarget(-1),TargetSeek(1), TargetRed(2), TargetBlue(3);
         private final int pipeline;
         private targetTypes(int v) {pipeline = v;}
         public int getPipeline() {
             return pipeline;
         }
     };
-    public static enum allianceColor{Red,Blue};
 
-    public static enum heightTargets {
-        LOne(0),LTwo(1), LThree(2), LFour(3);
-        private final int target;
-        private heightTargets(int v) {target = v;}
-        public int getTarget() {
-            return target;
-        }
-    };
+    public static enum allianceColor{Red,Blue};
+    public static enum heightTargets{LOne,LTwo, LThree, LFour};
+    public static enum leftRight{Left,Right};
+    public static enum shootAction{Shoot,NoShoot};
 
     public static final int noAlliance=-1;
     public static final int redAlliance=0;

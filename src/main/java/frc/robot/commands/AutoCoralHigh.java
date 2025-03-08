@@ -23,21 +23,7 @@ public class AutoCoralHigh extends SequentialCommandGroup {
     public AutoCoralHigh() {
 
         addCommands(         
-            new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
-            new InstantCommand(Robot.swerveDrive::brakesOn, Robot.swerveDrive),
-
-            new InstantCommand(Robot.swerveDrive::resetYaw, Robot.swerveDrive),
-
-            new ParallelCommandGroup(
-                new DriveWork(.3,0,30,125),
-                new ElevatorWork(Robot.heightTargets.LFour,true,200)
-            ),    
-
-            new ParallelCommandGroup(
-                new DriveWork(-.25,0,10,125),
-                new ElevatorWork(Robot.heightTargets.LOne, false,200)
-            ),    
-
+            new AutoCoralHighWork(),
             new FinishAuto()
         );        
     }

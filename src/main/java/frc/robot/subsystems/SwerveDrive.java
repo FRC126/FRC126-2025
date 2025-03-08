@@ -483,7 +483,6 @@ public class SwerveDrive extends SubsystemBase {
 
 	public double getDistanceInches() {
 		double wheelDiameter = 4;
-		//double gearRatio=18;
 		double gearRatio=14;
 		
 		double left1 = swerveFrontLeftDriveMotor.getPosition().getValueAsDouble() * -1;
@@ -495,10 +494,10 @@ public class SwerveDrive extends SubsystemBase {
 	
 		double distance = (avg / gearRatio) * (wheelDiameter * 3.1459);
 
-		if (swerveDebug) { 
+		//if (swerveDebug) { 
   			SmartDashboard.putNumber("Drive Distance",distance);
   			SmartDashboard.putNumber("Drive AVG",avg);
-		}	
+		//}	
 
 		return(distance);
 	}
@@ -558,8 +557,6 @@ public class SwerveDrive extends SubsystemBase {
 
 		double target = startAngle + offset;
 		double diff = Math.abs(target) - Math.abs(currentAngle);
-
-
 
 		double tmp = diff / 100;
 		tmp = Robot.boundSpeed(tmp, .25, .04 );

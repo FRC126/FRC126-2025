@@ -27,6 +27,7 @@ public class CoralShooterControl extends Command {
 	boolean triggered=false;
 	int trigCount=0;
 	boolean centered=false;
+	int heldCount=0;
 
 	/**********************************************************************************
 	 **********************************************************************************/
@@ -61,37 +62,45 @@ public class CoralShooterControl extends Command {
 		double y=0;
 		if (operatorJoystick.getLeftTrigger() != 0) {
 			y=operatorJoystick.getLeftTrigger() *-1;
+			heldCount++;
 		} else if (operatorJoystick.getRightTrigger() != 0) {
 			y=operatorJoystick.getRightTrigger() *.35;
+			heldCount++;
+		} else {
+			heldCount=0;
 		}
 
-		y*=.65;
+		y*=.75;
 
 		double yorig=y;
 
 		if (y < 0) {
-				if (!subsystem.getPhotoSensor() && !centered) {
-				    trigCount++;
-					if (trigCount > 3) {
-						y=-.20;
+			// Shooter is running forward
+			if (subsystem.getPhotoSensor() && heldCount > 5 && !centered) {
+				// if the photo sensor is on and we are not centered yet, 
+				// slow the shooter down after 5 iterations
+				trigCount++;
+				if (trigCount > 5) {
+					y=-.20;
+				} 
+			} else{
+				if (trigCount > 5) {
+					// Stop the shooter after we have been triggered
+					y=0;
+					Robot.Leds.setMode(LEDs.LEDModes.Rainbow);
+					if (!subsystem.getPhotoSensor()) {
+						// Pull the coral back in a little bit
+						y=.1;
+						centered=false;
 					} else {
-						y=-.5;
+						// Sensor is back on, so coral is centered.
+						centered=true;	
 					}
-				} else{
-					if (trigCount > 3) {
-						y=0;
-						Robot.Leds.setMode(LEDs.LEDModes.Rainbow);
-						if (!subsystem.getPhotoSensor()) {
-							y=.1;
-							centered=false;
-						} else {
-							centered=true;	
-						}
-					}	
-				}
-				Robot.Leds.setMode(LEDs.LEDModes.ShootingCoral);
-			
+				}	
+			}
+			Robot.Leds.setMode(LEDs.LEDModes.ShootingCoral);		
 		} else if ( y > 0 ) {
+			// Shooter is running in reverse
 			if (subsystem.getPhotoSensor()) {
 				y=0;
 				Robot.Leds.setMode(LEDs.LEDModes.Rainbow);
@@ -104,9 +113,10 @@ public class CoralShooterControl extends Command {
 			centered=false;
 		}
 		
-    	subsystem.runCoralShooter(y);
 		if (yorig == 0) {
 			subsystem.cancel();
-		}
+		} else {
+    	    subsystem.runCoralShooter(y);
+		}	
 	}
 }
