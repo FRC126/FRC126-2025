@@ -22,13 +22,15 @@ public class LimeLightWork extends Command {
     int iters;
     Robot.heightTargets target;
     boolean reached;
+    Robot.leftRight direction;
 
     /**********************************************************************************
      **********************************************************************************/
 
-    public LimeLightWork(Robot.heightTargets target, int iters) {
+    public LimeLightWork(Robot.heightTargets target, Robot.leftRight direction, int iters) {
         this.iters = iters;
         this.target = target;
+        this.direction = direction;
         reached=false;
     }
 
@@ -46,7 +48,7 @@ public class LimeLightWork extends Command {
 
     @Override
     public void execute() {
-		reached=Robot.limeLight.seekTarget();
+		reached=Robot.limeLight.seekTarget(direction);
     }
 
     /**********************************************************************************
@@ -69,6 +71,7 @@ public class LimeLightWork extends Command {
     @Override
     public void end(boolean isInteruppted) {
         Robot.coralShooter.runCoralShooter(0);
+        Robot.swerveDrive.cancel();
         Robot.elevator.cancel();
     }
 }

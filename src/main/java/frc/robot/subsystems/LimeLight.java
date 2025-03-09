@@ -152,11 +152,68 @@ public class LimeLight extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
-     public boolean seekTarget() {   
-        int cameraOffset = 8;    
+     private double getTolerance(double distance) {
+        if (distance > 48) { return(4); }
+        if (distance > 36) { return(6);}    
+        if (distance > 24) { return(8);}   
+        if (distance < 24 && distance > 15) { return(10);} 
+        return(5);
+     }
+
+    /************************************************************************
+	 ************************************************************************/
+
+     public boolean seekTarget(Robot.leftRight direction) {   
+
+        double tolerance = 5;
+        double moveSpeed = 0.06;
+        double targetDistance = 14.5;
+        double cameraOffset = 0;
+        double dirOffset = 1;
+        double rotateSpeed= 0.03;
+        double rotateThres = 1;
+
+        double ldist=Robot.distance.getLeftDistanceInches();
+        double rdist=Robot.distance.getRightDistanceInches();
+        if (ldist < 5) { ldist=rdist; }
+        if (rdist < 5) { rdist=ldist; }
+        double diff = ldist-rdist;
+        double dist;
+        if (diff < -15 || diff > -15) {
+            dist=ldist<rdist?ldist:rdist;
+        } else {
+            dist=(ldist+rdist)/2.0;
+        }
+
+        tolerance = getTolerance(dist);
+        cameraOffset=getTolerance(dist)*2.20;
+
+        double leftRight=0, forwardBack=0, rotate=0;
 
         if (!llTargetValid ||
             validCount <= 3) {
+
+            if (dist > targetDistance) {
+                forwardBack=0.1;
+        
+                if ((diff > rotateThres || diff < rotateThres * -1) && diff < 10) {
+                    forwardBack=0;
+                    leftRight=0;    
+                    if (diff > 0) {
+                        rotate = rotateSpeed;
+                    } else {
+                        rotate = rotateSpeed * -1;
+                    }
+                }                
+                Robot.swerveDrive.brakesOn();
+                Robot.swerveDrive.setAutoMove(true);
+                Robot.swerveDrive.Drive(forwardBack, leftRight, rotate, false, 0);
+                return(false);
+            }
+            if (dist > 10 && dist<targetDistance+1) {
+                return(true);
+            }
+
             centered=0;
             Robot.swerveDrive.setAutoMove(false);
             Robot.elevator.setAutoMove(false);
@@ -164,46 +221,50 @@ public class LimeLight extends SubsystemBase {
             return(false);
         }     
 
+        if (direction == Robot.leftRight.Left) {
+            dirOffset=-1;
+        }
+
         // We found a valid vision target.
-        double llTargetXOffset = llTargetX - cameraOffset;
+        double llTargetXOffset = llTargetX - (cameraOffset * dirOffset);
 
-        if ( llTargetXOffset < -1.5 || llTargetXOffset > 1.5) {
-            Robot.swerveDrive.brakesOn();
-            double driveRotate = Robot.swerveDrive.rotateToDegrees(llTargetXOffset);
-            if (driveRotate!=0) {
-                Robot.swerveDrive.setAutoMove(true);
+        if ( llTargetXOffset < (tolerance * -1) ) {
+                if (llTargetXOffset > 10 || llTargetXOffset < -10) {
+                    leftRight=moveSpeed * 2 * -1;
+                } else {
+                    leftRight=moveSpeed * -1;
+                }
+        } else if ( llTargetXOffset > tolerance ) {
+            if (llTargetXOffset > 10 || llTargetXOffset < -10) {
+                leftRight=moveSpeed * 2;
             } else {
-                Robot.swerveDrive.setAutoMove(false);
-            }    
-            centered=0;
+                leftRight=moveSpeed;
+            }
         } else {
-            Robot.swerveDrive.cancel();
-            centered++;
+            if (dist > targetDistance) {
+                if (dist > 24) {
+                    forwardBack=0.25;
+                } else {
+                   forwardBack=0.15;
+                }  
+            }
         }
 
-        double leftRight=0, forwardBack=0, rotate=0;
-
-        if ( llTargetXOffset < -1.5 ) {
-                leftRight=-0.1;
-        } else if ( llTargetXOffset > 1.5 ) {
-                leftRight=0.1;
-        } else {
-            Robot.swerveDrive.setAutoMove(false);
-            Robot.swerveDrive.cancel();            
-        }
-        
-        if (Robot.distance.getDistance() > 12) {
-            forwardBack=0.1;
-        }
-
-        /*
         ////////////////////////////////////////////////////////////////
-        // TODO: how do we figure out the rotate vs left right?
+        // figure out the rotate vs left right?
         //
-        if ( llTargetXOffset < -1.5 || llTargetXOffset > 1.5) {
-            rotate = Robot.swerveDrive.rotateToDegrees(llTargetXOffset);
-        }   
-        */
+     
+        if ((diff > rotateThres || diff < rotateThres * -1) && diff < 10) {
+            forwardBack=0;
+            leftRight=0;    
+            if (diff > 0) {
+                rotate = rotateSpeed;
+                if (diff>3) { rotate = rotateSpeed * 2; }
+            } else {
+                rotate = rotateSpeed * -1;
+                if (diff<-3) { rotate = rotateSpeed * -2; }
+            }
+        }
 
         if (leftRight != 0 || forwardBack != 0 || rotate != 0) {
             Robot.swerveDrive.brakesOn();
@@ -211,6 +272,7 @@ public class LimeLight extends SubsystemBase {
             Robot.swerveDrive.Drive(forwardBack, leftRight, rotate, false, 0);
             centered=0;
         } else {
+            Robot.swerveDrive.brakesOn();
             Robot.swerveDrive.setAutoMove(false);
             Robot.swerveDrive.cancel();            
             centered++;

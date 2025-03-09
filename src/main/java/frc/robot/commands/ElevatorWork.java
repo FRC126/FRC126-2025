@@ -53,8 +53,9 @@ public class ElevatorWork extends Command {
     public void execute() {
         reached=Robot.elevator.moveTarget(target);
 
-        if ((reached || runCount > 0) && shootAfter) {
-            Robot.coralShooter.runCoralShooter(.5);
+        if ((reached || runCount > 0) && shootAfter == Robot.shootAction.Shoot) {
+            Robot.coralShooter.setAutoMove(true);
+            Robot.coralShooter.runCoralShooter(.25);
             runCount++;
         } else {
             runCount=0;
@@ -84,6 +85,7 @@ public class ElevatorWork extends Command {
     @Override
     public void end(boolean isInteruppted) {
         Robot.coralShooter.runCoralShooter(0);
+        Robot.coralShooter.setAutoMove(true);      
         Robot.elevator.cancel();
         runCount=0;
     }

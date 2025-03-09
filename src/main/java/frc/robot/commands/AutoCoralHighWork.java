@@ -25,15 +25,21 @@ public class AutoCoralHighWork extends SequentialCommandGroup {
         addCommands(         
             new InstantCommand(Robot.swerveDrive::brakesOn, Robot.swerveDrive),
 
-            new LimeLightWork(Robot.heightTargets.LFour, 400),
+            new DriveWork(.15,0,10,70),
 
-            new ElevatorWork(Robot.heightTargets.LFour, Robot.shootAction.Shoot, 200),
+            new LimeLightWork(Robot.heightTargets.LFour, Robot.leftRight.Left,400),
+
+            new ElevatorWork(Robot.heightTargets.LFour, Robot.shootAction.Shoot, 100),
+
+            new CoralShooterWork(-.25, 20),
 
             new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
 
+            new DriveWork(-.15,0,10,30),
+
             new ParallelCommandGroup(
-                new DriveWork(-.15,0,10,40),
-                new ElevatorWork(Robot.heightTargets.LOne, Robot.shootAction.NoShoot, 200)
+                new DriveWork(-.15,0,10,30),
+                new ElevatorWork(Robot.heightTargets.LOne, Robot.shootAction.NoShoot,100 )
             )
         );        
     }

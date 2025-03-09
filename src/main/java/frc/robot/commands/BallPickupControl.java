@@ -52,16 +52,16 @@ public class BallPickupControl extends Command {
 
         double y=0;
 
-		if (operatorJoystick.isLShoulderButton()) {
-			subsystem.moveTarget(0);
-			subsystem.runWheel(0);
-		} else if (operatorJoystick.isRShoulderButton()) {
+		//if (operatorJoystick.isLShoulderButton()) {
+			//subsystem.moveTarget(0);
+			//subsystem.runWheel(0);
+		if (operatorJoystick.isRShoulderButton()) {
 			subsystem.moveTarget(1);
 			subsystem.runWheel(.25);
 			Robot.Leds.setMode(LEDs.LEDModes.BallPickup);
 		} else {
-			if (operatorJoystick.getPovUp()) { y=-.20; }
-			if (operatorJoystick.getPovDown()) { y=.2; }
+			if (operatorJoystick.getPovUp()) { y=-.1; }
+			if (operatorJoystick.getPovDown()) { y=.1; }
 
 			if (y != 0) {
 				subsystem.raiseLower(y);
@@ -75,6 +75,8 @@ public class BallPickupControl extends Command {
 			} else if (operatorJoystick.getPovRight()) {
 				subsystem.runWheel(-1);
 				Robot.Leds.setMode(LEDs.LEDModes.BallPickup);
+			} else if (operatorJoystick.getPovDown()) { 
+				subsystem.runWheel(-1);
 			} else {
 				subsystem.runWheel(0);
 			}

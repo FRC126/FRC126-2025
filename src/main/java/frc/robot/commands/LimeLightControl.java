@@ -55,10 +55,17 @@ public class LimeLightControl extends Command {
 		}	
 
         Robot.limeLight.trackTarget();
-        if (driveJoystick.isAButton()) {
+        if (driveJoystick.isYButton()) {
             Robot.Leds.setMode(LEDs.LEDModes.Aiming);
-            Robot.limeLight.seekTarget();
-        }    
+            Robot.limeLight.seekTarget(Robot.leftRight.Left);
+        } else if (driveJoystick.isAButton()) {
+            Robot.Leds.setMode(LEDs.LEDModes.Aiming);
+            Robot.limeLight.seekTarget(Robot.leftRight.Right);
+        } else {
+            Robot.swerveDrive.setAutoMove(false);
+            Robot.elevator.setAutoMove(false);
+            Robot.coralShooter.setAutoMove(false);            
+        }   
     }
 
 	/************************************************************************

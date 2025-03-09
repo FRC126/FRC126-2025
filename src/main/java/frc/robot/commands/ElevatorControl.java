@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ElevatorControl extends Command {
 	JoystickWrapper operatorJoystick;
 	Elevator subsystem;
+	double startSpeed=0;
 
 	/**********************************************************************************
 	 **********************************************************************************/
@@ -48,6 +49,9 @@ public class ElevatorControl extends Command {
 	@Override
 	public void execute() {
 
+		Robot.distance.getLeftDistanceInches();
+		Robot.distance.getRightDistanceInches();
+
 		if (Robot.internalData.isAuto() || subsystem.getAutoMove() || Robot.isAutoCommand) {
 			// Ignore user controls during Autonomous
 			return;
@@ -72,9 +76,16 @@ public class ElevatorControl extends Command {
 			subsystem.moveTarget(Robot.heightTargets.LFour);
 		} else {
 			if (y != 0) {
+				if (y<0) {
+					if (y<startSpeed) { startSpeed-=.05; }
+				} else {
+					if (y>startSpeed) { startSpeed+=.05; }
+				}
+				y=startSpeed;
 				subsystem.moveElevator(y);
 			} else {
 				subsystem.moveElevator(0);
+				startSpeed=0;
 			}
 			SmartDashboard.putNumber("Elevator Movement", y);
 
