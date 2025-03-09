@@ -72,14 +72,18 @@ public class Robot extends TimedRobot {
     public static boolean useNavx=true;
 
     public static enum targetTypes{
-        NoTarget(-1),TargetSeek(0), TargetRed(1), TargetBlue(2);
+        NoTarget(-1),TargetSeek(1), TargetRed(2), TargetBlue(3);
         private final int pipeline;
         private targetTypes(int v) {pipeline = v;}
         public int getPipeline() {
             return pipeline;
         }
     };
+
     public static enum allianceColor{Red,Blue};
+    public static enum heightTargets{LOne,LTwo, LThree, LFour};
+    public static enum leftRight{Left,Right};
+    public static enum shootAction{Shoot,NoShoot};
 
     public static final int noAlliance=-1;
     public static final int redAlliance=0;
@@ -141,14 +145,13 @@ public class Robot extends TimedRobot {
         ballPickup = new BallPickup();
 
         // Disance sensor
-        // distance = new MeasureDistance();
+        distance = new MeasureDistance();
 
         // LED Subsystem
         Leds = new LEDs();
 
         // Limelight subsystem1
-        // limeLight = new LimeLight();
-
+        limeLight = new LimeLight();
 
         // Server for the drive camera
         CameraServer.startAutomaticCapture();
@@ -163,9 +166,9 @@ public class Robot extends TimedRobot {
         allianceColor.addOption("Blue Alliance",blueAlliance);
         SmartDashboard.putData("Alliance Color",allianceColor);
         
-        autoNext.setDefaultOption("do nothing dummy!",autoNothing);
+        autoNext.addOption("do nothing dummy!",autoNothing);
         autoNext.setDefaultOption("Just Drive",autoJustDrive);
-        autoNext.addOption("Coral Low Straight",coralLowStraight);
+        //autoNext.addOption("Coral Low Straight",coralLowStraight);
         autoNext.addOption("Coral High Straight",coralHighStraight);
         SmartDashboard.putData("Auto Choices",autoNext);
     }
@@ -195,9 +198,11 @@ public class Robot extends TimedRobot {
 
         Robot.targetTypes target = Robot.targetTypes.TargetSeek; 
         if (selectedAllianceColor == redAlliance) {
-            target=Robot.targetTypes.TargetRed; 
+            // target = Robot.targetTypes.TargetRed; 
+            target = Robot.targetTypes.TargetSeek; 
         } else if (selectedAllianceColor == blueAlliance) {
-            target=Robot.targetTypes.TargetBlue; 
+            // target = Robot.targetTypes.TargetBlue; 
+            target = Robot.targetTypes.TargetSeek; 
         }
         Robot.targetType = target;
 
@@ -212,7 +217,7 @@ public class Robot extends TimedRobot {
                 break;
             case autoJustDrive:
                 SmartDashboard.putString("AutoCommand","Just Drive");
-                autonomous = new AutoCoralHigh();
+                autonomous = new AutoJustDrive();
                 break;
             case autoNothing:
                 // Do Nothing!

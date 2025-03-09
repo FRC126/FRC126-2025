@@ -16,24 +16,21 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
-import frc.robot.Robot.shootAction;
 
-public class ElevatorWork extends Command {
+public class LimeLightWork extends Command {
 
     int iters;
     Robot.heightTargets target;
-    shootAction shootAfter;
-    int runCount;
     boolean reached;
+    Robot.leftRight direction;
 
     /**********************************************************************************
      **********************************************************************************/
 
-    public ElevatorWork(Robot.heightTargets target, shootAction shootAfter, int iters) {
+    public LimeLightWork(Robot.heightTargets target, Robot.leftRight direction, int iters) {
         this.iters = iters;
         this.target = target;
-        this.shootAfter = shootAfter;
-        runCount=0;
+        this.direction = direction;
         reached=false;
     }
 
@@ -51,17 +48,8 @@ public class ElevatorWork extends Command {
 
     @Override
     public void execute() {
-        reached=Robot.elevator.moveTarget(target);
-
-        if ((reached || runCount > 0) && shootAfter == Robot.shootAction.Shoot) {
-            Robot.coralShooter.setAutoMove(true);
-            Robot.coralShooter.runCoralShooter(.25);
-            runCount++;
-        } else {
-            runCount=0;
-        }
+		reached=Robot.limeLight.seekTarget(direction);
     }
-
 
     /**********************************************************************************
      * Make this return true when this Command no longer needs to run execute()
@@ -70,9 +58,7 @@ public class ElevatorWork extends Command {
     @Override
     public boolean isFinished() {
         iters--;
-        if (iters == 0 || 
-           (reached && shootAfter == Robot.shootAction.NoShoot) ||
-           (shootAfter == Robot.shootAction.Shoot && runCount > 5)) {
+        if (iters == 0 || reached) {
             return true;
         }
         return false;
@@ -85,8 +71,7 @@ public class ElevatorWork extends Command {
     @Override
     public void end(boolean isInteruppted) {
         Robot.coralShooter.runCoralShooter(0);
-        Robot.coralShooter.setAutoMove(true);      
+        Robot.swerveDrive.cancel();
         Robot.elevator.cancel();
-        runCount=0;
     }
 }

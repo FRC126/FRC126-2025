@@ -26,12 +26,14 @@ public class SwerveControl extends Command {
 	public static boolean driveStraight = false;
 	public static double straightDegrees = 0;
 	int delay=0;
+	SwerveDrive subsystem;
 
 	/**********************************************************************************
 	 **********************************************************************************/
 
 	public SwerveControl(SwerveDrive subsystem) {
 		addRequirements(subsystem);
+		this.subsystem = subsystem;
 		driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.10);
 	}
 
@@ -56,7 +58,7 @@ public class SwerveControl extends Command {
 			Robot.stopAutoCommand();
 		}
 
-		if (Robot.internalData.isAuto() || Robot.swerveDrive.getAutoMove() || Robot.isAutoCommand) {
+		if (Robot.internalData.isAuto() || subsystem.getAutoMove() || Robot.isAutoCommand) {
 			// Ignore user controls during Autonomous
     		driveStraight = false;
 			return;

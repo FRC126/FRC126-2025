@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ElevatorControl extends Command {
 	JoystickWrapper operatorJoystick;
 	Elevator subsystem;
+	double startSpeed=0;
 
 	/**********************************************************************************
 	 **********************************************************************************/
@@ -47,8 +48,17 @@ public class ElevatorControl extends Command {
 
 	@Override
 	public void execute() {
+
+		Robot.distance.getLeftDistanceInches();
+		Robot.distance.getRightDistanceInches();
+
+		if (Robot.internalData.isAuto() || subsystem.getAutoMove() || Robot.isAutoCommand) {
+			// Ignore user controls during Autonomous
+			return;
+		}
+
     	// Elevator Movement Control
-		double y = operatorJoystick.getRightStickY() * .4;
+		double y = operatorJoystick.getRightStickY() * .7;
 		double y2 =operatorJoystick.getLeftStickY() * -.75;
 
         boolean aButton = operatorJoystick.isAButton();
@@ -57,22 +67,25 @@ public class ElevatorControl extends Command {
 		boolean yButton = operatorJoystick.isYButton();
 
 		if (aButton) {
-			subsystem.moveElevatorTarget(0);
-			subsystem.moveExtensionTarget(0);
+			subsystem.moveTarget(Robot.heightTargets.LOne);
 		} else if (bButton) {
-			subsystem.moveElevatorTarget(1);
-			subsystem.moveExtensionTarget(0);
+			subsystem.moveTarget(Robot.heightTargets.LTwo);
 		} else if (yButton) {
-			subsystem.moveElevatorTarget(2);
-			subsystem.moveExtensionTarget(0);
+			subsystem.moveTarget(Robot.heightTargets.LThree);
 		} else if (xButton) {
-			subsystem.moveElevatorTarget(3);
-			subsystem.moveExtensionTarget(1);
+			subsystem.moveTarget(Robot.heightTargets.LFour);
 		} else {
 			if (y != 0) {
+				if (y<0) {
+					if (y<startSpeed) { startSpeed-=.05; }
+				} else {
+					if (y>startSpeed) { startSpeed+=.05; }
+				}
+				y=startSpeed;
 				subsystem.moveElevator(y);
 			} else {
 				subsystem.moveElevator(0);
+				startSpeed=0;
 			}
 			SmartDashboard.putNumber("Elevator Movement", y);
 

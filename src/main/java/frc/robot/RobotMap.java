@@ -63,6 +63,7 @@ public class RobotMap {
 	// CTRE components
 	public static final int pigeonCanID = 50;
 	public static final int canRangeCanID = 51;
+	public static final int canRangeCanID2 = 52;
 
 	///////////////////////////////////////////////////////////////////////////
 	public static final int LidarChannel = 3; 

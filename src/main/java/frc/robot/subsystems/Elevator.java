@@ -8,8 +8,7 @@
 		 \/_/\/_____/   \/___/
 
     Team 126 2025 Code       
-	Go get em gaels!
-
+	Go get em gaels!7
 ***********************************/
 
 package frc.robot.subsystems;
@@ -35,6 +34,9 @@ public class Elevator extends SubsystemBase {
 	boolean pickupDebug = false;
 	double pickupRPM;
 	int called = 0;
+	boolean autoMove=false;
+	double startSpeed=0;
+	double extStartSpeed=0;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
@@ -76,7 +78,7 @@ public class Elevator extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	private void runMotor(double speed) {
+	private void runElevatorMotor(double speed) {
 		leftMotor.set(speed*-1);
 		rightMotor.set(speed);
 	}
@@ -84,28 +86,50 @@ public class Elevator extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
-	 public void moveExtensionTarget(int targetIn) {
+	 private boolean moveExtensionTarget(Robot.heightTargets targetIn) {
 		double speed = 0;
 		double currentPosition = getExtensionPosition();
 
 		double target=0;
-		if (targetIn==1) { target=50; }
+		switch(targetIn) {
+			case LOne:              // Bottom
+				target=0;
+				break;
+			case LTwo:              // Low
+				target=0;
+				break;
+			case LThree:             // Middle
+				target=0;
+				break;
+			case LFour:		    	// High
+				target=50;
+				break;
+		}		
 		SmartDashboard.putNumber("Extension target",target);
 		SmartDashboard.putNumber("Extension current",currentPosition);
 
-		if (target > currentPosition + 1) {
-			speed = -.75;
-			if (target - currentPosition < 2) { speed = -.5;}
-			if (target - currentPosition < 1) { speed = -.25;}
+		if (target > currentPosition + .5) {
+			speed=-.8;
+			if (target - currentPosition < 8) { speed = -.4;}
+			if (target - currentPosition < 4) { speed = -.25;}
+			if (target - currentPosition < 1) { speed = -.1;}
 		} else if (target < currentPosition - .5) {
-			speed = .75;
-			if (currentPosition - target < 2) { speed = .5;}
-			if (currentPosition - target < 1) { speed = .25;}
+			speed=.8;
+			if (currentPosition - target < 8) { speed = .4;}
+			if (currentPosition - target < 4) { speed = .25;}
+			if (currentPosition - target < 1) { speed = .1;}
 		} else {
+			extStartSpeed=0;
 			speed = 0;
 		}
 
 		moveExtension(speed);
+
+		if (speed == 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/************************************************************************
@@ -125,6 +149,13 @@ public class Elevator extends SubsystemBase {
 		if (speed < 0 && currentPosition > 60) { speed=speed*.5; }
         if (speed < 0 && currentPosition > 62) { speed=0; }
 		
+		runExtensionMotor(speed);
+	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public void runExtensionMotor(double speed) {
 		extensionMotor.set(speed);
 	}
 
@@ -168,40 +199,64 @@ public class Elevator extends SubsystemBase {
 
     /************************************************************************
 	 ************************************************************************/
-
-	public void moveElevatorTarget(int targetIn) {
+ 
+	private boolean moveElevatorTarget(Robot.heightTargets targetIn) {
 		double speed = 0;
 		double currentPosition = getPosition();
+		double topSpeed=1;
+		double speedIncr = 0.1;
 
 		double target=0;
 		switch(targetIn) {
-			case 1:              // Low
+			case LOne:              // Bottom
+				target=0;
+				break;
+			case LTwo:              // Low
 				target=32;
 				break;
-			case 2:             // Middle
+			case LThree:             // Middle
 				target=65;
 				break;
-			case 3:		    	// High
+			case LFour:		    	// High
 				target=111.5;
 				break;
 		}
 
 		if (target > currentPosition + .5) {
-			speed = .6;
-			if (target - currentPosition < 5) { speed = .3;}
-			if (target - currentPosition < 1) { speed = .2;}
+			if ( startSpeed < topSpeed-.05) {
+				speed = startSpeed + speedIncr;
+				startSpeed = speed;
+			} else {
+				speed = topSpeed;
+			}
+			if (target - currentPosition < 6) { speed = .4;}
+			if (target - currentPosition < 3) { speed = .25;}
+			if (target - currentPosition < 1) { speed = .1;}
 		} else if (target < currentPosition - 1) {
-			speed = -.6;
-			if (currentPosition - target < 5) { speed = -.3;}
-			if (currentPosition - target < 1) { speed = -.2;}
+			if ( startSpeed > (topSpeed -.05) * -1) {
+				speed = startSpeed - speedIncr;
+				startSpeed=speed;
+			} else {
+				speed = topSpeed * -1;
+			}
+			if (currentPosition - target < 6) { speed = -.4;}
+			if (currentPosition - target < 3) { speed = -.25;}
+			if (currentPosition - target < 1) { speed = -.1;}
 		} else {
 			motorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
 	    	leftMotor.configure(motorConfig, null, null);
 		    rightMotor.configure(motorConfig, null, null);
+			startSpeed=0;
 			speed = 0;
 		}
 
 		moveElevator(speed);
+
+		if (speed == 0) {
+			return(true);
+		} else {
+			return(false);
+		}
 	}
 
     /************************************************************************
@@ -222,8 +277,9 @@ public class Elevator extends SubsystemBase {
 			if (speed < 0 && currentPosition <= 1) { speed=0; }
 		}	
 
-		if (speed > 0 && currentPosition >113) { speed=speed*.5; }
-		if (speed > 0 && currentPosition >113) { speed=0; }
+		if (speed > 0 && currentPosition >105) { speed=speed*.5; }
+		if (speed > 0 && currentPosition >110) { speed=speed*.25; }
+		if (speed > 0 && currentPosition >112) { speed=0; }
 
 	    if (bottomLimit.get() == true && speed < 0) {
 			speed = 0;
@@ -236,14 +292,40 @@ public class Elevator extends SubsystemBase {
 			Robot.Leds.setMode(LEDs.LEDModes.ElevatorDown);
 		}
 
-		runMotor(speed);
+		runElevatorMotor(speed);
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+    
+	public boolean moveTarget(Robot.heightTargets targetIn) {
+		boolean extReached, elevReached;
+
+		extReached=moveExtensionTarget(targetIn); 
+		elevReached=moveElevatorTarget(targetIn);
+
+	    return(extReached && elevReached);
 	}
 
 	/************************************************************************
 	 ************************************************************************/
 
-	public void cancel() {
-		runMotor(0);
-		extensionMotor.set(0);
+	public boolean getAutoMove() {
+		return(autoMove);
+	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public void setAutoMove(boolean move) {
+		autoMove = move;
+	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public void cancel() {
+		runElevatorMotor(0);
+		runExtensionMotor(0);
 	}
 }

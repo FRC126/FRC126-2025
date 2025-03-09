@@ -98,19 +98,20 @@ public class BallPickup extends SubsystemBase {
 		double currentPosition = getPosition();
 
 		double target=0;
-		if (targetIn==1) { target=20; }
+		if (targetIn==1) { target=2.8; }
 
-		if (target > currentPosition + 3) {
-			speed = .5;
-			if (target - currentPosition < 10) { speed = .25;}
-			if (target - currentPosition < 5) { speed = .1;}
-		} else if (target < currentPosition - 3) {
-			speed = -.5;
-			if (currentPosition - target < 10) { speed = -.25;}
-			if (currentPosition - target < 5) { speed = -.1;}
+		if (target > currentPosition + .15) {
+			speed = .3;
+			if (target - currentPosition < .5) { speed = .1;}
+			if (target - currentPosition < .25) { speed = .1;}
+		} else if (target < currentPosition - .15) {
+			speed = -.3;
+			if (currentPosition - target < .5) { speed = -.1;}
+			if (currentPosition - target < .25) { speed = -.1;}
 		} else {
 			speed = 0;
 		}
+		SmartDashboard.putNumber("ballPickup target",target);
 
 		raiseLower(speed);
 	}
@@ -127,15 +128,12 @@ public class BallPickup extends SubsystemBase {
 		if (speed < -.5) { speed = -.5; }
 
 		if (Robot.overrideEncoders != true ) {
- 		    if (speed < 0 && pos <=1) { speed = 0; }
-		}
+			if (speed < 0 && pos <=.1) { speed = 0; }
+	    }
 
-		if (speed < 0 && pos <=2) { speed *= .25; }
+		if (speed < 0 && pos <=.2) { speed *= .35; }
 
-		if (speed > 0 && getPosition() >= 12.3) { speed = 0; }
-		//if (speed > 0 && getPosition() >=19) { speed = .25; }
-		//if (speed > 0 && getPosition() >=18 ) { speed *= .5; }
-
+		if (speed > 0 && getPosition() >= 3.5) { speed = 0; }
 
 		raiseLowerMotor.set(speed);
 	}

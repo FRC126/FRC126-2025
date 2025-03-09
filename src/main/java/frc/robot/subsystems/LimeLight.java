@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class LimeLight extends SubsystemBase {
 
-    private boolean activeSeek=false;
     private boolean llTargetValid;
     private double llTargetArea;
     private double llTargetX;
@@ -33,7 +32,7 @@ public class LimeLight extends SubsystemBase {
     private int validCount;
     private int missedCount;
     private int centered;
-
+ 
     public static SequentialCommandGroup throwCommand;
     boolean limeLightDebug=false;
     double pipelineLast=0;
@@ -60,13 +59,6 @@ public class LimeLight extends SubsystemBase {
         missedCount=0;
         centered=0;
     }
-
-    /************************************************************************
-	 ************************************************************************/
-
-     public void setActiveSeek(boolean seek) {
-        activeSeek = seek;
-    }   
 
    	/************************************************************************
 	 ************************************************************************/
@@ -160,39 +152,137 @@ public class LimeLight extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
-     public boolean seekTarget() {   
-        int cameraOffset = 8;    
+     private double getTolerance(double distance) {
+        if (distance > 48) { return(4); }
+        if (distance > 36) { return(6);}    
+        if (distance > 24) { return(8);}   
+        if (distance < 24 && distance > 15) { return(10);} 
+        return(5);
+     }
 
-        if (!activeSeek ||
-            !llTargetValid ||
+    /************************************************************************
+	 ************************************************************************/
+
+     public boolean seekTarget(Robot.leftRight direction) {   
+
+        double tolerance = 5;
+        double moveSpeed = 0.06;
+        double targetDistance = 14.5;
+        double cameraOffset = 0;
+        double dirOffset = 1;
+        double rotateSpeed= 0.03;
+        double rotateThres = 1;
+
+        double ldist=Robot.distance.getLeftDistanceInches();
+        double rdist=Robot.distance.getRightDistanceInches();
+        if (ldist < 5) { ldist=rdist; }
+        if (rdist < 5) { rdist=ldist; }
+        double diff = ldist-rdist;
+        double dist;
+        if (diff < -15 || diff > -15) {
+            dist=ldist<rdist?ldist:rdist;
+        } else {
+            dist=(ldist+rdist)/2.0;
+        }
+
+        tolerance = getTolerance(dist);
+        cameraOffset=getTolerance(dist)*2.20;
+
+        double leftRight=0, forwardBack=0, rotate=0;
+
+        if (!llTargetValid ||
             validCount <= 3) {
+
+            if (dist > targetDistance) {
+                forwardBack=0.1;
+        
+                if ((diff > rotateThres || diff < rotateThres * -1) && diff < 10) {
+                    forwardBack=0;
+                    leftRight=0;    
+                    if (diff > 0) {
+                        rotate = rotateSpeed;
+                    } else {
+                        rotate = rotateSpeed * -1;
+                    }
+                }                
+                Robot.swerveDrive.brakesOn();
+                Robot.swerveDrive.setAutoMove(true);
+                Robot.swerveDrive.Drive(forwardBack, leftRight, rotate, false, 0);
+                return(false);
+            }
+            if (dist > 10 && dist<targetDistance+1) {
+                return(true);
+            }
+
             centered=0;
             Robot.swerveDrive.setAutoMove(false);
+            Robot.elevator.setAutoMove(false);
+            Robot.coralShooter.setAutoMove(false);
             return(false);
         }     
 
-        // We found a valid vision target.
-        double llTargetXOffset = llTargetX - cameraOffset;
+        if (direction == Robot.leftRight.Left) {
+            dirOffset=-1;
+        }
 
-        if ( llTargetXOffset < -1.5 || llTargetXOffset > 1.5) {
-            Robot.swerveDrive.brakesOn();
-            double driveRotate = Robot.swerveDrive.rotateToDegrees(llTargetXOffset);
-            if (driveRotate!=0) {
-                Robot.swerveDrive.setAutoMove(true);
+        // We found a valid vision target.
+        double llTargetXOffset = llTargetX - (cameraOffset * dirOffset);
+
+        if ( llTargetXOffset < (tolerance * -1) ) {
+                if (llTargetXOffset > 10 || llTargetXOffset < -10) {
+                    leftRight=moveSpeed * 2 * -1;
+                } else {
+                    leftRight=moveSpeed * -1;
+                }
+        } else if ( llTargetXOffset > tolerance ) {
+            if (llTargetXOffset > 10 || llTargetXOffset < -10) {
+                leftRight=moveSpeed * 2;
             } else {
-                Robot.swerveDrive.setAutoMove(false);
-            }    
+                leftRight=moveSpeed;
+            }
+        } else {
+            if (dist > targetDistance) {
+                if (dist > 24) {
+                    forwardBack=0.25;
+                } else {
+                   forwardBack=0.15;
+                }  
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////
+        // figure out the rotate vs left right?
+        //
+     
+        if ((diff > rotateThres || diff < rotateThres * -1) && diff < 10) {
+            forwardBack=0;
+            leftRight=0;    
+            if (diff > 0) {
+                rotate = rotateSpeed;
+                if (diff>3) { rotate = rotateSpeed * 2; }
+            } else {
+                rotate = rotateSpeed * -1;
+                if (diff<-3) { rotate = rotateSpeed * -2; }
+            }
+        }
+
+        if (leftRight != 0 || forwardBack != 0 || rotate != 0) {
+            Robot.swerveDrive.brakesOn();
+            Robot.swerveDrive.setAutoMove(true);
+            Robot.swerveDrive.Drive(forwardBack, leftRight, rotate, false, 0);
             centered=0;
         } else {
-            Robot.swerveDrive.cancel();
-            centered++;
-        }   
-
-        if (centered > 2) {
+            Robot.swerveDrive.brakesOn();
             Robot.swerveDrive.setAutoMove(false);
-            return(true);
-        } else {
-            return(false);
+            Robot.swerveDrive.cancel();            
+            centered++;
         }
-    }          
+        
+        if (centered > 4) {
+             return(true);
+        }
+        
+        return(false);
+    }
+    
 }

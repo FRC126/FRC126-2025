@@ -234,7 +234,7 @@ public class SwerveDrive extends SubsystemBase {
      	//SmartDashboard.putNumber("reverse angle", reverse);
 
 		//double steps[] = {0.4, 0.1, 0.025, 0.01};
-		double steps[] = {0.6, 0.2, 0.04, 0.02};
+		double steps[] = {0.5, 0.15, 0.03, 0.01};
 
 		if ( targetAngle < (currentAngle) - 0.1 && !skip) {
 			speed=steps[0] * -1 * reverse;
@@ -358,14 +358,14 @@ public class SwerveDrive extends SubsystemBase {
 	    double invert=1;
 		if (driveStraight) {
 			// If driveStraight is true, keep the robot facing the right direction
-			if (currentAngle < straightDegrees-1.0) {
-				rotate=.025 * invert;	
-				if (leftRight > .2 || leftRight < -.2 || forwardBack > .2 || forwardBack < -.2 ) { rotate=.075 * invert; }
-				if (leftRight > .4 || leftRight < -.4 || forwardBack > .4 || forwardBack < -.4 ) { rotate=.20 * invert; }
-			} else if (currentAngle > straightDegrees+1.0) {
-				rotate=-.025 * invert;	
-				if (leftRight > .2 || leftRight < -.2 || forwardBack > .2 || forwardBack < -.2 ) { rotate=-.075 * invert; }
-				if (leftRight > .4 || leftRight < -.4 || forwardBack > .4 || forwardBack < -.4 ) { rotate=-.20 * invert; }
+			if (currentAngle < straightDegrees-2.0) {
+				rotate=.015 * invert;	
+				if (leftRight > .2 || leftRight < -.2 || forwardBack > .2 || forwardBack < -.2 ) { rotate=.05 * invert; }
+				if (leftRight > .4 || leftRight < -.4 || forwardBack > .4 || forwardBack < -.4 ) { rotate=.10 * invert; }
+			} else if (currentAngle > straightDegrees+2.0) {
+				rotate=-.015 * invert;	
+				if (leftRight > .2 || leftRight < -.2 || forwardBack > .2 || forwardBack < -.2 ) { rotate=-.05 * invert; }
+				if (leftRight > .4 || leftRight < -.4 || forwardBack > .4 || forwardBack < -.4 ) { rotate=-.1 * invert; }
 			} else {
 				rotate=0;
 			}
@@ -483,7 +483,6 @@ public class SwerveDrive extends SubsystemBase {
 
 	public double getDistanceInches() {
 		double wheelDiameter = 4;
-		//double gearRatio=18;
 		double gearRatio=14;
 		
 		double left1 = swerveFrontLeftDriveMotor.getPosition().getValueAsDouble() * -1;
@@ -495,10 +494,10 @@ public class SwerveDrive extends SubsystemBase {
 	
 		double distance = (avg / gearRatio) * (wheelDiameter * 3.1459);
 
-		if (swerveDebug) { 
+		//if (swerveDebug) { 
   			SmartDashboard.putNumber("Drive Distance",distance);
   			SmartDashboard.putNumber("Drive AVG",avg);
-		}	
+		//}	
 
 		return(distance);
 	}
@@ -558,8 +557,6 @@ public class SwerveDrive extends SubsystemBase {
 
 		double target = startAngle + offset;
 		double diff = Math.abs(target) - Math.abs(currentAngle);
-
-
 
 		double tmp = diff / 100;
 		tmp = Robot.boundSpeed(tmp, .25, .04 );
