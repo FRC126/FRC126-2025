@@ -22,14 +22,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 /**********************************************************************************
  **********************************************************************************/
 
-public class LimeLightControl extends Command {
+public class LimeLightRearControl extends Command {
     public static int iter=0;
     JoystickWrapper driveJoystick;
 
 	/************************************************************************
 	 ************************************************************************/
 
-    public LimeLightControl(LimeLight subsystem) {
+    public LimeLightRearControl(LimeLight subsystem) {
 		addRequirements(subsystem);
         driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.05);
     }
@@ -55,21 +55,18 @@ public class LimeLightControl extends Command {
 		}	
 
         Robot.limeLight.trackTarget();
-        if (driveJoystick.isYButton()) {
+
+        if (driveJoystick.getRightTrigger()) {
             Robot.Leds.setMode(LEDs.LEDModes.Aiming);
-            Robot.limeLight.seekTarget(Robot.leftRight.Left);
-            Robot.limeLight.setActive(true);    
-        } else if (driveJoystick.isAButton()) {
-            Robot.Leds.setMode(LEDs.LEDModes.Aiming);
-            Robot.limeLight.seekTarget(Robot.leftRight.Right);
-            Robot.limeLight.setActive(true);    
-        } else {
-            if (Robot.limeLightRear.getActive()) {
+            Robot.limeLightRear.seekTarget(Robot.leftRight.Left);
+            Robot.limeLightRear.setActive(true);
+        } else {    
+            if (Robot.limeLight.getActive == false) {
                 Robot.swerveDrive.setAutoMove(false);
                 Robot.elevator.setAutoMove(false);
                 Robot.coralShooter.setAutoMove(false);            
-            }
-            Robot.limeLight.setActive(false);    
+            }    
+            Robot.limeLightRear.setActive(false);
         }   
     }
 

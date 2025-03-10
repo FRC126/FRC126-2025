@@ -69,6 +69,7 @@ public class Robot extends TimedRobot {
     public static MeasureDistance distance;
     public static LEDs Leds;
     public static LimeLight limeLight;
+    public static LimeLight limeLightRear;
     public static boolean useNavx=true;
 
     public static enum targetTypes{
@@ -82,7 +83,7 @@ public class Robot extends TimedRobot {
 
     public static enum allianceColor{Red,Blue};
     public static enum heightTargets{LOne,LTwo, LThree, LFour};
-    public static enum leftRight{Left,Right};
+    public static enum leftRight{Left,Right, Center};
     public static enum shootAction{Shoot,NoShoot};
 
     public static final int noAlliance=-1;
@@ -151,7 +152,8 @@ public class Robot extends TimedRobot {
         Leds = new LEDs();
 
         // Limelight subsystem1
-        limeLight = new LimeLight();
+        limeLight = new LimeLight(null);
+        limeLightRear = new LimeLight("REAR");
 
         // Server for the drive camera
         CameraServer.startAutomaticCapture();

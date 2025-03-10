@@ -32,6 +32,9 @@ public class LimeLight extends SubsystemBase {
     private int validCount;
     private int missedCount;
     private int centered;
+    private boolean active=false;
+
+    private String limelightName;
  
     public static SequentialCommandGroup throwCommand;
     boolean limeLightDebug=false;
@@ -46,7 +49,7 @@ public class LimeLight extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-    public LimeLight() {
+    public LimeLight(String limelightName) {
         // Register this subsystem with command scheduler and set the default command
         super();
         setDefaultCommand(new LimeLightControl(this));
@@ -58,6 +61,7 @@ public class LimeLight extends SubsystemBase {
         validCount=0;
         missedCount=0;
         centered=0;
+        this.limelightName = limelightName; 
     }
 
    	/************************************************************************
@@ -89,18 +93,18 @@ public class LimeLight extends SubsystemBase {
         }
         pipelineLast=pipeline;
 
-        LimelightHelpers.setPipelineIndex(null, pipeline);
-        LimelightHelpers.setCameraMode_Processor(null);
-        LimelightHelpers.setLEDMode_PipelineControl(null);
+        LimelightHelpers.setPipelineIndex(limelightName, pipeline);
+        LimelightHelpers.setCameraMode_Processor(limelightName);
+        LimelightHelpers.setLEDMode_PipelineControl(limelightName);
 
         if (limeLightDebug) {
-            SmartDashboard.putNumber("Limelight Pipe", LimelightHelpers.getCurrentPipelineIndex(null));
+            SmartDashboard.putNumber("Limelight Pipe", LimelightHelpers.getCurrentPipelineIndex(limelightName));
         }
 
-        double tx = txSmoother.sampleAndGetAverage(LimelightHelpers.getTX(null));
-        double ty = tySmoother.sampleAndGetAverage(LimelightHelpers.getTY(null));
-        double ta = taSmoother.sampleAndGetAverage(LimelightHelpers.getTA(null));        
-        boolean tv = LimelightHelpers.getTV(null);
+        double tx = txSmoother.sampleAndGetAverage(LimelightHelpers.getTX(limelightName));
+        double ty = tySmoother.sampleAndGetAverage(LimelightHelpers.getTY(limelightName));
+        double ta = taSmoother.sampleAndGetAverage(LimelightHelpers.getTA(limelightName));        
+        boolean tv = LimelightHelpers.getTV(limelightName);
         
         if (limeLightDebug) {
             //post to smart dashboard periodically
@@ -152,15 +156,48 @@ public class LimeLight extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
+    public boolean getActive () {
+        return active;
+    }
+
+    /************************************************************************
+	 ************************************************************************/
+
+    public void setActive (boolean active) {
+        this.active = active;
+    }
+
+    /************************************************************************
+	 ************************************************************************/
+
      private double getTolerance(double distance) {
         if (distance > 48) { return(4); }
+        if (distance > 42) { return(5); }
         if (distance > 36) { return(6);}    
+        if (distance > 30) { return(7);}    
         if (distance > 24) { return(8);}   
-        if (distance < 24 && distance > 15) { return(10);} 
+        if (distance > 20) { return(9);}   
+        if (distance <= 20 && distance >= 13) { return(10);} 
         return(5);
      }
 
     /************************************************************************
+	 ************************************************************************/
+
+    private double fixRotateSpeed ( double diff, double rotateSpeed) {
+        double rotate;
+
+        if (diff > 0) {
+            rotate = rotateSpeed;
+            if (diff > 5) { rotate = rotateSpeed * 2; }
+        } else {
+            rotate = rotateSpeed * -1;
+            if (diff < -5) { rotate = rotateSpeed * -2; }
+        }
+
+        return rotate;
+    }
+     /************************************************************************
 	 ************************************************************************/
 
      public boolean seekTarget(Robot.leftRight direction) {   
@@ -172,14 +209,15 @@ public class LimeLight extends SubsystemBase {
         double dirOffset = 1;
         double rotateSpeed= 0.03;
         double rotateThres = 1;
-
+        double dist, diff;
+    
         double ldist=Robot.distance.getLeftDistanceInches();
         double rdist=Robot.distance.getRightDistanceInches();
+
         if (ldist < 5) { ldist=rdist; }
         if (rdist < 5) { rdist=ldist; }
-        double diff = ldist-rdist;
-        double dist;
-        if (diff < -15 || diff > -15) {
+        diff = ldist-rdist;
+        if (diff < -15 || diff > 15) {
             dist=ldist<rdist?ldist:rdist;
         } else {
             dist=(ldist+rdist)/2.0;
@@ -193,17 +231,14 @@ public class LimeLight extends SubsystemBase {
         if (!llTargetValid ||
             validCount <= 3) {
 
+            // if we don't have a valid target, but can measure distance, just move forward
             if (dist > targetDistance) {
                 forwardBack=0.1;
         
                 if ((diff > rotateThres || diff < rotateThres * -1) && diff < 10) {
                     forwardBack=0;
                     leftRight=0;    
-                    if (diff > 0) {
-                        rotate = rotateSpeed;
-                    } else {
-                        rotate = rotateSpeed * -1;
-                    }
+                    rotate = fixRotateSpeed(diff, rotateSpeed);
                 }                
                 Robot.swerveDrive.brakesOn();
                 Robot.swerveDrive.setAutoMove(true);
@@ -223,12 +258,18 @@ public class LimeLight extends SubsystemBase {
 
         if (direction == Robot.leftRight.Left) {
             dirOffset=-1;
+        } else if (direction == Robot.leftRight.Right) {
+            dirOffset=1;
+        } else {
+            dirOffset=0;
         }
 
         // We found a valid vision target.
         double llTargetXOffset = llTargetX - (cameraOffset * dirOffset);
 
-        if ( llTargetXOffset < (tolerance * -1) ) {
+         ////////////////////////////////////////////////////////////////
+
+         if ( llTargetXOffset < (tolerance * -1) ) {
                 if (llTargetXOffset > 10 || llTargetXOffset < -10) {
                     leftRight=moveSpeed * 2 * -1;
                 } else {
@@ -247,24 +288,30 @@ public class LimeLight extends SubsystemBase {
                 } else {
                    forwardBack=0.15;
                 }  
+            } else {
+                if (dist < 5 ) {
+                    forwardBack=0.15;
+                }
             }
         }
 
         ////////////////////////////////////////////////////////////////
         // figure out the rotate vs left right?
         //
-     
         if ((diff > rotateThres || diff < rotateThres * -1) && diff < 10) {
             forwardBack=0;
             leftRight=0;    
-            if (diff > 0) {
-                rotate = rotateSpeed;
-                if (diff>3) { rotate = rotateSpeed * 2; }
-            } else {
-                rotate = rotateSpeed * -1;
-                if (diff<-3) { rotate = rotateSpeed * -2; }
-            }
+            rotate = fixRotateSpeed(diff, rotateSpeed);
         }
+
+        if (direction == Robot.leftRight.Center) {
+            // If we are backing up, then we need to reverse the direction
+            forwardBack*=-1;
+            leftRight*=-1;
+            rotate*=-1;
+        }    
+
+        ////////////////////////////////////////////////////////////////
 
         if (leftRight != 0 || forwardBack != 0 || rotate != 0) {
             Robot.swerveDrive.brakesOn();

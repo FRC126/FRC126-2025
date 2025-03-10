@@ -19,19 +19,30 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 
-public class AutoCoralHigh extends SequentialCommandGroup {
-    public AutoCoralHigh() {
+public class AutoCoralHighLeft extends SequentialCommandGroup {
+    public AutoCoralHighLeft() {
 
         addCommands(         
             new InstantCommand(Robot.swerveDrive::brakesOn, Robot.swerveDrive),
 
-			new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
             new DriveWork(.15,0,10,70),
 
-			new AutoCoralHighWork(),
+            new TurnDegreesAbsolute(45, 200),
+
+            new AutoCoralHighWork(),
+
+			new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
+
+            new ElevatorWork(Robot.heightTargets.LOne, Robot.shootAction.NoShoot,100 ),
 
             new DriveWork(-.15,0,10,60),
- 		
+
+            new TurnDegreesAbsolute(160, 200),
+
+            new DriveWork(-.15,0,10,120),
+
+            new LimeLightRearWork(Robot.leftRight.Center,400),
+            
 			new FinishAuto()
         );        
     }

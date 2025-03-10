@@ -485,18 +485,22 @@ public class SwerveDrive extends SubsystemBase {
 		double wheelDiameter = 4;
 		double gearRatio=14;
 		
-		double left1 = swerveFrontLeftDriveMotor.getPosition().getValueAsDouble() * -1;
-		double left2 = swerveRearLeftDriveMotor.getPosition().getValueAsDouble() * -1;
-		double right1 = swerveFrontRightDriveMotor.getPosition().getValueAsDouble() * -1;
-		double right2 = swerveRearRightDriveMotor.getPosition().getValueAsDouble() * -1;
+		double left1 = Math.abs(swerveFrontLeftDriveMotor.getPosition().getValueAsDouble());
+		double left2 = Math.abs(swerveRearLeftDriveMotor.getPosition().getValueAsDouble());
+		double right1 = Math.abs(swerveFrontRightDriveMotor.getPosition().getValueAsDouble());
+		double right2 = Math.abs(swerveRearRightDriveMotor.getPosition().getValueAsDouble());
 
 		double avg = Math.abs((left1 + left2 + right1 + right2) / 4);
 	
 		double distance = (avg / gearRatio) * (wheelDiameter * 3.1459);
 
 		//if (swerveDebug) { 
-  			SmartDashboard.putNumber("Drive Distance",distance);
-  			SmartDashboard.putNumber("Drive AVG",avg);
+		SmartDashboard.putNumber("Drive Left 1",left1);
+		SmartDashboard.putNumber("Drive Left 2",left2);
+		SmartDashboard.putNumber("Drive Right 1",right1);
+		SmartDashboard.putNumber("Drive Right 2",right2);
+		SmartDashboard.putNumber("Drive Distance",distance);
+  	    SmartDashboard.putNumber("Drive AVG",avg);
 		//}	
 
 		return(distance);
@@ -574,6 +578,46 @@ public class SwerveDrive extends SubsystemBase {
             SmartDashboard.putNumber("Turn Current Degrees",startAngle);
             SmartDashboard.putNumber("Turn Target Degrees",target);
             SmartDashboard.putNumber("Turn diff",diff);
+        }
+		
+		Robot.swerveDrive.Drive(0, 0, driveRotate);
+
+		return(driveRotate);
+	}	
+
+    /************************************************************************
+	 *************************************************************************/
+
+	 public double rotateToAbsolute(double target) {
+		double driveRotate=0;
+		double driftAllowance=1.00;
+		double currentAngle=Robot.swerveDrive.getYaw();    
+
+		while (currentAngle > 180) { 
+			currentAngle -= 360; 
+		}
+
+		while (currentAngle < -180) { 
+			currentAngle += 360; 
+		}
+
+		double diff = Math.abs(target) - Math.abs(currentAngle);
+
+		double tmp = diff / 100;
+		tmp = Robot.boundSpeed(tmp, .25, .03 );
+
+		if (Math.abs(diff) < driftAllowance) {
+			driveRotate=0;
+			Robot.swerveDrive.brakesOn();
+		} else if (currentAngle < target) {
+			driveRotate=tmp;
+		} else {
+			driveRotate=tmp*-1;
+		}
+
+        if (swerveDebug) {
+            SmartDashboard.putNumber("Turn Absolute Degrees",target);
+            SmartDashboard.putNumber("Turn Absolute Diff",diff);
         }
 		
 		Robot.swerveDrive.Drive(0, 0, driveRotate);

@@ -70,8 +70,6 @@ public class LimeLightWork extends Command {
 
     @Override
     public void end(boolean isInteruppted) {
-        Robot.coralShooter.runCoralShooter(0);
         Robot.swerveDrive.cancel();
-        Robot.elevator.cancel();
     }
 }

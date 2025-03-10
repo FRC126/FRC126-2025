@@ -44,6 +44,7 @@ public class CoralShooterWork extends Command {
 
     @Override
     public void execute() {
+        Robot.coralShooter.setAutoMove(true);
 		Robot.coralShooter.runCoralShooter(speed);
     }
 
@@ -68,6 +69,7 @@ public class CoralShooterWork extends Command {
 
     @Override
     public void end(boolean isInteruppted) {
+        Robot.coralShooter.setAutoMove(false);
         Robot.coralShooter.runCoralShooter(0);
     }
 }

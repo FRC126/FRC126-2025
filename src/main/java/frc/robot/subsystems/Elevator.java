@@ -304,7 +304,11 @@ public class Elevator extends SubsystemBase {
 		extReached=moveExtensionTarget(targetIn); 
 		elevReached=moveElevatorTarget(targetIn);
 
-	    return(extReached && elevReached);
+		if (extReached && elevReached) {
+			return(true);
+		}
+
+		return(false);
 	}
 
 	/************************************************************************
