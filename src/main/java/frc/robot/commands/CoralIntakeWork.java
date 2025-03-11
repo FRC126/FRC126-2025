@@ -17,7 +17,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
-public class CoralShooterWork extends Command {
+public class CoralIntakeWork extends Command {
 
     int iters;
     double speed=-.3;
@@ -25,8 +25,10 @@ public class CoralShooterWork extends Command {
     /**********************************************************************************
      **********************************************************************************/
 
-    public CoralShooterWork(int iters) {
+    public CoralIntakeWork(int iters) {
         this.iters = iters;
+        Robot.coralShooter.resetState();
+        Robot.coralShooter.runCoralShooter(0);
     }
 
     /**********************************************************************************
@@ -35,6 +37,8 @@ public class CoralShooterWork extends Command {
 
     @Override
     public void initialize() {
+        Robot.coralShooter.resetState();
+        Robot.coralShooter.runCoralShooter(0);
     }
 
     /**********************************************************************************
@@ -44,7 +48,10 @@ public class CoralShooterWork extends Command {
     @Override
     public void execute() {
         Robot.coralShooter.setAutoMove(true);
-		Robot.coralShooter.runCoralShooter(speed);
+
+        double y = Robot.coralShooter.doIntake(-.5,false);
+
+		Robot.coralShooter.runCoralShooter(y);
     }
 
     /**********************************************************************************
@@ -55,7 +62,8 @@ public class CoralShooterWork extends Command {
     public boolean isFinished() {
         iters--;
 
-        if (iters == 0) {
+        if (iters == 0 || Robot.coralShooter.isStateDone() ) {
+            Robot.coralShooter.resetState();
      		Robot.coralShooter.runCoralShooter(0);
             return true;
         }
@@ -68,6 +76,7 @@ public class CoralShooterWork extends Command {
 
     @Override
     public void end(boolean isInteruppted) {
+        Robot.coralShooter.resetState();
         Robot.coralShooter.setAutoMove(false);
         Robot.coralShooter.runCoralShooter(0);
     }

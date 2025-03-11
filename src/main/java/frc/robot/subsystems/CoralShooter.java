@@ -14,6 +14,7 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,8 +33,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class CoralShooter extends SubsystemBase {
 	boolean coralShooterDebug = false;
 	int called = 0;
-	static boolean sensorTriggered = false;
 	boolean autoMove=false;
+	int ejectCount=0;
+	public static enum intakeState{None, Run, RunSlow, Backup, Done, Eject};
+
+	intakeState State=intakeState.None;	
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
@@ -53,8 +57,6 @@ public class CoralShooter extends SubsystemBase {
 
 		motorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
 		motor.configure(motorConfig, null, null);
-
-		sensorTriggered = false;
 	}
 
 	/************************************************************************
@@ -82,22 +84,78 @@ public class CoralShooter extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	public boolean getSensorTriggered() {
-		return(sensorTriggered);
-	}
-
-	/************************************************************************
-	 ************************************************************************/
-
-	public void setSensorTriggered(boolean triggered) {
-		sensorTriggered = triggered;
-	}
-
-	/************************************************************************
-	 ************************************************************************/
-
 	 public boolean getAutoMove() {
 		return(autoMove);
+	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+	public void resetState() {
+		State=intakeState.None;
+	} 
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public boolean isStateDone() {	
+		if (State == intakeState.Done) {
+			return true;
+		}
+		return false;
+	} 
+
+	/************************************************************************
+	 ************************************************************************/
+
+    public double doIntake(double y, boolean doEject) {
+
+		Robot.Leds.setMode(LEDs.LEDModes.ShootingCoral);		
+
+		if (doEject) {
+			State = intakeState.Eject;
+		} else {
+			ejectCount=0;
+		}
+
+		switch (State) {
+			case None:
+				State=intakeState.Run;
+				y=0;
+				break;
+			case Run:	 
+				if (getPhotoSensor()) {
+					State=intakeState.RunSlow;
+					y=-.25;
+				}
+				break;	
+			case RunSlow:
+				if (!getPhotoSensor()) {
+					State=intakeState.Backup;
+					y=0;
+				} else {
+					y=-.25;
+				}
+				break;
+			case Backup:
+				if (getPhotoSensor()) {
+					State=intakeState.Done;
+					y=0;
+				} else {
+					y=.15;
+				}
+				break;	
+			case Done:
+				Robot.Leds.setMode(LEDs.LEDModes.Rainbow);
+				y=0;
+				break;	
+			case Eject:
+			    y=-.5;
+				break;	
+		}
+
+
+		return(y);
 	}
 
 	/************************************************************************
@@ -112,6 +170,5 @@ public class CoralShooter extends SubsystemBase {
 
 	public void cancel() {
 		runCoralShooter(0);
-		sensorTriggered = false;
 	}
 }

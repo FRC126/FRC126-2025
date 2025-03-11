@@ -25,15 +25,11 @@ public class AutoCoralHighLeft extends SequentialCommandGroup {
         addCommands(         
             new InstantCommand(Robot.swerveDrive::brakesOn, Robot.swerveDrive),
 
-            new DriveWork(.15,0,10,70),
+            new DriveWork(.15,0,24,70),
 
             new TurnDegreesAbsolute(45, 200),
 
             new AutoCoralHighWork(),
-
-			new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
-
-            new ElevatorWork(Robot.heightTargets.LOne, Robot.shootAction.NoShoot,100 ),
 
             new DriveWork(-.15,0,10,60),
 
@@ -41,8 +37,12 @@ public class AutoCoralHighLeft extends SequentialCommandGroup {
 
             new DriveWork(-.15,0,10,120),
 
-            new LimeLightRearWork(Robot.leftRight.Center,400),
-            
+            new AutoPickupWork(),
+
+            new DriveWork(.15,0,10,120),
+
+            new AutoCoralHighWork(),
+
 			new FinishAuto()
         );        
     }

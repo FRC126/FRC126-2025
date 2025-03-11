@@ -55,7 +55,7 @@ public class LimeLightRearControl extends Command {
 		}	
 
         Robot.limeLight.trackTarget();
-
+/*
         if (driveJoystick.getRightTrigger()) {
             Robot.Leds.setMode(LEDs.LEDModes.Aiming);
             Robot.limeLightRear.seekTarget(Robot.leftRight.Left);
@@ -68,7 +68,8 @@ public class LimeLightRearControl extends Command {
             }    
             Robot.limeLightRear.setActive(false);
         }   
-    }
+  */
+        }
 
 	/************************************************************************
      * Make this return true when this Command no longer needs to run execute()

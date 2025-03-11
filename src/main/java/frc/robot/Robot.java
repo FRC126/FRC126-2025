@@ -169,9 +169,9 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData("Alliance Color",allianceColor);
         
         autoNext.addOption("do nothing dummy!",autoNothing);
-        autoNext.setDefaultOption("Just Drive",autoJustDrive);
+        autoNext.addOption("Just Drive",autoJustDrive);
         //autoNext.addOption("Coral Low Straight",coralLowStraight);
-        autoNext.addOption("Coral High Straight",coralHighStraight);
+        autoNext.setDefaultOption("Coral High Straight",coralHighStraight);
         SmartDashboard.putData("Auto Choices",autoNext);
     }
 

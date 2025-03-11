@@ -64,11 +64,11 @@ public class LimeLightControl extends Command {
             Robot.limeLight.seekTarget(Robot.leftRight.Right);
             Robot.limeLight.setActive(true);    
         } else {
-            if (Robot.limeLightRear.getActive()) {
+            //if (Robot.limeLightRear.getActive()) {
                 Robot.swerveDrive.setAutoMove(false);
                 Robot.elevator.setAutoMove(false);
                 Robot.coralShooter.setAutoMove(false);            
-            }
+            //}
             Robot.limeLight.setActive(false);    
         }   
     }

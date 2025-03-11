@@ -19,19 +19,15 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 
-public class AutoCoralHigh extends SequentialCommandGroup {
-    public AutoCoralHigh() {
+public class AutoPickupWork extends SequentialCommandGroup {
+    public AutoPickupWork() {
 
         addCommands(         
-            new InstantCommand(Robot.swerveDrive::brakesOn, Robot.swerveDrive),
+            new LimeLightRearWork(Robot.leftRight.Center,400),
 
-            new DriveWork(.2,0,18,70),
+            new DriveWork(-.1,0,6,10),
 
-			new AutoCoralHighWork(),
-
-            new DriveWork(-.15,0,18,60),
- 		
-			new FinishAuto()
-        );        
+            new CoralIntakeWork(100)
+            );        
     }
 }

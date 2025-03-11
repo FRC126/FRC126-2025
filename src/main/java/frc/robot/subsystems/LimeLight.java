@@ -33,6 +33,7 @@ public class LimeLight extends SubsystemBase {
     private int missedCount;
     private int centered;
     private boolean active=false;
+    private int strafeCount=0;
 
     private String limelightName;
  
@@ -170,16 +171,23 @@ public class LimeLight extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
-     private double getTolerance(double distance) {
-        if (distance > 48) { return(4); }
-        if (distance > 42) { return(5); }
-        if (distance > 36) { return(6);}    
-        if (distance > 30) { return(7);}    
-        if (distance > 24) { return(8);}   
-        if (distance > 20) { return(9);}   
-        if (distance <= 20 && distance >= 13) { return(10);} 
-        return(5);
-     }
+    private double getTolerance(double distance) {
+        double ret = (120.0 / distance);
+        if (ret < 1.5) { ret=1.5;}
+        if (ret > 4) { ret=4;}
+        return ret;
+    }
+
+    /************************************************************************
+	 ************************************************************************/
+
+    private double getoffset(double distance) {
+        double ret = 460/distance;
+        if (ret > 30) { ret=30; }
+        if (distance < 10) { ret=9;}
+        return(ret);
+    }
+         
 
     /************************************************************************
 	 ************************************************************************/
@@ -197,18 +205,19 @@ public class LimeLight extends SubsystemBase {
 
         return rotate;
     }
-     /************************************************************************
+     
+    /************************************************************************
 	 ************************************************************************/
 
      public boolean seekTarget(Robot.leftRight direction) {   
 
-        double tolerance = 5;
-        double moveSpeed = 0.06;
+        double tolerance = 3;
+        double moveSpeed = 0.03;
         double targetDistance = 14.5;
         double cameraOffset = 0;
         double dirOffset = 1;
         double rotateSpeed= 0.03;
-        double rotateThres = 1;
+        double rotateThres = 2.5;
         double dist, diff;
     
         double ldist=Robot.distance.getLeftDistanceInches();
@@ -224,7 +233,7 @@ public class LimeLight extends SubsystemBase {
         }
 
         tolerance = getTolerance(dist);
-        cameraOffset=getTolerance(dist)*2.20;
+        cameraOffset=getoffset(dist);
 
         double leftRight=0, forwardBack=0, rotate=0;
 
@@ -236,13 +245,11 @@ public class LimeLight extends SubsystemBase {
                 forwardBack=0.1;
         
                 if ((diff > rotateThres || diff < rotateThres * -1) && diff < 10) {
-                    forwardBack=0;
-                    leftRight=0;    
-                    rotate = fixRotateSpeed(diff, rotateSpeed);
-                }                
-                Robot.swerveDrive.brakesOn();
-                Robot.swerveDrive.setAutoMove(true);
-                Robot.swerveDrive.Drive(forwardBack, leftRight, rotate, false, 0);
+                    //forwardBack=0;
+                    //leftRight=0;    
+                    //rotate = fixRotateSpeed(diff, rotateSpeed);
+                }
+                doMove(forwardBack, leftRight, rotate);                
                 return(false);
             }
             if (dist > 10 && dist<targetDistance+1) {
@@ -250,9 +257,7 @@ public class LimeLight extends SubsystemBase {
             }
 
             centered=0;
-            Robot.swerveDrive.setAutoMove(false);
-            Robot.elevator.setAutoMove(false);
-            Robot.coralShooter.setAutoMove(false);
+            stopMove();
             return(false);
         }     
 
@@ -270,24 +275,23 @@ public class LimeLight extends SubsystemBase {
          ////////////////////////////////////////////////////////////////
 
          if ( llTargetXOffset < (tolerance * -1) ) {
-                if (llTargetXOffset > 10 || llTargetXOffset < -10) {
-                    leftRight=moveSpeed * 2 * -1;
-                } else {
-                    leftRight=moveSpeed * -1;
-                }
+                    leftRight=moveSpeed * (dist / 23) * -1;
+                    double foo = tolerance - llTargetXOffset;
+                    if (foo < 2) {
+                        leftRight=moveSpeed*-1;
+                    }
         } else if ( llTargetXOffset > tolerance ) {
-            if (llTargetXOffset > 10 || llTargetXOffset < -10) {
-                leftRight=moveSpeed * 2;
-            } else {
-                leftRight=moveSpeed;
-            }
+                leftRight=moveSpeed * (dist/23);
+                double foo = llTargetXOffset - tolerance;
+                if (foo < 2) {
+                    leftRight=moveSpeed;
+                }
         } else {
             if (dist > targetDistance) {
-                if (dist > 24) {
-                    forwardBack=0.25;
-                } else {
-                   forwardBack=0.15;
-                }  
+                    forwardBack=dist/170.0;
+                    if (forwardBack > 0.25) {
+                        forwardBack=0.25;
+                    }
             } else {
                 if (dist < 5 ) {
                     forwardBack=0.15;
@@ -295,6 +299,7 @@ public class LimeLight extends SubsystemBase {
             }
         }
 
+/*
         ////////////////////////////////////////////////////////////////
         // figure out the rotate vs left right?
         //
@@ -303,6 +308,10 @@ public class LimeLight extends SubsystemBase {
             leftRight=0;    
             rotate = fixRotateSpeed(diff, rotateSpeed);
         }
+*/
+        if (leftRight != 0) {
+            forwardBack=0;
+        }
 
         if (direction == Robot.leftRight.Center) {
             // If we are backing up, then we need to reverse the direction
@@ -310,18 +319,15 @@ public class LimeLight extends SubsystemBase {
             leftRight*=-1;
             rotate*=-1;
         }    
-
+        SmartDashboard.putNumber("limeleftRight", leftRight);
+        SmartDashboard.putNumber("limeforwardBack", forwardBack);
         ////////////////////////////////////////////////////////////////
 
         if (leftRight != 0 || forwardBack != 0 || rotate != 0) {
-            Robot.swerveDrive.brakesOn();
-            Robot.swerveDrive.setAutoMove(true);
-            Robot.swerveDrive.Drive(forwardBack, leftRight, rotate, false, 0);
+            doMove(forwardBack, leftRight, rotate);
             centered=0;
         } else {
-            Robot.swerveDrive.brakesOn();
-            Robot.swerveDrive.setAutoMove(false);
-            Robot.swerveDrive.cancel();            
+            stopMove();
             centered++;
         }
         
@@ -331,5 +337,154 @@ public class LimeLight extends SubsystemBase {
         
         return(false);
     }
+
+    /************************************************************************
+	 ************************************************************************/
+    private void doMove(double forwardBack , double leftRight, double rotate) {
+        if (leftRight != 0 || forwardBack != 0 || rotate != 0) {
+            Robot.swerveDrive.brakesOn();
+            Robot.swerveDrive.setAutoMove(true);
+            Robot.swerveDrive.Drive(forwardBack, leftRight, rotate, false, 0);
+        } else {
+            stopMove();
+        }    
+    }
+
+    /************************************************************************
+	 ************************************************************************/
+
+     private void stopMove() {
+        Robot.swerveDrive.brakesOn();
+        Robot.swerveDrive.setAutoMove(false);
+        Robot.swerveDrive.cancel();            
+    } 
+
+    /************************************************************************
+	 ************************************************************************/
+
+     public boolean seekTargetNew(Robot.leftRight direction) {   
+
+        double tolerance = 2;
+        double moveSpeed = 0.03;
+        double targetDistance = 14.5;
+        double dist, diff;
     
+        double ldist=Robot.distance.getLeftDistanceInches();
+        double rdist=Robot.distance.getRightDistanceInches();
+
+        if (ldist < 5) { ldist=rdist; }
+        if (rdist < 5) { rdist=ldist; }
+        diff = ldist-rdist;
+        if (diff < -15 || diff > 15) {
+            dist=ldist<rdist?ldist:rdist;
+        } else {
+            dist=(ldist+rdist)/2.0;
+        }
+
+        double leftRight=0, forwardBack=0, rotate=0;
+
+        if (!llTargetValid ||
+            validCount <= 3) {
+
+            // if we don't have a valid target, but can measure distance, just move forward
+            if (dist > targetDistance+2) {
+                doMove(0.1, 0, 0);
+                strafeCount=0;
+                return(false);
+            }
+
+            // if we have reached the target we need to strafe left or right
+            if (dist > 10 && dist<=targetDistance+2) {
+                strafeCount++;
+                if (strafeCount < 50) { 
+                    if (strafeCount == 1) {
+                        Robot.swerveDrive.resetEncoders();
+                    }
+                    double driveDistance = Robot.swerveDrive.getDistanceInches();
+                    
+                    if (driveDistance > 5) {
+                        stopMove();
+                        strafeCount=50;
+                    }    
+
+                    switch (direction) {
+                        case Left:
+                            doMove(0, 0.1, 0);
+                            break;
+                        case Right:
+                            doMove(0, -0.1, 0);
+                            break;
+                        case Center:
+                            if (strafeCount >3) {
+                                stopMove();
+                                return(true);
+                            }
+                            doMove(.1, 0, 0);
+                            return(false);
+                    }        
+                } else if (strafeCount < 53 ) {
+                    doMove(.1, 0, 0);
+                } else if (strafeCount == 53) {    
+                    stopMove();
+                    return(true);
+                }    
+
+                return(false);
+            }
+
+            stopMove();
+            Robot.swerveDrive.setAutoMove(false);
+            return(false);
+        }  
+        
+        strafeCount=0;
+
+        ////////////////////////////////////////////////////////////////
+        // We found a valid vision target.
+         if ( llTargetX < (tolerance * -1) ) {
+                    leftRight=moveSpeed * (dist / 23) * -1;
+                    double foo = tolerance - llTargetX;
+                    if (foo < 2) {
+                        leftRight=moveSpeed*-1;
+                    }
+        } else if ( llTargetX > tolerance ) {
+                leftRight=moveSpeed * (dist/23);
+                double foo = llTargetX - tolerance;
+                if (foo < 2) {
+                    leftRight=moveSpeed;
+                }
+        } 
+        
+        if (dist > targetDistance) {
+                forwardBack=dist/170.0;
+                if (forwardBack > 0.25) {
+                    forwardBack=0.25;
+                }
+        } else {
+            if (dist < 5 ) {
+                forwardBack=0.15;
+            }
+        }
+
+        if (forwardBack != 0) {
+            leftRight *= .25;
+        }
+
+        if (direction == Robot.leftRight.Center) {
+            // If we are backing up, then we need to reverse the direction
+            forwardBack*=-1;
+            leftRight*=-1;
+            rotate*=-1;
+        }    
+
+        SmartDashboard.putNumber("limeleftRight", leftRight);
+        SmartDashboard.putNumber("limeforwardBack", forwardBack);
+
+        ////////////////////////////////////////////////////////////////
+
+        doMove(forwardBack, leftRight, rotate);
+        
+        return(false);
+    }
+     
 }

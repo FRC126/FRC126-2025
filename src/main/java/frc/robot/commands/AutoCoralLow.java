@@ -31,7 +31,7 @@ public class AutoCoralLow extends SequentialCommandGroup {
 
             new DriveWork(.3,0,30,125),
 
-            new CoralShooterWork(.3,100),
+            new CoralShooterWork(50),
 
             new DriveWork(-.25,0,10,125),
 
