@@ -50,25 +50,23 @@ public class LimeLightRearControl extends Command {
     public void execute() {
 		if (Robot.internalData.isAuto() || Robot.isAutoCommand) {
 			// Ignore user controls during Autonomous
-            Robot.limeLight.trackTarget();
+            Robot.limeLightRear.trackTarget();
 			return;
 		}	
 
-        Robot.limeLight.trackTarget();
-/*
-        if (driveJoystick.getRightTrigger()) {
-            Robot.Leds.setMode(LEDs.LEDModes.Aiming);
-            Robot.limeLightRear.seekTarget(Robot.leftRight.Left);
+        Robot.limeLightRear.trackTarget();
+
+        if (driveJoystick.getPovDown()) {
             Robot.limeLightRear.setActive(true);
+            Robot.Leds.setMode(LEDs.LEDModes.Aiming);
+            Robot.limeLightRear.seekTargetNew(Robot.leftRight.Center);
         } else {    
-            if (Robot.limeLight.getActive == false) {
+            if (!Robot.limeLight.getActive()) {
                 Robot.swerveDrive.setAutoMove(false);
-                Robot.elevator.setAutoMove(false);
-                Robot.coralShooter.setAutoMove(false);            
             }    
             Robot.limeLightRear.setActive(false);
         }   
-  */
+  
         }
 
 	/************************************************************************

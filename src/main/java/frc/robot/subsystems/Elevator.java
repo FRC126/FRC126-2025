@@ -141,7 +141,7 @@ public class Elevator extends SubsystemBase {
 
 		if (Robot.overrideEncoders != true ) {
 			if (speed > 0 && currentPosition < 20) { speed=speed*.5; }
-            if (speed > 0 && currentPosition <= 1) { speed=0; }
+            if (speed > 0 && currentPosition <= .1) { speed=0; }
 		}	
 		SmartDashboard.putNumber("Extension current2",currentPosition);
 		SmartDashboard.putNumber("Extension speed",speed);

@@ -270,6 +270,34 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
         Robot.Leds.doLights();
         check();
+        aligned();
+    }
+
+    /************************************************************************
+    ************************************************************************/
+
+    private void aligned() {
+        double ldist=Robot.distance.getLeftDistanceInches();
+        double rdist=Robot.distance.getRightDistanceInches();
+        double dist;
+
+        if (ldist < 5) { ldist=rdist; }
+        if (rdist < 5) { rdist=ldist; }
+        double diff = ldist-rdist;
+        
+        if (diff < -15 || diff > 15) {
+            dist=ldist<rdist?ldist:rdist;
+        } else {
+            dist=(ldist+rdist)/2.0;
+        }
+
+        if (dist > 10) {
+            if (diff > -2 && diff < 2) {
+                SmartDashboard.putBoolean("Robot aligned", true);
+            } else {
+                SmartDashboard.putBoolean("Robot aligned", false);
+            }    
+        }
     }
 
     /************************************************************************

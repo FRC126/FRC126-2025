@@ -326,9 +326,14 @@ public class SwerveDrive extends SubsystemBase {
 	 * 
 	 * https://jacobmisirian.gitbooks.io/frc-swerve-drive-programming/content/chapter1.html
 	 ************************************************************************/
+	public void Drive(double forwardBackIn, double leftRightIn, double rotateIn,
+	            boolean driveStraight, double straightDegrees) {
+	    Drive(forwardBackIn, leftRightIn, rotateIn, driveStraight, straightDegrees, true);
+	}
+
 
 	public void Drive(double forwardBackIn, double leftRightIn, double rotateIn,
-	                boolean driveStraight, double straightDegrees) { 
+	                boolean driveStraight, double straightDegrees, boolean fieldRelative) { 
 
 		double forwardBack = forwardBackIn;
         double leftRight = leftRightIn;
@@ -347,7 +352,7 @@ public class SwerveDrive extends SubsystemBase {
 		// direction, and the controls are driver relative, not robot relative
         double currentAngle = getYaw();
 
-		if (!Robot.isAutoCommand || Robot.internalData.isAuto()) {
+		if ((!Robot.isAutoCommand || Robot.internalData.isAuto()) && fieldRelative) {
 			// 2 dimensional rotation of the control inputs corrected to make the motion
 			// driver relative instead of robot relative
 			double angle=Math.toRadians(currentAngle); 

@@ -48,7 +48,7 @@ public class LimeLightWork extends Command {
 
     @Override
     public void execute() {
-		reached=Robot.limeLight.seekTarget(direction);
+		reached=Robot.limeLight.seekTargetNew(direction);
     }
 
     /**********************************************************************************
