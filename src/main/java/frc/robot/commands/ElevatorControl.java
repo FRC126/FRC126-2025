@@ -58,8 +58,8 @@ public class ElevatorControl extends Command {
 		}
 
     	// Elevator Movement Control
-		double y = operatorJoystick.getRightStickY() * .7;
-		double y2 =operatorJoystick.getLeftStickY() * -.75;
+		double y = operatorJoystick.getRightStickY() * .8;
+		double y2 =operatorJoystick.getLeftStickY() * -.85;
 
         boolean aButton = operatorJoystick.isAButton();
 		boolean bButton = operatorJoystick.isBButton();

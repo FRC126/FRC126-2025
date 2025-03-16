@@ -19,7 +19,6 @@ import frc.robot.Robot.targetTypes;
 import frc.robot.commands.*;
 import frc.robot.util.Smoother;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-//import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -53,7 +52,12 @@ public class LimeLight extends SubsystemBase {
     public LimeLight(String limelightName) {
         // Register this subsystem with command scheduler and set the default command
         super();
-        setDefaultCommand(new LimeLightControl(this));
+
+        if (limelightName == null) {
+            setDefaultCommand(new LimeLightControl(this));
+        } else {
+            setDefaultCommand(new LimeLightRearControl(this));
+        }
 
         llTargetValid=false;
         llTargetArea = 0.0;
@@ -74,7 +78,7 @@ public class LimeLight extends SubsystemBase {
                                 double targetY) {
         llTargetValid = isValid;
         llTargetArea = targetArea;
-        llTargetX = targetX;
+        llTargetX = targetX; 
         llTargetY = targetY;
     }    
 
@@ -171,170 +175,7 @@ public class LimeLight extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
-    private double getTolerance(double distance) {
-        double ret = (120.0 / distance);
-        if (ret < 1.5) { ret=1.5;}
-        if (ret > 4) { ret=4;}
-        return ret;
-    }
-
-    /************************************************************************
-	 ************************************************************************/
-
-    private double getoffset(double distance) {
-        double ret = 460/distance;
-        if (ret > 30) { ret=30; }
-        if (distance < 10) { ret=9;}
-        return(ret);
-    }
-         
-
-    /************************************************************************
-	 ************************************************************************/
-
-    private double fixRotateSpeed ( double diff, double rotateSpeed) {
-        double rotate;
-
-        if (diff > 0) {
-            rotate = rotateSpeed;
-            if (diff > 5) { rotate = rotateSpeed * 2; }
-        } else {
-            rotate = rotateSpeed * -1;
-            if (diff < -5) { rotate = rotateSpeed * -2; }
-        }
-
-        return rotate;
-    }
-     
-    /************************************************************************
-	 ************************************************************************/
-
-     public boolean seekTarget(Robot.leftRight direction) {   
-
-        double tolerance = 3;
-        double moveSpeed = 0.03;
-        double targetDistance = 14.5;
-        double cameraOffset = 0;
-        double dirOffset = 1;
-        double rotateSpeed= 0.03;
-        double rotateThres = 2.5;
-        double dist, diff;
-    
-        double ldist=Robot.distance.getLeftDistanceInches();
-        double rdist=Robot.distance.getRightDistanceInches();
-
-        if (ldist < 5) { ldist=rdist; }
-        if (rdist < 5) { rdist=ldist; }
-        diff = ldist-rdist;
-        if (diff < -15 || diff > 15) {
-            dist=ldist<rdist?ldist:rdist;
-        } else {
-            dist=(ldist+rdist)/2.0;
-        }
-
-        tolerance = getTolerance(dist);
-        cameraOffset=getoffset(dist);
-
-        double leftRight=0, forwardBack=0, rotate=0;
-
-        if (!llTargetValid ||
-            validCount <= 3) {
-
-            // if we don't have a valid target, but can measure distance, just move forward
-            if (dist > targetDistance) {
-                forwardBack=0.1;
-        
-                if ((diff > rotateThres || diff < rotateThres * -1) && diff < 10) {
-                    //forwardBack=0;
-                    //leftRight=0;    
-                    //rotate = fixRotateSpeed(diff, rotateSpeed);
-                }
-                doMove(forwardBack, leftRight, rotate);                
-                return(false);
-            }
-            if (dist > 10 && dist<targetDistance+1) {
-                return(true);
-            }
-
-            centered=0;
-            stopMove();
-            return(false);
-        }     
-
-        if (direction == Robot.leftRight.Left) {
-            dirOffset=-1;
-        } else if (direction == Robot.leftRight.Right) {
-            dirOffset=1;
-        } else {
-            dirOffset=0;
-        }
-
-        // We found a valid vision target.
-        double llTargetXOffset = llTargetX - (cameraOffset * dirOffset);
-
-         ////////////////////////////////////////////////////////////////
-
-         if ( llTargetXOffset < (tolerance * -1) ) {
-                    leftRight=moveSpeed * (dist / 20) * -1;
-                    double foo = tolerance - llTargetXOffset;
-                    if (foo < 2) {
-                        leftRight=moveSpeed*-1;
-                    }
-        } else if ( llTargetXOffset > tolerance ) {
-                leftRight=moveSpeed * (dist/20);
-                double foo = llTargetXOffset - tolerance;
-                if (foo < 2) {
-                    leftRight=moveSpeed;
-                }
-        } else {
-            if (dist > targetDistance) {
-                    forwardBack=dist/150.0;
-                    if (forwardBack > 0.35) {
-                        forwardBack=0.35;
-                    }
-            } else {
-                if (dist < 5 ) {
-                    forwardBack=0.15;
-                }
-            }
-        }
-
-/*
-        ////////////////////////////////////////////////////////////////
-        // figure out the rotate vs left right?
-        //
-        if ((diff > rotateThres || diff < rotateThres * -1) && diff < 10) {
-            forwardBack=0;
-            leftRight=0;    
-            rotate = fixRotateSpeed(diff, rotateSpeed);
-        }
-*/
-        if (leftRight != 0) {
-            forwardBack=0;
-        }
-
-        SmartDashboard.putNumber("limeleftRight", leftRight);
-        SmartDashboard.putNumber("limeforwardBack", forwardBack);
-        ////////////////////////////////////////////////////////////////
-
-        if (leftRight != 0 || forwardBack != 0 || rotate != 0) {
-            doMove(forwardBack, leftRight, rotate);
-            centered=0;
-        } else {
-            stopMove();
-            centered++;
-        }
-        
-        if (centered > 4) {
-             return(true);
-        }
-        
-        return(false);
-    }
-
-    /************************************************************************
-	 ************************************************************************/
-    private void doMove(double forwardBack , double leftRight, double rotate) {
+     private void doMove(double forwardBack , double leftRight, double rotate) {
         if (leftRight != 0 || forwardBack != 0 || rotate != 0) {
             Robot.swerveDrive.brakesOn();
             Robot.swerveDrive.setAutoMove(true);
@@ -366,21 +207,42 @@ public class LimeLight extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
-    private double getLeftRightSpeed(double distance) {
-        if (distance > 55) { return .2; }
-        if (distance > 45) { return .1; }
-        if (distance > 35) { return .075; }
-        if (distance > 25) { return .05; }
-        return .0375;
+    private double getLeftRightSpeed(double distance, double offset) {
+        double ret = 0.05;
+
+        if (distance < 30) {
+            if (offset > 20) { 
+                ret=.25;
+            } else if (offset > 15) { 
+                ret=.20;
+            } else if (offset > 10) { 
+                ret=.15;
+            } else if (offset > 5) { 
+                ret=.10;
+            }
+        } else {
+            if (offset > 12) { 
+                ret=.25;
+            } else if (offset > 9) { 
+                ret=.20;
+            } else if (offset > 6) { 
+                ret=.15;
+            } else if (offset > 4) { 
+                ret=.10;
+            }
+        }
+
+        return ret;
     }
 
     /************************************************************************
 	 ************************************************************************/
 
      private double getMoveSpeed(double distance) {
+        if (distance > 65) { return .40; }
         if (distance > 55) { return .35; }
-        if (distance > 45) { return .25; }
-        if (distance > 35) { return .20; }
+        if (distance > 45) { return .30; }
+        if (distance > 35) { return .25; }
         if (distance > 25) { return .15; }
         return .1;
     }
@@ -407,10 +269,6 @@ public class LimeLight extends SubsystemBase {
         } else {
             dist=(ldist+rdist)/2.0;
         }
-
-        tolerance = getToleranceNew(dist);
-        leftRightSpeed = getLeftRightSpeed(dist);
-        moveSpeed = getMoveSpeed(dist); 
 
         double leftRight=0, forwardBack=0, rotate=0;
 
@@ -462,7 +320,10 @@ public class LimeLight extends SubsystemBase {
         }  
         
         strafeCount=0;
-        SmartDashboard.putNumber("strafeCount", strafeCount);
+
+        tolerance = getToleranceNew(dist);
+        leftRightSpeed = getLeftRightSpeed(dist, Math.abs( Math.abs(llTargetX)-tolerance));
+        moveSpeed = getMoveSpeed(dist); 
 
         ////////////////////////////////////////////////////////////////
         // We found a valid vision target.
@@ -506,14 +367,18 @@ public class LimeLight extends SubsystemBase {
 
         double dist = llTargetArea/4;
 
+        SmartDashboard.putNumber("limerear-llTargetArea", llTargetArea);
+        SmartDashboard.putNumber("limerear-dist", dist);
+
         if (dist < 10) { 
             stopMove();
             Robot.swerveDrive.setAutoMove(false);
             return(true);
         }    
 
+
         tolerance = getToleranceNew(dist);
-        leftRightSpeed = getLeftRightSpeed(dist);
+        leftRightSpeed = getLeftRightSpeed(dist, Math.abs( Math.abs(llTargetX)-tolerance));
         moveSpeed = getMoveSpeed(dist); 
 
         ////////////////////////////////////////////////////////////////
@@ -530,8 +395,8 @@ public class LimeLight extends SubsystemBase {
         forwardBack*=-1;
         leftRight*=-1;
 
-        SmartDashboard.putNumber("limenewleftRight", leftRight);
-        SmartDashboard.putNumber("limenewforwardBack", forwardBack);
+        SmartDashboard.putNumber("limerear-leftRight", leftRight);
+        SmartDashboard.putNumber("limerear-forwardBack", forwardBack);
 
         ////////////////////////////////////////////////////////////////
 

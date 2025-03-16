@@ -102,7 +102,7 @@ public class Elevator extends SubsystemBase {
 				target=0;
 				break;
 			case LFour:		    	// High
-				target=50;
+				target=55;
 				break;
 		}		
 		SmartDashboard.putNumber("Extension target",target);
@@ -146,8 +146,8 @@ public class Elevator extends SubsystemBase {
 		SmartDashboard.putNumber("Extension current2",currentPosition);
 		SmartDashboard.putNumber("Extension speed",speed);
 
-		if (speed < 0 && currentPosition > 60) { speed=speed*.5; }
-        if (speed < 0 && currentPosition > 62) { speed=0; }
+		if (speed < 0 && currentPosition > 62) { speed=speed*.5; }
+        if (speed < 0 && currentPosition > 64) { speed=0; }
 		
 		runExtensionMotor(speed);
 	}
@@ -204,7 +204,8 @@ public class Elevator extends SubsystemBase {
 		double speed = 0;
 		double currentPosition = getPosition();
 		double topSpeed=1;
-		double speedIncr = 0.1;
+		double speedIncr = 0.15;
+		double startSpeedIncr = .05;
 
 		double target=0;
 		switch(targetIn) {
@@ -225,23 +226,29 @@ public class Elevator extends SubsystemBase {
 		if (target > currentPosition + .5) {
 			if ( startSpeed < topSpeed-.05) {
 				speed = startSpeed + speedIncr;
+				if (startSpeed < .3) {
+					speed = startSpeed + startSpeedIncr;
+				}
 				startSpeed = speed;
 			} else {
 				speed = topSpeed;
 			}
 			if (target - currentPosition < 6) { speed = .4;}
 			if (target - currentPosition < 3) { speed = .25;}
-			if (target - currentPosition < 1) { speed = .1;}
-		} else if (target < currentPosition - 1) {
+			if (target - currentPosition < 1) { speed = .15;}
+		} else if (target < currentPosition - .5) {
 			if ( startSpeed > (topSpeed -.05) * -1) {
 				speed = startSpeed - speedIncr;
+				if (startSpeed > -0.3) {
+					speed = startSpeed + startSpeedIncr;
+				}
 				startSpeed=speed;
 			} else {
 				speed = topSpeed * -1;
 			}
 			if (currentPosition - target < 6) { speed = -.4;}
 			if (currentPosition - target < 3) { speed = -.25;}
-			if (currentPosition - target < 1) { speed = -.1;}
+			if (currentPosition - target < 1) { speed = -.15;}
 		} else {
 			motorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
 	    	leftMotor.configure(motorConfig, null, null);
