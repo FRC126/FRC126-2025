@@ -23,7 +23,7 @@ public class AutoPickupWork extends SequentialCommandGroup {
     public AutoPickupWork() {
 
         addCommands(         
-            new LimeLightRearWork(Robot.leftRight.Center,400),
+            new LimeLightRearWork(400),
 
             new DriveWork(-.1,0,6,10),
 

@@ -59,7 +59,7 @@ public class LimeLightRearControl extends Command {
         if (driveJoystick.getPovDown()) {
             Robot.limeLightRear.setActive(true);
             Robot.Leds.setMode(LEDs.LEDModes.Aiming);
-            Robot.limeLightRear.seekTargetNew(Robot.leftRight.Center);
+            Robot.limeLightRear.seekTargetNoDistance();
         } else {    
             if (!Robot.limeLight.getActive()) {
                 Robot.swerveDrive.setAutoMove(false);

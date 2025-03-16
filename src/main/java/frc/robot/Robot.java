@@ -83,7 +83,7 @@ public class Robot extends TimedRobot {
 
     public static enum allianceColor{Red,Blue};
     public static enum heightTargets{LOne,LTwo, LThree, LFour};
-    public static enum leftRight{Left,Right, Center};
+    public static enum leftRight{Left,Right};
     public static enum shootAction{Shoot,NoShoot};
 
     public static final int noAlliance=-1;
@@ -402,6 +402,10 @@ public class Robot extends TimedRobot {
       	Robot.swerveDrive.cancel();
 
         Robot.swerveDrive.setAutoMove(false);
+        Robot.elevator.setAutoMove(false);  
+        Robot.elevator.setAutoMove(false);  
+        Robot.limeLight.setActive(false);
+        Robot.limeLightRear.setActive(false);
 	}		
 
     /************************************************************************

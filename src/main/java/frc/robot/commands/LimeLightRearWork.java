@@ -27,9 +27,8 @@ public class LimeLightRearWork extends Command {
     /**********************************************************************************
      **********************************************************************************/
 
-    public LimeLightRearWork(Robot.leftRight direction, int iters) {
+    public LimeLightRearWork(int iters) {
         this.iters = iters;
-        this.direction = direction;
         reached=false;
     }
 
@@ -47,7 +46,7 @@ public class LimeLightRearWork extends Command {
 
     @Override
     public void execute() {
-		reached=Robot.limeLightRear.seekTarget(direction);
+		reached=Robot.limeLightRear.seekTargetNoDistance();
     }
 
     /**********************************************************************************
