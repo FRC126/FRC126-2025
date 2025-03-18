@@ -94,7 +94,8 @@ public class Robot extends TimedRobot {
     public static final int coralLowStraight=1;
     public static final int coralHighStraight=2;
     public static final int autoJustDrive=3;
-    
+    public static final int coralHighRight=4;
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Automation Variables
     public static SequentialCommandGroup autonomous;
@@ -153,7 +154,7 @@ public class Robot extends TimedRobot {
 
         // Limelight subsystem1
         limeLight = new LimeLight(null);
-        limeLightRear = new LimeLight("REAR");
+        limeLightRear = new LimeLight("limelight-back");
 
         // Server for the drive camera
         CameraServer.startAutomaticCapture();
@@ -172,6 +173,8 @@ public class Robot extends TimedRobot {
         autoNext.addOption("Just Drive",autoJustDrive);
         //autoNext.addOption("Coral Low Straight",coralLowStraight);
         autoNext.setDefaultOption("Coral High Straight",coralHighStraight);
+        autoNext.addOption("Coral High Right",coralHighRight);
+
         SmartDashboard.putData("Auto Choices",autoNext);
     }
 
@@ -216,6 +219,10 @@ public class Robot extends TimedRobot {
             case coralHighStraight:
                 SmartDashboard.putString("AutoCommand","Coral High Straight");
                 autonomous = new AutoCoralHigh();
+                break;
+            case coralHighRight:
+                SmartDashboard.putString("AutoCommand","Coral High Right");
+                autonomous = new AutoCoralHighRight();
                 break;
             case autoJustDrive:
                 SmartDashboard.putString("AutoCommand","Just Drive");
@@ -403,7 +410,7 @@ public class Robot extends TimedRobot {
 
         Robot.swerveDrive.setAutoMove(false);
         Robot.elevator.setAutoMove(false);  
-        Robot.elevator.setAutoMove(false);  
+        Robot.coralShooter.setAutoMove(false);  
         Robot.limeLight.setActive(false);
         Robot.limeLightRear.setActive(false);
 	}		

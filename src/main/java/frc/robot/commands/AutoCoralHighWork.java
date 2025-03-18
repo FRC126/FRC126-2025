@@ -29,7 +29,7 @@ public class AutoCoralHighWork extends SequentialCommandGroup {
 
             new CoralShooterWork(40),
 
-            new DriveWork(-.1,0,10,30),
+            new DriveWork(-.15,0,6,50),
 
             new ElevatorWork(Robot.heightTargets.LOne, Robot.shootAction.Shoot, 100)
             );        

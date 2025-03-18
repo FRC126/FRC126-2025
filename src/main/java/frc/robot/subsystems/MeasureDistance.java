@@ -29,9 +29,9 @@ public class MeasureDistance {
         measure = new CANrange(RobotMap.canRangeCanID);
         measure2 = new CANrange(RobotMap.canRangeCanID2);
 
-        CANrangeConfiguration configs = new CANrangeConfiguration();
-        measure.getConfigurator().apply(configs);  
-        measure2.getConfigurator().apply(configs);  
+        //CANrangeConfiguration configs = new CANrangeConfiguration();
+        //measure.getConfigurator().apply(configs);  
+        //measure2.getConfigurator().apply(configs);  
     }
 
     public double getLeftDistanceInches() {

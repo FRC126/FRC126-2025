@@ -25,12 +25,12 @@ public class AutoCoralHigh extends SequentialCommandGroup {
         addCommands(         
             new InstantCommand(Robot.swerveDrive::brakesOn, Robot.swerveDrive),
 
-            new DriveWork(.2,0,6,70),
+            new AutoCoralHighWork(),
 
-			new AutoCoralHighWork(),
+            new DriveWork(-.25,0,10,200),
+            new TurnDegreesAbsolute(179, 200),
 
-            new DriveWork(-.15,0,10,200),
- 		
+			new InstantCommand(Robot.swerveDrive::resetYaw, Robot.swerveDrive),
 			new FinishAuto()
         );        
     }

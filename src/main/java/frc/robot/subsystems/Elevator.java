@@ -240,7 +240,7 @@ public class Elevator extends SubsystemBase {
 			if ( startSpeed > (topSpeed -.05) * -1) {
 				speed = startSpeed - speedIncr;
 				if (startSpeed > -0.3) {
-					speed = startSpeed + startSpeedIncr;
+					speed = startSpeed - startSpeedIncr;
 				}
 				startSpeed=speed;
 			} else {

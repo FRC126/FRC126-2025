@@ -57,6 +57,7 @@ public class CoralShooterWork extends Command {
 
         if (iters == 0) {
      		Robot.coralShooter.runCoralShooter(0);
+            Robot.coralShooter.setAutoMove(false);
             return true;
         }
         return false;

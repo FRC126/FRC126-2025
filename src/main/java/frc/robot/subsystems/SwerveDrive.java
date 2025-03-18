@@ -204,6 +204,7 @@ public class SwerveDrive extends SubsystemBase {
 	 ************************************************************************/
 
 	public boolean brakesOff() {
+		/*
 		if (areBrakesOn) {
 			swerveFrontRightDriveMotor.setNeutralMode(NeutralModeValue.Coast);
 			swerveFrontLeftDriveMotor.setNeutralMode(NeutralModeValue.Coast);
@@ -212,6 +213,7 @@ public class SwerveDrive extends SubsystemBase {
 			areBrakesOn=false;
 			return(true);
 		}	
+		*/
 		return(false);
 	}
 
