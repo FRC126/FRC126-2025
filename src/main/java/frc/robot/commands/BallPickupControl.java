@@ -60,8 +60,13 @@ public class BallPickupControl extends Command {
 			subsystem.runWheel(.25);
 			Robot.Leds.setMode(LEDs.LEDModes.BallPickup);
 		} else {
-			if (operatorJoystick.getPovUp()) { y=-.1; }
-			if (operatorJoystick.getPovDown()) { y=.1; }
+			if (operatorJoystick.getPovUp()) { 
+		        y=-.1; 
+			} else if (operatorJoystick.getPovDown()) {
+				y=.1; 
+			} else if (subsystem.getPosition() > 0) {
+			    y=-.1;
+			}
 
 			if (y != 0) {
 				subsystem.raiseLower(y);

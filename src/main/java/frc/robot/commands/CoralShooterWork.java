@@ -20,14 +20,13 @@ import frc.robot.Robot;
 public class CoralShooterWork extends Command {
 
     int iters;
-    double speed;
+    double speed=-.3;
 
     /**********************************************************************************
      **********************************************************************************/
 
-    public CoralShooterWork(double speed, int iters) {
+    public CoralShooterWork(int iters) {
         this.iters = iters;
-        this.speed = speed;
     }
 
     /**********************************************************************************
@@ -44,6 +43,7 @@ public class CoralShooterWork extends Command {
 
     @Override
     public void execute() {
+        Robot.coralShooter.setAutoMove(true);
 		Robot.coralShooter.runCoralShooter(speed);
     }
 
@@ -57,6 +57,7 @@ public class CoralShooterWork extends Command {
 
         if (iters == 0) {
      		Robot.coralShooter.runCoralShooter(0);
+            Robot.coralShooter.setAutoMove(false);
             return true;
         }
         return false;
@@ -68,6 +69,7 @@ public class CoralShooterWork extends Command {
 
     @Override
     public void end(boolean isInteruppted) {
+        Robot.coralShooter.setAutoMove(false);
         Robot.coralShooter.runCoralShooter(0);
     }
 }

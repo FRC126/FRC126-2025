@@ -69,12 +69,12 @@ public class DriveWork extends Command {
 
         double tmp = Robot.swerveDrive.getDistanceInches();
 
-        if (tmp + 4 > distance) {
+        if (tmp + 8 > distance) {
             // Slow down as we get close to the distance
             FB=driveFb*.5;
             LR=driveLr*.5;
         } 
-        if (tmp + 2 > distance) {
+        if (tmp + 4 > distance) {
             // Slow down as we get close to the distance
             FB=driveFb*.25;
             LR=driveLr*.25;

@@ -17,7 +17,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
-public class LimeLightWork extends Command {
+public class LimeLightRearWork extends Command {
 
     int iters;
     Robot.heightTargets target;
@@ -27,10 +27,8 @@ public class LimeLightWork extends Command {
     /**********************************************************************************
      **********************************************************************************/
 
-    public LimeLightWork(Robot.heightTargets target, Robot.leftRight direction, int iters) {
+    public LimeLightRearWork(int iters) {
         this.iters = iters;
-        this.target = target;
-        this.direction = direction;
         reached=false;
     }
 
@@ -48,7 +46,7 @@ public class LimeLightWork extends Command {
 
     @Override
     public void execute() {
-		reached=Robot.limeLight.seekTargetNew(direction);
+		reached=Robot.limeLightRear.seekTargetNoDistance();
     }
 
     /**********************************************************************************

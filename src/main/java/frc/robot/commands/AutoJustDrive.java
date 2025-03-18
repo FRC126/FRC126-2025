@@ -27,7 +27,7 @@ public class AutoJustDrive extends SequentialCommandGroup {
 
             new InstantCommand(Robot.swerveDrive::resetYaw, Robot.swerveDrive),
 
-            new DriveWork(-.25,0,60,90),
+            new DriveWork(-.25,0,24,120),
 
 
 

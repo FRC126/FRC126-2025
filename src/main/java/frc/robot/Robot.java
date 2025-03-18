@@ -69,6 +69,7 @@ public class Robot extends TimedRobot {
     public static MeasureDistance distance;
     public static LEDs Leds;
     public static LimeLight limeLight;
+    public static LimeLight limeLightRear;
     public static boolean useNavx=true;
 
     public static enum targetTypes{
@@ -93,7 +94,8 @@ public class Robot extends TimedRobot {
     public static final int coralLowStraight=1;
     public static final int coralHighStraight=2;
     public static final int autoJustDrive=3;
-    
+    public static final int coralHighRight=4;
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Automation Variables
     public static SequentialCommandGroup autonomous;
@@ -151,7 +153,8 @@ public class Robot extends TimedRobot {
         Leds = new LEDs();
 
         // Limelight subsystem1
-        limeLight = new LimeLight();
+        limeLight = new LimeLight(null);
+        limeLightRear = new LimeLight("limelight-back");
 
         // Server for the drive camera
         CameraServer.startAutomaticCapture();
@@ -167,9 +170,11 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData("Alliance Color",allianceColor);
         
         autoNext.addOption("do nothing dummy!",autoNothing);
-        autoNext.setDefaultOption("Just Drive",autoJustDrive);
+        autoNext.addOption("Just Drive",autoJustDrive);
         //autoNext.addOption("Coral Low Straight",coralLowStraight);
-        autoNext.addOption("Coral High Straight",coralHighStraight);
+        autoNext.setDefaultOption("Coral High Straight",coralHighStraight);
+        autoNext.addOption("Coral High Right",coralHighRight);
+
         SmartDashboard.putData("Auto Choices",autoNext);
     }
 
@@ -214,6 +219,10 @@ public class Robot extends TimedRobot {
             case coralHighStraight:
                 SmartDashboard.putString("AutoCommand","Coral High Straight");
                 autonomous = new AutoCoralHigh();
+                break;
+            case coralHighRight:
+                SmartDashboard.putString("AutoCommand","Coral High Right");
+                autonomous = new AutoCoralHighRight();
                 break;
             case autoJustDrive:
                 SmartDashboard.putString("AutoCommand","Just Drive");
@@ -268,6 +277,34 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
         Robot.Leds.doLights();
         check();
+        aligned();
+    }
+
+    /************************************************************************
+    ************************************************************************/
+
+    private void aligned() {
+        double ldist=Robot.distance.getLeftDistanceInches();
+        double rdist=Robot.distance.getRightDistanceInches();
+        double dist;
+
+        if (ldist < 5) { ldist=rdist; }
+        if (rdist < 5) { rdist=ldist; }
+        double diff = ldist-rdist;
+        
+        if (diff < -15 || diff > 15) {
+            dist=ldist<rdist?ldist:rdist;
+        } else {
+            dist=(ldist+rdist)/2.0;
+        }
+
+        if (dist > 10) {
+            if (diff > -2 && diff < 2) {
+                SmartDashboard.putBoolean("Robot aligned", true);
+            } else {
+                SmartDashboard.putBoolean("Robot aligned", false);
+            }    
+        }
     }
 
     /************************************************************************
@@ -372,6 +409,10 @@ public class Robot extends TimedRobot {
       	Robot.swerveDrive.cancel();
 
         Robot.swerveDrive.setAutoMove(false);
+        Robot.elevator.setAutoMove(false);  
+        Robot.coralShooter.setAutoMove(false);  
+        Robot.limeLight.setActive(false);
+        Robot.limeLightRear.setActive(false);
 	}		
 
     /************************************************************************

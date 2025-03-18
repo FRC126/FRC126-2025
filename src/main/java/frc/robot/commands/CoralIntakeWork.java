@@ -17,21 +17,18 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
-public class LimeLightWork extends Command {
+public class CoralIntakeWork extends Command {
 
     int iters;
-    Robot.heightTargets target;
-    boolean reached;
-    Robot.leftRight direction;
+    double speed=-.3;
 
     /**********************************************************************************
      **********************************************************************************/
 
-    public LimeLightWork(Robot.heightTargets target, Robot.leftRight direction, int iters) {
+    public CoralIntakeWork(int iters) {
         this.iters = iters;
-        this.target = target;
-        this.direction = direction;
-        reached=false;
+        Robot.coralShooter.resetState();
+        Robot.coralShooter.runCoralShooter(0);
     }
 
     /**********************************************************************************
@@ -40,6 +37,8 @@ public class LimeLightWork extends Command {
 
     @Override
     public void initialize() {
+        Robot.coralShooter.resetState();
+        Robot.coralShooter.runCoralShooter(0);
     }
 
     /**********************************************************************************
@@ -48,7 +47,11 @@ public class LimeLightWork extends Command {
 
     @Override
     public void execute() {
-		reached=Robot.limeLight.seekTargetNew(direction);
+        Robot.coralShooter.setAutoMove(true);
+
+        double y = Robot.coralShooter.doIntake(-.5,false);
+
+		Robot.coralShooter.runCoralShooter(y);
     }
 
     /**********************************************************************************
@@ -58,7 +61,10 @@ public class LimeLightWork extends Command {
     @Override
     public boolean isFinished() {
         iters--;
-        if (iters == 0 || reached) {
+
+        if (iters == 0 || Robot.coralShooter.isStateDone() ) {
+            Robot.coralShooter.resetState();
+     		Robot.coralShooter.runCoralShooter(0);
             return true;
         }
         return false;
@@ -70,6 +76,8 @@ public class LimeLightWork extends Command {
 
     @Override
     public void end(boolean isInteruppted) {
-        Robot.swerveDrive.cancel();
+        Robot.coralShooter.resetState();
+        Robot.coralShooter.setAutoMove(false);
+        Robot.coralShooter.runCoralShooter(0);
     }
 }

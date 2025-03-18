@@ -22,14 +22,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 /**********************************************************************************
  **********************************************************************************/
 
-public class LimeLightControl extends Command {
+public class LimeLightRearControl extends Command {
     public static int iter=0;
     JoystickWrapper driveJoystick;
 
 	/************************************************************************
 	 ************************************************************************/
 
-    public LimeLightControl(LimeLight subsystem) {
+    public LimeLightRearControl(LimeLight subsystem) {
 		addRequirements(subsystem);
         driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.05);
     }
@@ -50,26 +50,24 @@ public class LimeLightControl extends Command {
     public void execute() {
 		if (Robot.internalData.isAuto() || Robot.isAutoCommand) {
 			// Ignore user controls during Autonomous
-            Robot.limeLight.trackTarget();
+            Robot.limeLightRear.trackTarget();
 			return;
 		}	
 
-        Robot.limeLight.trackTarget();
-        if (driveJoystick.isYButton()) {
+        Robot.limeLightRear.trackTarget();
+
+        if (driveJoystick.getPovDown()) {
+            Robot.limeLightRear.setActive(true);
             Robot.Leds.setMode(LEDs.LEDModes.Aiming);
-            Robot.limeLight.seekTargetNew(Robot.leftRight.Left);
-            Robot.limeLight.setActive(true);    
-        } else if (driveJoystick.isAButton()) {
-            Robot.Leds.setMode(LEDs.LEDModes.Aiming);
-            Robot.limeLight.seekTargetNew(Robot.leftRight.Right);
-            Robot.limeLight.setActive(true);    
-        } else {
-            if (!Robot.limeLightRear.getActive()) {
+            Robot.limeLightRear.seekTargetNoDistance();
+        } else {    
+            if (!Robot.limeLight.getActive()) {
                 Robot.swerveDrive.setAutoMove(false);
-            }
-            Robot.limeLight.setActive(false);    
+            }    
+            Robot.limeLightRear.setActive(false);
         }   
-    }
+  
+        }
 
 	/************************************************************************
      * Make this return true when this Command no longer needs to run execute()
