@@ -25,7 +25,7 @@ public class AutoPickupWork extends SequentialCommandGroup {
         addCommands(         
             new LimeLightRearWork(400),
 
-            new DriveWork(-.1,0,6,10),
+            new DriveWork(-.1,0,2,10),
 
             new CoralIntakeWork(100)
             );        

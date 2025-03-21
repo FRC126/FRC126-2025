@@ -78,6 +78,10 @@ public class DriveWork extends Command {
             // Slow down as we get close to the distance
             FB=driveFb*.25;
             LR=driveLr*.25;
+            if (FB > 0 && FB < .1) { FB=.1; }
+            if (FB < 0 && FB > -.1) { FB=-.1; }
+            if (LR > 0 && LR < .1) { LR=.1; }
+            if (LR < 0 && LR > -.1) { LR=-.1; }
         } 
         if (tmp + .5 > distance) {
             // Within one inch of the target

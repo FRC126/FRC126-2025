@@ -219,8 +219,8 @@ public class LimeLight extends SubsystemBase {
         double ret = (160.0/distance);
         SmartDashboard.putNumber("getToleranceNew", ret);              
 
-        if (ret > 4) { ret=4;}
-        if (ret < 2) { ret=2;}
+        if (ret > 3.5) { ret=3.5;}
+        if (ret < 1.5) { ret=1.5;}
         return ret;
     }
 
@@ -259,12 +259,12 @@ public class LimeLight extends SubsystemBase {
 	 ************************************************************************/
 
      private double getMoveSpeed(double distance) {
-        if (distance > 65) { return .3; }
-        if (distance > 55) { return .25; }
-        if (distance > 45) { return .20; }
-        if (distance > 35) { return .175; }
-        if (distance > 25) { return .15; }
-        return .1;
+        if (distance > 65) { return .30; }
+        if (distance > 55) { return .30; }
+        if (distance > 45) { return .225; }
+        if (distance > 35) { return .19; }
+        if (distance > 25) { return .16; }
+        return .14;
     }
 
     /************************************************************************
@@ -275,7 +275,7 @@ public class LimeLight extends SubsystemBase {
         double tolerance;
         double leftRightSpeed;
         double moveSpeed;
-        double targetDistance = 13.0;
+        double targetDistance = 10.0;
         double dist, diff;
     
         double ldist=Robot.distance.getLeftDistanceInches();
@@ -293,9 +293,8 @@ public class LimeLight extends SubsystemBase {
 
         double leftRight=0, forwardBack=0, rotate=0;
 
-
         if (!llTargetValid ||
-            validCount <= 3 || (dist < targetDistance+1 && dist > 10)) {
+            validCount <= 3 || (dist < targetDistance+1 && dist > 8)) {
 
             // if we don't have a valid target, but can measure distance, just move forward
             if (dist > targetDistance+2) {
@@ -305,7 +304,7 @@ public class LimeLight extends SubsystemBase {
             }
 
             // if we have reached the target we need to strafe left or right
-            if (dist > 10 && dist<=targetDistance+2) {
+            if (dist > 8 && dist<=targetDistance+2) {
                 strafeCount++;
                 if (strafeCount < 1000) { 
                     if (strafeCount < 3) {
@@ -319,10 +318,10 @@ public class LimeLight extends SubsystemBase {
                         }    
                         switch (direction) {
                         case Left:
-                            doMove(0, 0.1, 0);
+                            doMove(0, 0.12, 0);
                             break;
                         case Right:
-                            doMove(0, -0.1, 0);
+                            doMove(0, -0.12, 0);
                             break;
                         }    
                     }   
@@ -357,8 +356,17 @@ public class LimeLight extends SubsystemBase {
         if (dist > targetDistance) {
             forwardBack=moveSpeed;
         } 
-
-
+        if (ldist < rdist-2 && ldist > rdist-10) {
+            rotate=-.07;
+            //leftRight=0;
+            //forwardBack=0;
+        }
+        if (rdist < ldist-2 && rdist > ldist-10) {
+            rotate=.07;
+            //leftRight=0;
+            //forwardBack=0;
+        }
+        
         SmartDashboard.putNumber("limenewleftRight", leftRight);
         SmartDashboard.putNumber("limenewforwardBack", forwardBack);
 
@@ -377,7 +385,7 @@ public class LimeLight extends SubsystemBase {
         double tolerance;
         double leftRightSpeed;
         double moveSpeed;
-        double targetDistance = 2;
+        double targetDistance = 1.5;
    
         double leftRight=0, forwardBack=0;
 

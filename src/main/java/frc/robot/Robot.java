@@ -95,6 +95,7 @@ public class Robot extends TimedRobot {
     public static final int coralHighStraight=2;
     public static final int autoJustDrive=3;
     public static final int coralHighRight=4;
+    public static final int coralHighLeft=5;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Automation Variables
@@ -174,6 +175,7 @@ public class Robot extends TimedRobot {
         //autoNext.addOption("Coral Low Straight",coralLowStraight);
         autoNext.setDefaultOption("Coral High Straight",coralHighStraight);
         autoNext.addOption("Coral High Right",coralHighRight);
+        autoNext.addOption("Coral High Left",coralHighLeft);
 
         SmartDashboard.putData("Auto Choices",autoNext);
     }
@@ -223,6 +225,10 @@ public class Robot extends TimedRobot {
             case coralHighRight:
                 SmartDashboard.putString("AutoCommand","Coral High Right");
                 autonomous = new AutoCoralHighRight();
+                break;
+            case coralHighLeft:
+                SmartDashboard.putString("AutoCommand","Coral High Left");
+                autonomous = new AutoCoralHighLeft();
                 break;
             case autoJustDrive:
                 SmartDashboard.putString("AutoCommand","Just Drive");

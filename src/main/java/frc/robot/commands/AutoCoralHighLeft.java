@@ -25,23 +25,18 @@ public class AutoCoralHighLeft extends SequentialCommandGroup {
         addCommands(         
             new InstantCommand(Robot.swerveDrive::brakesOn, Robot.swerveDrive),
 
-            new DriveWork(.15,0,24,70),
+            new DriveWork(.2,0,26,200),
 
-            new TurnDegreesAbsolute(-45, 200),
-
-            new AutoCoralHighWork(),
-
-            new DriveWork(-.15,0,10,60),
-
-            new TurnDegreesAbsolute(160, 200),
-
-            new DriveWork(-.15,0,10,120),
-
-            new AutoPickupWork(),
-
-            new DriveWork(.15,0,10,120),
+            new TurnDegreesAbsolute(48, 200),
 
             new AutoCoralHighWork(),
+
+            new DriveWork(-.2,0,12,100),
+
+            new TurnDegreesAbsolute(179, 200),
+
+            new InstantCommand(Robot.swerveDrive::resetYaw, Robot.swerveDrive),
+
 
 			new FinishAuto()
         );        
