@@ -14,6 +14,7 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.RobotMap;
 //import frc.robot.Robot;
 //import frc.robot.RobotMap;
 import frc.robot.commands.*;
@@ -21,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.config.SparkBaseConfig;
 
@@ -38,10 +39,7 @@ public class TestMotor extends SubsystemBase {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Test Motors
-    SparkMax TestMotor = new SparkMax(61, SparkMax.MotorType.kBrushless);
-    SparkMax TestMotor2 = new SparkMax(62, SparkMax.MotorType.kBrushless);
-	SparkMaxConfig TestMotorConfig = new SparkMaxConfig();
-    RelativeEncoder TestMotorEncoder = TestMotor.getEncoder();
+  	TalonFX testMotor = new TalonFX(40);
 
 	/************************************************************************
 	 ************************************************************************/
@@ -50,10 +48,6 @@ public class TestMotor extends SubsystemBase {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new TestMotorControl(this));
-		setPosition(0);
-
-		TestMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
-		TestMotor.configure(TestMotorConfig, null, null);
 	}
 
 	/************************************************************************
@@ -67,28 +61,7 @@ public class TestMotor extends SubsystemBase {
 
 	public void runMotor(double speed) {
 
-		TestMotor.set(speed);
-		TestMotor2.set(speed * -1);
-
-		getPosition();
-	}
-
-	/************************************************************************
-	 ************************************************************************/
-
-	private double getPosition() {
-		double pos=TestMotorEncoder.getPosition();
-
-		SmartDashboard.putNumber("Test Motor Position",pos);
-
-		return(pos);
-	}
-
- 	/************************************************************************
-	 ************************************************************************/
-
-	public void setPosition(double value) {
-		TestMotorEncoder.setPosition(value);
+		testMotor.set(speed);
 	}
 
 	/************************************************************************

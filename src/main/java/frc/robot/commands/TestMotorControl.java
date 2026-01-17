@@ -29,6 +29,9 @@ public class TestMotorControl extends Command {
 	public TestMotorControl(TestMotor subsystem) {
 		addRequirements(subsystem);
 		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.15);
+
+		// Add a slider to the SmartDashboard for motor speed
+		SmartDashboard.putNumber("Motor Speed Slider", 0.0); // Default value is 0.0
 	}
 
 	/**********************************************************************************
@@ -44,7 +47,10 @@ public class TestMotorControl extends Command {
 	 **********************************************************************************/
 
 	@Override
-	public void execute() {
+	public void execute() {	
+		// Read the slider value from the SmartDashboard
+		double sliderSpeed = SmartDashboard.getNumber("Motor Speed Slider", 0.0);
+
     	// Climber Movement Control
 		double y = operatorJoystick.getRightStickY();
 		double speed=0;
@@ -57,8 +63,9 @@ public class TestMotorControl extends Command {
 			SmartDashboard.putString("Test Motor", "Backward");
 		} else {
 			SmartDashboard.putString("Test Motor", "Stop");
-		}
+			}
 
+	
 	 	SmartDashboard.putNumber("Test Motor Speed", speed);
         Robot.testMotor.runMotor(speed)	;
 	}
